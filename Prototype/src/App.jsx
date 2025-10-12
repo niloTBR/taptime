@@ -6,6 +6,8 @@ import JourneyPage from '@/pages/JourneyPage'
 import JoinExpertPage from '@/pages/JoinExpertPage'
 import ExpertProfilePage from '@/pages/ExpertProfilePage'
 import BookingPage from '@/pages/BookingPage'
+import LoginPage from '@/pages/LoginPage'
+import SignUpPage from '@/pages/SignUpPage'
 import TestPage from '@/pages/TestPage'
 
 function App() {
@@ -21,6 +23,8 @@ function App() {
           <Route path="/book/:expertId" element={<BookingPage />} />
           <Route path="/test" element={<TestPage />} />
         </Route>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignUpPage />} />
       </Routes>
     </Router>
   )
