@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Link } from 'react-router-dom'
 import { Users, Target, Award, Heart } from 'lucide-react'
 
+// About page component
 const AboutPage = () => {
   const values = [
     {
