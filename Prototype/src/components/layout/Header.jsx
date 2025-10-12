@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { Menu, X, User } from 'lucide-react'
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import LazyImage from '@/components/common/LazyImage'
 import navigationData from '@/data/navigation.json'
 
@@ -17,20 +18,20 @@ const Header = () => {
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <a href="/" className="flex items-center space-x-3">
+          <Link to="/" className="flex items-center space-x-3">
             <img 
               src="/taptime-logo.png" 
               alt="TapTime" 
               className="h-16 w-auto"
             />
-          </a>
+          </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
             {header.links.map((link) => (
-              <a
+              <Link
                 key={link.href}
-                href={link.href}
+                to={link.href}
                 className={`text-sm font-medium transition-colors hover:text-primary ${
                   link.active
                     ? 'text-primary'
@@ -38,7 +39,7 @@ const Header = () => {
                 }`}
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
           </nav>
 
@@ -51,7 +52,7 @@ const Header = () => {
                 size="sm"
                 asChild
               >
-                <a href={action.href}>{action.label}</a>
+                <Link to={action.href}>{action.label}</Link>
               </Button>
             ))}
           </div>
@@ -77,9 +78,9 @@ const Header = () => {
           <div className="md:hidden mt-4 pb-4 border-t pt-4">
             <nav className="flex flex-col space-y-4">
               {header.links.map((link) => (
-                <a
+                <Link
                   key={link.href}
-                  href={link.href}
+                  to={link.href}
                   className={`text-sm font-medium transition-colors hover:text-primary ${
                     link.active
                       ? 'text-primary'
@@ -88,7 +89,7 @@ const Header = () => {
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   {link.label}
-                </a>
+                </Link>
               ))}
               
               <div className="flex flex-col space-y-2 pt-4 border-t">
@@ -100,7 +101,7 @@ const Header = () => {
                     className="justify-start"
                     asChild
                   >
-                    <a href={action.href}>{action.label}</a>
+                    <Link to={action.href}>{action.label}</Link>
                   </Button>
                 ))}
               </div>
