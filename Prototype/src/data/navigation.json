@@ -1,0 +1,66 @@
+{
+  "header": {
+    "brand": "TapTime",
+    "logo": "/api/placeholder/120/40",
+    "links": [
+      {
+        "label": "Join as Expert",
+        "href": "/join-expert",
+        "active": false
+      },
+      {
+        "label": "Your Journey", 
+        "href": "/journey",
+        "active": false
+      },
+      {
+        "label": "Browse expert",
+        "href": "/browse",
+        "active": false
+      }
+    ],
+    "actions": [
+      {
+        "type": "button",
+        "label": "Log In",
+        "variant": "ghost",
+        "href": "/login"
+      },
+      {
+        "type": "button", 
+        "label": "Sign up",
+        "variant": "default",
+        "href": "/signup"
+      }
+    ]
+  },
+  "footer": {
+    "brand": "TapTime",
+    "description": "Your one-stop platform where experts meet with those who are looking to get ahead",
+    "sections": [
+      {
+        "title": "Company",
+        "links": [
+          { "label": "About Us", "href": "/about" },
+          { "label": "Careers", "href": "/careers" },
+          { "label": "Blog", "href": "/blog" },
+          { "label": "Press", "href": "/press" }
+        ]
+      },
+      {
+        "title": "Resources", 
+        "links": [
+          { "label": "Help Center", "href": "/help" },
+          { "label": "Safety", "href": "/safety" },
+          { "label": "Expert Guidelines", "href": "/guidelines" },
+          { "label": "Community", "href": "/community" }
+        ]
+      }
+    ],
+    "legal": [
+      { "label": "Privacy Policy", "href": "/privacy" },
+      { "label": "Terms of Service", "href": "/terms" }
+    ],
+    "copyright": "© 2025 TapTime. All rights reserved."
+  }
+}

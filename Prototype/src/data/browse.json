@@ -1,0 +1,137 @@
+{
+  "hero": {
+    "title": "Find Your Perfect Expert",
+    "subtitle": "Browse thousands of verified industry experts ready to help you achieve your goals",
+    "searchPlaceholder": "Search by expertise, industry, or name..."
+  },
+  "filters": {
+    "categories": [
+      "All Categories",
+      "Business & Startups",
+      "Technology & Innovation",
+      "Design & Creativity", 
+      "Marketing & Growth",
+      "Finance & Economics",
+      "Health & Wellness"
+    ],
+    "priceRanges": [
+      "All Prices",
+      "$50 - $100",
+      "$100 - $250",
+      "$250 - $500",
+      "$500+"
+    ],
+    "availability": [
+      "Available Now",
+      "Today",
+      "This Week",
+      "Flexible"
+    ],
+    "rating": [
+      "All Ratings",
+      "4.5+ Stars",
+      "4.8+ Stars",
+      "5.0 Stars"
+    ]
+  },
+  "sortOptions": [
+    "Recommended",
+    "Price: Low to High",
+    "Price: High to Low", 
+    "Highest Rated",
+    "Most Reviews",
+    "Recently Joined"
+  ],
+  "experts": [
+    {
+      "id": "isabella-grace",
+      "name": "Isabella Grace Harrington",
+      "title": "Founder of TechNova",
+      "rate": "$500/15min",
+      "rating": 5.0,
+      "reviewCount": 127,
+      "image": "/api/placeholder/150/150",
+      "badge": "Top Expert",
+      "expertise": ["Tech Strategy", "Startup Scaling"],
+      "bio": "Built and scaled TechNova from idea to $100M valuation. Expert in product-market fit and raising Series A-C funding.",
+      "availability": "Available Today",
+      "responseTime": "Usually responds within 2 hours"
+    },
+    {
+      "id": "sophia-martinez",
+      "name": "Sophia Martinez", 
+      "title": "Founder of BloomWell Skincare",
+      "rate": "$500/15min",
+      "rating": 4.9,
+      "reviewCount": 203,
+      "image": "/api/placeholder/150/150", 
+      "badge": "Top Expert",
+      "expertise": ["E-commerce", "Brand Building"],
+      "bio": "Bootstrapped BloomWell to $50M revenue. Expert in DTC marketing, brand strategy, and scaling operations.",
+      "availability": "Available This Week",
+      "responseTime": "Usually responds within 4 hours"
+    },
+    {
+      "id": "robin-grace",
+      "name": "Robin Grace Harrington",
+      "title": "VP Product at Microsoft",
+      "rate": "$750/15min",
+      "rating": 5.0,
+      "reviewCount": 89,
+      "image": "/api/placeholder/150/150",
+      "badge": "Top Expert", 
+      "expertise": ["Product Strategy", "Tech Leadership"],
+      "bio": "Led product teams at Microsoft for 8+ years. Expert in product roadmaps, team management, and enterprise software.",
+      "availability": "Available Now",
+      "responseTime": "Usually responds within 1 hour"
+    },
+    {
+      "id": "emily-carter",
+      "name": "Emily Carter",
+      "title": "CMO at DataFlow Inc",
+      "rate": "$450/15min",
+      "rating": 4.8,
+      "reviewCount": 156,
+      "image": "/api/placeholder/150/150",
+      "badge": "Verified",
+      "expertise": ["Marketing Strategy", "Growth Hacking"],
+      "bio": "Built marketing teams that drove 10x growth at 3 startups. Expert in growth loops, conversion optimization, and paid acquisition.",
+      "availability": "Available Today",
+      "responseTime": "Usually responds within 3 hours"
+    },
+    {
+      "id": "marcus-chen",
+      "name": "Marcus Chen",
+      "title": "Design Director at Figma",
+      "rate": "$400/15min",
+      "rating": 4.9,
+      "reviewCount": 234,
+      "image": "/api/placeholder/150/150",
+      "badge": "Verified",
+      "expertise": ["UX Design", "Design Systems"],
+      "bio": "Led design for major Figma features used by millions. Expert in design systems, user research, and product design.",
+      "availability": "Available This Week",
+      "responseTime": "Usually responds within 6 hours"
+    },
+    {
+      "id": "sarah-kim",
+      "name": "Sarah Kim",
+      "title": "VP Finance at Stripe",
+      "rate": "$600/15min",
+      "rating": 5.0,
+      "reviewCount": 67,
+      "image": "/api/placeholder/150/150",
+      "badge": "Top Expert",
+      "expertise": ["Financial Planning", "Fundraising"],
+      "bio": "Managed $500M+ in funding rounds at Stripe and other unicorns. Expert in financial modeling, investor relations, and valuation.",
+      "availability": "Available Now",
+      "responseTime": "Usually responds within 2 hours"
+    }
+  ],
+  "stats": {
+    "totalExperts": "1,247",
+    "averageRating": "4.9",
+    "totalSessions": "15,000+",
+    "averageResponse": "2 hours"
+  }
+}

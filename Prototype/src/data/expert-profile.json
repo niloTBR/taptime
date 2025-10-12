@@ -1,0 +1,149 @@
+{
+  "expert": {
+    "id": "isabella-grace",
+    "name": "Isabella Grace Harrington",
+    "title": "Founder & CEO of TechNova",
+    "tagline": "Built TechNova from idea to $100M valuation. Helping founders scale their startups.",
+    "image": "/api/placeholder/200/200",
+    "rating": 5.0,
+    "reviewCount": 127,
+    "totalSessions": 340,
+    "responseTime": "Usually responds within 2 hours",
+    "badges": ["Top Expert", "Verified"],
+    "location": "San Francisco, CA",
+    "languages": ["English", "Spanish"],
+    "rate": "$500/15min",
+    "availability": "Available Today"
+  },
+  "about": {
+    "bio": "Isabella is the Founder and CEO of TechNova, a B2B SaaS platform that she built from idea to $100M valuation in 4 years. She's raised over $50M in funding from top-tier VCs including Sequoia and a16z.\n\nWith 12+ years in the startup ecosystem, Isabella has deep expertise in product-market fit, scaling teams, fundraising, and building sustainable growth engines. She's passionate about helping early-stage founders avoid common pitfalls and accelerate their path to success.\n\nBefore TechNova, Isabella was VP of Product at DataSync (acquired by Salesforce) and started her career as a software engineer at Google.",
+    "expertise": [
+      "Startup Strategy & Scaling",
+      "Product-Market Fit",
+      "Fundraising (Seed to Series C)",
+      "Team Building & Hiring",
+      "Go-to-Market Strategy",
+      "SaaS Business Models",
+      "Product Development",
+      "Investor Relations"
+    ],
+    "experience": [
+      {
+        "company": "TechNova",
+        "role": "Founder & CEO",
+        "duration": "2020 - Present",
+        "description": "Built B2B SaaS platform from $0 to $100M valuation. Raised $50M+ across 3 funding rounds."
+      },
+      {
+        "company": "DataSync (acquired by Salesforce)",
+        "role": "VP of Product",
+        "duration": "2018 - 2020", 
+        "description": "Led product team of 25+ through acquisition. Grew ARR from $10M to $40M."
+      },
+      {
+        "company": "Google",
+        "role": "Senior Software Engineer",
+        "duration": "2015 - 2018",
+        "description": "Built core infrastructure for Google Cloud. Led projects serving 1B+ users."
+      }
+    ],
+    "education": [
+      {
+        "school": "Stanford University",
+        "degree": "MBA",
+        "year": "2015"
+      },
+      {
+        "school": "MIT",
+        "degree": "BS Computer Science",
+        "year": "2012"
+      }
+    ]
+  },
+  "sessions": {
+    "topics": [
+      {
+        "title": "Product-Market Fit Deep Dive",
+        "description": "Get clarity on whether you've achieved PMF and what to focus on next",
+        "duration": "15 min",
+        "price": "$500"
+      },
+      {
+        "title": "Fundraising Strategy Session",
+        "description": "Review your pitch deck, financial model, and fundraising approach",
+        "duration": "30 min",
+        "price": "$1000"
+      },
+      {
+        "title": "Scaling Strategy Review", 
+        "description": "Plan your path from current stage to next level of growth",
+        "duration": "15 min",
+        "price": "$500"
+      },
+      {
+        "title": "Team Building & Hiring",
+        "description": "Build the right team structure and hiring processes for growth",
+        "duration": "15 min",
+        "price": "$500"
+      }
+    ]
+  },
+  "reviews": [
+    {
+      "id": 1,
+      "reviewerName": "Alex Chen",
+      "reviewerTitle": "Founder at DataFlow",
+      "reviewerImage": "/api/placeholder/50/50",
+      "rating": 5,
+      "date": "2 days ago",
+      "sessionTopic": "Product-Market Fit Strategy",
+      "review": "Isabella's insights were game-changing. She helped me identify exactly why our growth was plateauing and gave me a clear roadmap to achieve true PMF. The frameworks she shared are gold."
+    },
+    {
+      "id": 2,
+      "reviewerName": "Sarah Kim",
+      "reviewerTitle": "CEO at HealthTech Solutions",
+      "reviewerImage": "/api/placeholder/50/50",
+      "rating": 5,
+      "date": "1 week ago", 
+      "sessionTopic": "Fundraising Strategy",
+      "review": "Incredible session. Isabella reviewed our pitch deck and gave specific, actionable feedback that transformed our story. We closed our Series A 2 months later using her suggestions."
+    },
+    {
+      "id": 3,
+      "reviewerName": "Marcus Rodriguez",
+      "reviewerTitle": "Founder at EdTech Labs",
+      "reviewerImage": "/api/placeholder/50/50",
+      "rating": 5,
+      "date": "2 weeks ago",
+      "sessionTopic": "Scaling Strategy",
+      "review": "Isabella understands the challenges of going from 0 to 1 to 100. Her advice on team structure and processes helped us scale from 10 to 50 people without losing our culture."
+    },
+    {
+      "id": 4,
+      "reviewerName": "Jennifer Liu",
+      "reviewerTitle": "Co-founder at AI Startup",
+      "reviewerImage": "/api/placeholder/50/50",
+      "rating": 5,
+      "date": "3 weeks ago",
+      "sessionTopic": "Product Development",
+      "review": "As a first-time founder, Isabella's guidance was invaluable. She helped me prioritize features and build a sustainable product development process. Highly recommend!"
+    }
+  ],
+  "calendar": {
+    "availableSlots": [
+      {
+        "date": "Today",
+        "slots": ["2:00 PM", "4:00 PM", "6:00 PM"]
+      },
+      {
+        "date": "Tomorrow", 
+        "slots": ["10:00 AM", "2:00 PM", "4:00 PM", "6:00 PM"]
+      },
+      {
+        "date": "Wednesday",
+        "slots": ["9:00 AM", "11:00 AM", "3:00 PM", "5:00 PM"]
+      }
+    ]
+  }
+}

@@ -1,0 +1,137 @@
+{
+  "hero": {
+    "title": "Your Expert Journey",
+    "subtitle": "Track your progress, manage sessions, and accelerate your growth with personalized insights"
+  },
+  "stats": {
+    "sessionsCompleted": 12,
+    "hoursLearned": 3.5,
+    "expertsConnected": 8,
+    "goalsAchieved": 4
+  },
+  "upcomingSessions": [
+    {
+      "id": "session-1",
+      "expertName": "Isabella Grace Harrington",
+      "expertTitle": "Founder of TechNova",
+      "expertImage": "/api/placeholder/60/60",
+      "sessionTopic": "Product-Market Fit Strategy",
+      "scheduledTime": "Today, 2:00 PM",
+      "duration": "15 min",
+      "meetingLink": "https://meet.google.com/abc-defg-hij",
+      "status": "confirmed"
+    },
+    {
+      "id": "session-2", 
+      "expertName": "Marcus Chen",
+      "expertTitle": "Design Director at Figma",
+      "expertImage": "/api/placeholder/60/60",
+      "sessionTopic": "Portfolio Review & Feedback",
+      "scheduledTime": "Tomorrow, 10:30 AM",
+      "duration": "15 min",
+      "meetingLink": "https://meet.google.com/xyz-uvwx-yz",
+      "status": "confirmed"
+    }
+  ],
+  "recentSessions": [
+    {
+      "id": "past-1",
+      "expertName": "Sarah Kim",
+      "expertTitle": "VP Finance at Stripe",
+      "expertImage": "/api/placeholder/60/60",
+      "sessionTopic": "Fundraising Strategy",
+      "completedDate": "Yesterday",
+      "duration": "15 min",
+      "rating": 5,
+      "hasNotes": true,
+      "hasRecording": true
+    },
+    {
+      "id": "past-2",
+      "expertName": "Emily Carter", 
+      "expertTitle": "CMO at DataFlow Inc",
+      "expertImage": "/api/placeholder/60/60",
+      "sessionTopic": "Growth Marketing Plan",
+      "completedDate": "3 days ago",
+      "duration": "15 min", 
+      "rating": 5,
+      "hasNotes": true,
+      "hasRecording": false
+    },
+    {
+      "id": "past-3",
+      "expertName": "Robin Grace Harrington",
+      "expertTitle": "VP Product at Microsoft", 
+      "expertImage": "/api/placeholder/60/60",
+      "sessionTopic": "Product Roadmap Planning",
+      "completedDate": "1 week ago",
+      "duration": "15 min",
+      "rating": 4,
+      "hasNotes": true,
+      "hasRecording": true
+    }
+  ],
+  "goals": [
+    {
+      "id": "goal-1",
+      "title": "Launch MVP by Q2",
+      "description": "Build and ship first version of the product",
+      "progress": 75,
+      "status": "in_progress",
+      "relatedSessions": 5,
+      "dueDate": "March 2025"
+    },
+    {
+      "id": "goal-2", 
+      "title": "Raise $2M Seed Round",
+      "description": "Complete Series A fundraising",
+      "progress": 40,
+      "status": "in_progress", 
+      "relatedSessions": 3,
+      "dueDate": "April 2025"
+    },
+    {
+      "id": "goal-3",
+      "title": "Build Design System",
+      "description": "Create comprehensive design system",
+      "progress": 100,
+      "status": "completed",
+      "relatedSessions": 4,
+      "dueDate": "Completed"
+    }
+  ],
+  "recommendations": [
+    {
+      "id": "rec-1",
+      "type": "expert",
+      "title": "Continue with Product Strategy",
+      "description": "Based on your recent sessions, consider booking another session with Isabella to dive deeper into scaling strategies.",
+      "actionLabel": "Book Follow-up",
+      "expertName": "Isabella Grace Harrington"
+    },
+    {
+      "id": "rec-2",
+      "type": "topic",
+      "title": "Explore Marketing Automation",
+      "description": "Your growth marketing progress suggests you're ready to learn about automation tools and processes.",
+      "actionLabel": "Find Expert",
+      "suggestedCategory": "Marketing & Growth"
+    }
+  ],
+  "learningPath": {
+    "currentLevel": "Intermediate",
+    "nextMilestone": "Advanced Product Strategy",
+    "completedModules": [
+      "Business Model Validation",
+      "Initial Product Development", 
+      "Early Customer Discovery",
+      "Basic Fundraising Prep"
+    ],
+    "upcomingModules": [
+      "Product-Market Fit Optimization",
+      "Growth Strategy & Scaling",
+      "Advanced Fundraising",
+      "Team Building & Leadership"
+    ]
+  }
+}

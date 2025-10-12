@@ -1,0 +1,149 @@
+{
+  "hero": {
+    "title": "Share Your Expertise. Build Your Legacy.",
+    "subtitle": "Join thousands of industry leaders who are monetizing their knowledge and making a real impact on the next generation of professionals",
+    "ctaButton": "Apply to Become an Expert",
+    "secondaryButton": "Learn More"
+  },
+  "benefits": [
+    {
+      "icon": "DollarSign",
+      "title": "Earn $200-1000+ per hour",
+      "description": "Set your own rates and earn premium fees for short, focused sessions. Top experts earn $15,000+ monthly."
+    },
+    {
+      "icon": "Clock", 
+      "title": "Flexible scheduling",
+      "description": "Work on your own terms. Sessions are just 15-30 minutes, fitting perfectly around your busy schedule."
+    },
+    {
+      "icon": "Users",
+      "title": "Build your personal brand",
+      "description": "Establish yourself as a thought leader in your industry while expanding your professional network."
+    },
+    {
+      "icon": "TrendingUp",
+      "title": "Make meaningful impact",
+      "description": "Help ambitious professionals breakthrough challenges and accelerate their career growth."
+    }
+  ],
+  "process": [
+    {
+      "step": "01",
+      "title": "Apply & Get Verified",
+      "description": "Submit your application with your background and expertise. Our team reviews and verifies your credentials within 48 hours."
+    },
+    {
+      "step": "02", 
+      "title": "Create Your Profile",
+      "description": "Build your expert profile showcasing your experience, set your rates, and define your areas of expertise."
+    },
+    {
+      "step": "03",
+      "title": "Start Earning",
+      "description": "Go live on the platform and start receiving booking requests from professionals seeking your guidance."
+    }
+  ],
+  "requirements": {
+    "title": "Who We're Looking For",
+    "subtitle": "We maintain high standards to ensure the best experience for our community",
+    "criteria": [
+      "5+ years of proven experience in your field",
+      "Leadership role at a recognized company or successful entrepreneur",
+      "Track record of mentoring, teaching, or coaching others",
+      "Excellent communication skills and professional presence",
+      "Passion for helping others succeed and grow"
+    ]
+  },
+  "testimonials": [
+    {
+      "id": 1,
+      "name": "Sarah Chen",
+      "title": "VP Engineering at Airbnb",
+      "image": "/api/placeholder/80/80",
+      "quote": "Being a TapTime expert has been incredibly rewarding. I've helped over 200 engineers level up their careers while earning $8,000+ monthly in my spare time.",
+      "earnings": "$8,400/month",
+      "sessions": 180
+    },
+    {
+      "id": 2,
+      "name": "Marcus Johnson", 
+      "title": "Founder of TechFlow (Acquired)",
+      "image": "/api/placeholder/80/80",
+      "quote": "The platform makes it so easy to share my startup experience. 15-minute sessions fit perfectly between meetings, and the quality of mentees is exceptional.",
+      "earnings": "$12,600/month",
+      "sessions": 210
+    },
+    {
+      "id": 3,
+      "name": "Dr. Lisa Park",
+      "title": "Chief Marketing Officer",
+      "image": "/api/placeholder/80/80", 
+      "quote": "I love helping marketers solve real challenges. The structured format keeps sessions focused and impactful. It's become my favorite side project.",
+      "earnings": "$5,200/month", 
+      "sessions": 95
+    }
+  ],
+  "categories": [
+    {
+      "name": "Business & Strategy",
+      "description": "Business planning, strategy, operations",
+      "demand": "High",
+      "averageRate": "$400-800/hour"
+    },
+    {
+      "name": "Technology & Engineering", 
+      "description": "Software development, architecture, DevOps",
+      "demand": "Very High",
+      "averageRate": "$300-600/hour"
+    },
+    {
+      "name": "Design & Product",
+      "description": "UX/UI design, product management",
+      "demand": "High", 
+      "averageRate": "$250-500/hour"
+    },
+    {
+      "name": "Marketing & Growth",
+      "description": "Digital marketing, growth hacking, brand",
+      "demand": "Very High",
+      "averageRate": "$300-700/hour"
+    },
+    {
+      "name": "Finance & Fundraising",
+      "description": "Financial planning, VC, investment",
+      "demand": "High",
+      "averageRate": "$500-1000/hour"
+    },
+    {
+      "name": "Leadership & Career",
+      "description": "Management, career coaching, culture",
+      "demand": "Medium",
+      "averageRate": "$200-400/hour"
+    }
+  ],
+  "faq": [
+    {
+      "question": "How much can I earn as a TapTime expert?",
+      "answer": "Earnings vary by expertise and time commitment. Most experts earn $200-1000+ per hour, with top performers earning $15,000+ monthly. You set your own rates based on your experience and market demand."
+    },
+    {
+      "question": "How much time do I need to commit?",
+      "answer": "There's no minimum commitment. Sessions are typically 15-30 minutes, and you control your availability completely. Many experts start with just a few hours per week."
+    },
+    {
+      "question": "What's the application process like?",
+      "answer": "Submit your application with your background and expertise. Our team reviews within 48 hours. If approved, you'll create your profile and can start receiving bookings immediately."
+    },
+    {
+      "question": "How do I get paid?",
+      "answer": "We handle all payments securely. You're paid within 24 hours after each completed session via direct deposit or PayPal. No chasing invoices or payment delays."
+    }
+  ],
+  "stats": {
+    "experts": "2,500+",
+    "avgEarning": "$450/hour", 
+    "satisfaction": "4.9/5",
+    "repeatBookings": "85%"
+  }
+}

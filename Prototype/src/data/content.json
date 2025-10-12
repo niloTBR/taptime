@@ -1,0 +1,187 @@
+{
+  "app": {
+    "name": "TapTime Prototype",
+    "description": "Connect with industry experts and book their time",
+    "version": "1.0.0"
+  },
+  "pages": {
+    "home": {
+      "title": "TapTime Prototype",
+      "subtitle": "A clean React + Tailwind + shadcn/ui setup",
+      "hero": {
+        "title": "Connect with Experts",
+        "description": "Find and book time with industry professionals who can help accelerate your growth",
+        "cta": {
+          "primary": "Get Started",
+          "secondary": "Learn More"
+        }
+      },
+      "sections": {
+        "features": {
+          "title": "Features Included",
+          "description": "Everything you requested has been set up",
+          "items": [
+            {
+              "category": "Dependencies Installed",
+              "icon": "✅",
+              "items": [
+                "React with Vite",
+                "Tailwind CSS",
+                "shadcn/ui components", 
+                "Lucide React icons",
+                "SCSS support",
+                "React Router"
+              ]
+            },
+            {
+              "category": "Folder Structure", 
+              "icon": "📁",
+              "items": [
+                "src/pages",
+                "src/components (ui, layout, common)",
+                "src/modules",
+                "src/styles (components, pages, base)",
+                "src/data"
+              ]
+            }
+          ]
+        },
+        "demo": {
+          "title": "Component Demo",
+          "cards": [
+            {
+              "id": "component-test",
+              "title": "Component Test",
+              "description": "Testing our UI components with icons",
+              "icon": "heart",
+              "iconColor": "text-red-500",
+              "content": {
+                "type": "counter",
+                "label": "Counter",
+                "actions": [
+                  {
+                    "label": "Increment",
+                    "variant": "default",
+                    "action": "increment"
+                  },
+                  {
+                    "label": "Decrement", 
+                    "variant": "outline",
+                    "action": "decrement"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "styling-test",
+              "title": "Styling Test",
+              "description": "Global SCSS styles and responsive design",
+              "icon": "star",
+              "iconColor": "text-yellow-500",
+              "content": {
+                "type": "demo",
+                "elements": [
+                  {
+                    "type": "gradient",
+                    "text": "Responsive Gradient Background",
+                    "classes": "gradient-demo"
+                  },
+                  {
+                    "type": "button",
+                    "text": "Large Secondary Button",
+                    "variant": "secondary",
+                    "size": "lg",
+                    "fullWidth": true
+                  }
+                ]
+              }
+            },
+            {
+              "id": "structure-test",
+              "title": "Structure Test", 
+              "description": "Clean component architecture",
+              "icon": "users",
+              "iconColor": "text-green-500",
+              "content": {
+                "type": "list",
+                "items": [
+                  "Data-driven content from JSON",
+                  "Global SCSS styling system",
+                  "Responsive design built-in",
+                  "No hardcoded styles or content",
+                  "Component-level SCSS when needed"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "ui": {
+    "buttons": {
+      "variants": {
+        "default": "Primary action button",
+        "secondary": "Secondary action button", 
+        "outline": "Outlined button",
+        "ghost": "Subtle button",
+        "destructive": "Destructive action button"
+      },
+      "sizes": {
+        "sm": "Small button",
+        "default": "Default button",
+        "lg": "Large button",
+        "icon": "Icon only button"
+      }
+    },
+    "loading": {
+      "default": "Loading...",
+      "saving": "Saving...",
+      "loading": "Loading...",
+      "processing": "Processing..."
+    },
+    "messages": {
+      "error": "Something went wrong. Please try again.",
+      "success": "Action completed successfully!",
+      "info": "Here's some helpful information.",
+      "warning": "Please review this information."
+    }
+  },
+  "navigation": {
+    "header": {
+      "brand": "TapTime",
+      "links": [
+        {
+          "label": "Home",
+          "href": "/",
+          "active": true
+        },
+        {
+          "label": "Features",
+          "href": "/features"
+        },
+        {
+          "label": "About",
+          "href": "/about"
+        },
+        {
+          "label": "Contact", 
+          "href": "/contact"
+        }
+      ]
+    },
+    "footer": {
+      "copyright": "© 2025 TapTime Prototype",
+      "links": [
+        {
+          "label": "Privacy",
+          "href": "/privacy"
+        },
+        {
+          "label": "Terms",
+          "href": "/terms"
+        }
+      ]
+    }
+  }
+}

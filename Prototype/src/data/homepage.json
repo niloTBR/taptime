@@ -1,0 +1,157 @@
+{
+  "hero": {
+    "title": "Your time. Expertly matched",
+    "subtitle": "Get personalized guidance from world-class experts who've built the companies and careers you admire. Book 15-minute sessions that change everything.",
+    "searchPlaceholder": "Search for your expertise, advice, coaching, mentorship",
+    "primaryCta": "Find Your Expert",
+    "secondaryCta": "Become an Expert"
+  },
+  "valuePropositions": [
+    {
+      "number": "01",
+      "title": "Get perfectly matched",
+      "description": "Our AI understands your goals and connects you with experts who've solved your exact challenges. No more guessing who can help."
+    },
+    {
+      "number": "02", 
+      "title": "Book instantly",
+      "description": "See real results from past sessions, read detailed reviews, and book the perfect time slot. Your breakthrough is just clicks away."
+    },
+    {
+      "number": "03",
+      "title": "Get results that matter",
+      "description": "Walk away with a clear action plan, insider knowledge, and the confidence to execute. Every session is designed for immediate impact."
+    }
+  ],
+  "featuredSection": {
+    "title": "Learn From The Best",
+    "subtitle": "Get personalized advice and strategic insights from successful founders, seasoned executives, and proven innovators who've already built the companies, products, and careers you're dreaming of achieving",
+    "experts": [
+      {
+        "id": "isabella-grace",
+        "name": "Isabella Grace Harrington",
+        "title": "Founder of TechNova",
+        "rate": "$500/15min",
+        "rating": 5.0,
+        "reviewCount": 127,
+        "image": "/api/placeholder/150/150",
+        "badge": "Top Expert",
+        "expertise": ["Tech Strategy", "Startup Scaling"]
+      },
+      {
+        "id": "sophia-martinez",
+        "name": "Sophia Martinez", 
+        "title": "Founder of BloomWell Skincare",
+        "rate": "$500/15min",
+        "rating": 4.9,
+        "reviewCount": 203,
+        "image": "/api/placeholder/150/150", 
+        "badge": "Top Expert",
+        "expertise": ["E-commerce", "Brand Building"]
+      },
+      {
+        "id": "robin-grace",
+        "name": "Robin Grace Harrington",
+        "title": "VP Product at Microsoft",
+        "rate": "$750/15min",
+        "rating": 5.0,
+        "reviewCount": 89,
+        "image": "/api/placeholder/150/150",
+        "badge": "Top Expert", 
+        "expertise": ["Product Strategy", "Tech Leadership"]
+      },
+      {
+        "id": "emily-carter",
+        "name": "Emily Carter",
+        "title": "CMO at DataFlow Inc",
+        "rate": "$450/15min",
+        "rating": 4.8,
+        "reviewCount": 156,
+        "image": "/api/placeholder/150/150",
+        "badge": "Verified",
+        "expertise": ["Marketing Strategy", "Growth Hacking"]
+      }
+    ]
+  },
+  "categories": [
+    {
+      "id": "business-startups",
+      "name": "Business & Startups",
+      "image": "/api/placeholder/80/80",
+      "expertCount": 234
+    },
+    {
+      "id": "technology",
+      "name": "Technology & Innovation", 
+      "image": "/api/placeholder/80/80",
+      "expertCount": 187
+    },
+    {
+      "id": "design",
+      "name": "Design & Creativity",
+      "image": "/api/placeholder/80/80", 
+      "expertCount": 156
+    },
+    {
+      "id": "marketing",
+      "name": "Marketing & Growth",
+      "image": "/api/placeholder/80/80",
+      "expertCount": 203
+    },
+    {
+      "id": "finance",
+      "name": "Finance & Economics",
+      "image": "/api/placeholder/80/80",
+      "expertCount": 98
+    },
+    {
+      "id": "health",
+      "name": "Health & Wellness", 
+      "image": "/api/placeholder/80/80",
+      "expertCount": 67
+    }
+  ],
+  "ctaSection": {
+    "title": "Your Next Breakthrough Awaits",
+    "subtitle": "Join thousands of ambitious professionals who've accelerated their success with expert guidance",
+    "description": "Stop wondering 'what if' and start making it happen. Your perfect expert is waiting.",
+    "buttonText": "Find Your Expert Now",
+    "backgroundImage": "/api/placeholder/800/400"
+  },
+  "stats": {
+    "experts": "1,000+",
+    "sessions": "10,000+", 
+    "satisfaction": "4.9/5",
+    "countries": "25+"
+  },
+  "reviews": {
+    "title": "Success Stories",
+    "subtitle": "Real breakthroughs from real people who took action with expert guidance",
+    "testimonials": [
+      {
+        "id": 1,
+        "name": "Alex Chen",
+        "title": "Product Manager at Stripe",
+        "rating": 5,
+        "text": "One 15-minute session gave me the exact framework I needed. Landed my dream PM role at Stripe within 2 months.",
+        "image": "/api/placeholder/60/60"
+      },
+      {
+        "id": 2,
+        "name": "Sarah Williams",
+        "title": "Startup Founder",
+        "rating": 5,
+        "text": "My expert walked me through their actual pitch deck. We closed our $2M Series A using their exact strategy.",
+        "image": "/api/placeholder/60/60"
+      },
+      {
+        "id": 3,
+        "name": "Michael Rodriguez",
+        "title": "UX Designer",
+        "rating": 5,
+        "text": "They showed me what top-tier portfolios really look like. Got callbacks from Google, Apple, and Figma in one week.",
+        "image": "/api/placeholder/60/60"
+      }
+    ]
+  }
+}

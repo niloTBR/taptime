@@ -1,0 +1,127 @@
+{
+  "expert": {
+    "id": "isabella-grace",
+    "name": "Isabella Grace Harrington",
+    "title": "Founder & CEO of TechNova",
+    "image": "/api/placeholder/100/100",
+    "rating": 5.0,
+    "reviewCount": 127,
+    "responseTime": "Usually responds within 2 hours"
+  },
+  "sessionTypes": [
+    {
+      "id": "pmf-deep-dive",
+      "title": "Product-Market Fit Deep Dive",
+      "description": "Get clarity on whether you've achieved PMF and what to focus on next",
+      "duration": "15 min",
+      "price": 500,
+      "currency": "USD"
+    },
+    {
+      "id": "fundraising-strategy",
+      "title": "Fundraising Strategy Session",
+      "description": "Review your pitch deck, financial model, and fundraising approach",
+      "duration": "30 min",
+      "price": 1000,
+      "currency": "USD"
+    },
+    {
+      "id": "scaling-strategy",
+      "title": "Scaling Strategy Review",
+      "description": "Plan your path from current stage to next level of growth",
+      "duration": "15 min",
+      "price": 500,
+      "currency": "USD"
+    }
+  ],
+  "calendar": {
+    "availableSlots": [
+      {
+        "date": "2025-10-07",
+        "displayDate": "Today",
+        "slots": [
+          {"time": "14:00", "display": "2:00 PM", "available": true},
+          {"time": "16:00", "display": "4:00 PM", "available": true},
+          {"time": "18:00", "display": "6:00 PM", "available": false}
+        ]
+      },
+      {
+        "date": "2025-10-08",
+        "displayDate": "Tomorrow",
+        "slots": [
+          {"time": "10:00", "display": "10:00 AM", "available": true},
+          {"time": "14:00", "display": "2:00 PM", "available": true},
+          {"time": "16:00", "display": "4:00 PM", "available": true},
+          {"time": "18:00", "display": "6:00 PM", "available": true}
+        ]
+      },
+      {
+        "date": "2025-10-09",
+        "displayDate": "Wednesday",
+        "slots": [
+          {"time": "09:00", "display": "9:00 AM", "available": true},
+          {"time": "11:00", "display": "11:00 AM", "available": true},
+          {"time": "15:00", "display": "3:00 PM", "available": true},
+          {"time": "17:00", "display": "5:00 PM", "available": true}
+        ]
+      }
+    ]
+  },
+  "bookingSteps": [
+    {
+      "step": 1,
+      "title": "Choose Session Type",
+      "description": "Select the type of consultation you need"
+    },
+    {
+      "step": 2,
+      "title": "Pick Date & Time",
+      "description": "Choose when you'd like to have your session"
+    },
+    {
+      "step": 3,
+      "title": "Add Details",
+      "description": "Tell us what you'd like to discuss"
+    },
+    {
+      "step": 4,
+      "title": "Payment",
+      "description": "Secure payment to confirm your booking"
+    }
+  ],
+  "bookingQuestions": [
+    {
+      "id": "company_stage",
+      "question": "What stage is your company/project at?",
+      "type": "select",
+      "options": [
+        "Idea stage",
+        "MVP/Pre-launch",
+        "Early traction",
+        "Scaling",
+        "Growth stage"
+      ],
+      "required": true
+    },
+    {
+      "id": "specific_challenge",
+      "question": "What specific challenge would you like to discuss?",
+      "type": "textarea",
+      "placeholder": "Please describe your situation and what you're hoping to get out of this session...",
+      "required": true
+    },
+    {
+      "id": "preparation_materials",
+      "question": "Do you have any materials you'd like to share beforehand? (Optional)",
+      "type": "file",
+      "accepts": ".pdf,.doc,.docx,.ppt,.pptx",
+      "required": false
+    }
+  ],
+  "policies": {
+    "cancellation": "Free cancellation up to 24 hours before the session",
+    "rescheduling": "You can reschedule up to 2 hours before the session",
+    "refund": "Full refund if expert cancels. 50% refund for cancellations with less than 24h notice",
+    "preparation": "You'll receive a calendar invite and video link 1 hour before the session"
+  }
+}
