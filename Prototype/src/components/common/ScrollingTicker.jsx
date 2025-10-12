@@ -15,7 +15,7 @@ const ScrollingTicker = ({ items, className = '' }) => {
       'Health & Wellness': Heart
     }
     const IconComponent = iconMap[categoryName] || Briefcase
-    return <IconComponent className="w-8 h-8" />
+    return <IconComponent className="w-4 h-4" />
   }
 
   useEffect(() => {
@@ -44,14 +44,14 @@ const ScrollingTicker = ({ items, className = '' }) => {
         ref={tickerRef}
         className="flex animate-scroll whitespace-nowrap"
       >
-        <div className="ticker-content flex items-center gap-16 min-w-full pr-16">
+        <div className="ticker-content flex items-center gap-8 min-w-full pr-8">
           {items.map((item, index) => (
-            <div key={index} className="flex items-center gap-3 shrink-0 whitespace-nowrap min-w-fit px-6">
-              <div className="w-10 h-10 rounded-full border-2 border-foreground flex items-center justify-center shrink-0">
+            <div key={index} className="flex items-center gap-2 shrink-0 whitespace-nowrap min-w-fit px-4">
+              <div className="w-8 h-8 rounded-full border-2 border-foreground flex items-center justify-center shrink-0">
                 {getIcon(item.category)}
               </div>
-              <span className="text-2xl font-semibold whitespace-nowrap shrink-0">{item.category}</span>
-              <ArrowRight className="w-5 h-5 text-muted-foreground shrink-0 ms-2" />
+              <span className="text-lg font-semibold whitespace-nowrap shrink-0">{item.category}</span>
+              <ArrowRight className="w-4 h-4 text-muted-foreground shrink-0 ml-1" />
             </div>
           ))}
         </div>
