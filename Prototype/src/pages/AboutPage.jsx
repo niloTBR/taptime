@@ -36,7 +36,7 @@ const AboutPage = () => {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50">
+    <div className="min-h-screen bg-background">
       {/* Hero Section */}
       <section className="pt-24 pb-16 px-4">
         <div className="container mx-auto max-w-4xl text-center">
@@ -47,10 +47,10 @@ const AboutPage = () => {
             We're revolutionizing how people connect with industry experts, making professional mentorship and knowledge sharing accessible to everyone.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button asChild className="bg-green-600 hover:bg-green-700">
+            <Button asChild className="rounded-full px-8">
               <Link to="/browse">Find an Expert</Link>
             </Button>
-            <Button variant="outline" asChild>
+            <Button variant="outline" asChild className="rounded-full px-8 border-2 border-foreground">
               <Link to="/join-expert">Become an Expert</Link>
             </Button>
           </div>
@@ -70,11 +70,11 @@ const AboutPage = () => {
                 We're building a future where knowledge flows freely, barriers to mentorship are removed, and expertise is accessible to all who seek it.
               </p>
             </div>
-            <div className="bg-gradient-to-br from-green-100 to-green-50 rounded-2xl p-8">
+            <div className="bg-gray-50 rounded-2xl p-8">
               <div className="grid grid-cols-2 gap-6">
                 {stats.map((stat, index) => (
                   <div key={index} className="text-center">
-                    <div className="text-2xl font-bold text-green-600 mb-1">{stat.number}</div>
+                    <div className="text-2xl font-bold mb-1">{stat.number}</div>
                     <div className="text-sm text-gray-600">{stat.label}</div>
                   </div>
                 ))}

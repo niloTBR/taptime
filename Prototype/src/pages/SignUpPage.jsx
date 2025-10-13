@@ -60,7 +60,7 @@ const SignUpPage = () => {
             <Link to="/" className="absolute right-4 top-4 text-muted-foreground hover:text-foreground">
               <X className="w-5 h-5" />
             </Link>
-            <CardTitle className="text-2xl font-bold text-green-600">Create An Account</CardTitle>
+            <CardTitle className="text-2xl font-bold">Create An Account</CardTitle>
             <CardDescription className="text-sm text-muted-foreground">
               Great to see you ! Kindly provide your information to proceed.
             </CardDescription>
@@ -73,7 +73,7 @@ const SignUpPage = () => {
                   name="fullName"
                   type="text"
                   placeholder="Full Name"
-                  className="border-gray-200 focus:border-green-500 focus:ring-green-500"
+                  className="border-gray-200"
                   value={formData.firstName + ' ' + formData.lastName}
                   onChange={(e) => {
                     const names = e.target.value.split(' ')
@@ -93,7 +93,7 @@ const SignUpPage = () => {
                   name="email"
                   type="email"
                   placeholder="Email Address"
-                  className="border-gray-200 focus:border-green-500 focus:ring-green-500"
+                  className="border-gray-200"
                   value={formData.email}
                   onChange={handleInputChange}
                   required
@@ -107,7 +107,7 @@ const SignUpPage = () => {
                   name="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="Password"
-                  className="border-gray-200 focus:border-green-500 focus:ring-green-500"
+                  className="border-gray-200"
                   value={formData.password}
                   onChange={handleInputChange}
                   required
@@ -120,7 +120,7 @@ const SignUpPage = () => {
                   name="confirmPassword"
                   type={showConfirmPassword ? "text" : "password"}
                   placeholder="Confirm Password"
-                  className="border-gray-200 focus:border-green-500 focus:ring-green-500"
+                  className="border-gray-200"
                   value={formData.confirmPassword}
                   onChange={handleInputChange}
                   required
@@ -139,7 +139,7 @@ const SignUpPage = () => {
                 />
                 <label htmlFor="agreeToTerms" className="text-gray-600 leading-5">
                   I would like to subscribe to TapTime's product updates and promotional communications.{' '}
-                  <Link to="/terms" className="text-green-600 hover:underline">
+                  <Link to="/terms" className="text-foreground hover:underline">
                     Know more...
                   </Link>
                 </label>
@@ -153,20 +153,20 @@ const SignUpPage = () => {
                 />
                 <label className="text-gray-600 leading-5">
                   By clicking "ACCEPT AND AGREE", you have agreed to TapTime's{' '}
-                  <Link to="/terms" className="text-green-600 hover:underline">
+                  <Link to="/terms" className="text-foreground hover:underline">
                     Terms of Use
                   </Link>,{' '}
-                  <Link to="/participation" className="text-green-600 hover:underline">
+                  <Link to="/participation" className="text-foreground hover:underline">
                     Participation Terms
                   </Link>{' '}
                   and{' '}
-                  <Link to="/privacy" className="text-green-600 hover:underline">
+                  <Link to="/privacy" className="text-foreground hover:underline">
                     Privacy Statement
                   </Link>.
                 </label>
               </div>
 
-              <Button type="submit" className="w-full bg-green-500 hover:bg-green-600 text-white rounded-lg py-2.5">
+              <Button type="submit" className="w-full rounded-full py-2.5">
                 Sign Up
               </Button>
             </form>
@@ -217,7 +217,7 @@ const SignUpPage = () => {
 
             <div className="text-center text-sm">
               Already existed user?{' '}
-              <Link to="/login" className="text-green-600 hover:underline font-medium">
+              <Link to="/login" className="text-foreground hover:underline font-medium">
                 Login
               </Link>
             </div>

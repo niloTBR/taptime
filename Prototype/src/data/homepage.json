@@ -151,6 +151,78 @@
         "rating": 5,
         "text": "They showed me what top-tier portfolios really look like. Got callbacks from Google, Apple, and Figma in one week.",
         "image": "/api/placeholder/60/60"
+      },
+      {
+        "id": 4,
+        "name": "Jessica Thompson",
+        "title": "Marketing Director",
+        "rating": 5,
+        "text": "The growth strategies they shared transformed our conversion rate from 2% to 8% in just 3 weeks.",
+        "image": "/api/placeholder/60/60"
+      },
+      {
+        "id": 5,
+        "name": "David Park",
+        "title": "Software Engineer",
+        "rating": 5,
+        "text": "Finally understood system design after years of struggling. Passed my Google interview on the first try.",
+        "image": "/api/placeholder/60/60"
+      },
+      {
+        "id": 6,
+        "name": "Emily Foster",
+        "title": "Sales Manager",
+        "rating": 5,
+        "text": "Their closing techniques increased my deal size by 40%. Best investment I've ever made in my career.",
+        "image": "/api/placeholder/60/60"
+      },
+      {
+        "id": 7,
+        "name": "James Wilson",
+        "title": "Startup Founder",
+        "rating": 5,
+        "text": "They helped me avoid critical mistakes that would have cost us months. We launched 6 weeks ahead of schedule.",
+        "image": "/api/placeholder/60/60"
+      },
+      {
+        "id": 8,
+        "name": "Rachel Green",
+        "title": "Product Designer",
+        "rating": 5,
+        "text": "Learned design thinking frameworks that instantly improved my user research process. Promotion followed within 2 months.",
+        "image": "/api/placeholder/60/60"
+      },
+      {
+        "id": 9,
+        "name": "Kevin Martinez",
+        "title": "Business Analyst",
+        "rating": 5,
+        "text": "The financial modeling techniques they taught me landed me a role at Goldman Sachs. Incredible ROI.",
+        "image": "/api/placeholder/60/60"
+      },
+      {
+        "id": 10,
+        "name": "Lisa Chang",
+        "title": "HR Director",
+        "rating": 5,
+        "text": "Their talent acquisition strategies helped us hire top-tier candidates 3x faster. Game-changing insights.",
+        "image": "/api/placeholder/60/60"
+      },
+      {
+        "id": 11,
+        "name": "Robert Taylor",
+        "title": "Tech Lead",
+        "rating": 5,
+        "text": "They showed me how to lead technical teams effectively. My team's velocity increased by 60% in one quarter.",
+        "image": "/api/placeholder/60/60"
+      },
+      {
+        "id": 12,
+        "name": "Amanda Lewis",
+        "title": "Content Strategist",
+        "rating": 5,
+        "text": "The content frameworks they shared helped us grow from 10K to 100K followers in 4 months. Absolutely incredible.",
+        "image": "/api/placeholder/60/60"
       }
     ]
   }

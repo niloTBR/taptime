@@ -43,7 +43,7 @@ const LoginPage = () => {
             <Link to="/" className="absolute right-4 top-4 text-muted-foreground hover:text-foreground">
               <X className="w-5 h-5" />
             </Link>
-            <CardTitle className="text-2xl font-bold text-green-600">Welcome Back !</CardTitle>
+            <CardTitle className="text-2xl font-bold">Welcome Back !</CardTitle>
             <CardDescription className="text-sm text-muted-foreground">
               Welcome back! Please enter your details
             </CardDescription>
@@ -56,7 +56,7 @@ const LoginPage = () => {
                   name="email"
                   type="email"
                   placeholder="Email Address"
-                  className="border-gray-200 focus:border-green-500 focus:ring-green-500"
+                  className="border-gray-200"
                   value={formData.email}
                   onChange={handleInputChange}
                   required
@@ -69,7 +69,7 @@ const LoginPage = () => {
                   name="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="Password"
-                  className="border-gray-200 focus:border-green-500 focus:ring-green-500"
+                  className="border-gray-200"
                   value={formData.password}
                   onChange={handleInputChange}
                   required
@@ -81,12 +81,12 @@ const LoginPage = () => {
                   <input type="checkbox" className="rounded border-gray-300" />
                   <span className="text-gray-600">Remember me on this website</span>
                 </label>
-                <Link to="/forgot-password" className="text-sm text-green-600 hover:underline">
+                <Link to="/forgot-password" className="text-sm text-foreground hover:underline">
                   Forgot Password?
                 </Link>
               </div>
 
-              <Button type="submit" className="w-full bg-green-500 hover:bg-green-600 text-white rounded-lg py-2.5">
+              <Button type="submit" className="w-full rounded-full py-2.5">
                 Log In
               </Button>
             </form>
@@ -137,7 +137,7 @@ const LoginPage = () => {
 
             <div className="text-center text-sm">
               Don't have an account?{' '}
-              <Link to="/signup" className="text-green-600 hover:underline font-medium">
+              <Link to="/signup" className="text-foreground hover:underline font-medium">
                 Sign up
               </Link>
             </div>

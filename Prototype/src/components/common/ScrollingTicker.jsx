@@ -44,9 +44,9 @@ const ScrollingTicker = ({ items, className = '' }) => {
         ref={tickerRef}
         className="flex animate-scroll whitespace-nowrap"
       >
-        <div className="ticker-content flex items-center gap-32 min-w-full pr-32">
+        <div className="ticker-content flex items-center gap-16 min-w-full pr-16">
           {items.map((item, index) => (
-            <div key={index} className="flex items-center gap-3 shrink-0 whitespace-nowrap min-w-fit px-8">
+            <div key={index} className="flex items-center gap-3 shrink-0 whitespace-nowrap min-w-fit px-4">
               <div className="w-6 h-6 rounded-full border-2 border-foreground flex items-center justify-center shrink-0">
                 {getIcon(item.category)}
               </div>

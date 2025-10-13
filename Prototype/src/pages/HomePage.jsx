@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
@@ -6,11 +7,28 @@ import SearchBar from '@/components/common/SearchBar'
 import ExpertCard from '@/components/common/ExpertCard'
 import ScrollingTicker from '@/components/common/ScrollingTicker'
 import SectionTitle from '@/components/common/SectionTitle'
-import { ArrowRight, Users, Clock, Star, Globe } from 'lucide-react'
+import { ArrowRight, Users, Clock, Star, Globe, ChevronLeft, ChevronRight } from 'lucide-react'
 import homepageData from '@/data/homepage.json'
 
 const HomePage = () => {
   const { hero, valuePropositions, featuredSection, categories, ctaSection, stats, reviews } = homepageData
+  const [currentReviewIndex, setCurrentReviewIndex] = useState(0)
+  
+  const reviewsPerPage = 3
+  const totalPages = Math.ceil(reviews.testimonials.length / reviewsPerPage)
+  
+  const nextReviews = () => {
+    setCurrentReviewIndex((prev) => (prev + 1) % totalPages)
+  }
+  
+  const prevReviews = () => {
+    setCurrentReviewIndex((prev) => (prev - 1 + totalPages) % totalPages)
+  }
+  
+  const getCurrentReviews = () => {
+    const start = currentReviewIndex * reviewsPerPage
+    return reviews.testimonials.slice(start, start + reviewsPerPage)
+  }
 
   const handleSearch = (query) => {
     console.log('Searching for:', query)
@@ -35,7 +53,7 @@ const HomePage = () => {
           <div className="text-center space-y-12">
             {/* Hero Content */}
             <div className="space-y-6">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-medium tracking-tight">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-medium tracking-tight">
                 {hero.title}
               </h1>
               <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
@@ -162,14 +180,34 @@ const HomePage = () => {
       {/* Reviews Section */}
       <section className="py-20 px-4">
         <div className="container mx-auto max-w-6xl">
-          <SectionTitle 
-            miniTitle="What Our Users Say"
-            title={reviews.title}
-            description={reviews.subtitle}
-            className="mb-12"
-          />
+          <div className="flex items-center justify-between mb-12">
+            <SectionTitle 
+              miniTitle="What Our Users Say"
+              title={reviews.title}
+              description={reviews.subtitle}
+            />
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={prevReviews}
+                className="rounded-full p-2 border-2 border-foreground"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={nextReviews}
+                className="rounded-full p-2 border-2 border-foreground"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </Button>
+            </div>
+          </div>
+          
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {reviews.testimonials.map((testimonial) => (
+            {getCurrentReviews().map((testimonial) => (
               <Card key={testimonial.id} className="border-2 border-foreground">
                 <CardContent className="p-6 space-y-4">
                   <div className="flex items-center gap-1 mb-4">
@@ -194,6 +232,20 @@ const HomePage = () => {
                 </CardContent>
               </Card>
             ))}
+          </div>
+          
+          <div className="flex justify-center mt-8">
+            <div className="flex gap-2">
+              {Array.from({ length: totalPages }, (_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setCurrentReviewIndex(i)}
+                  className={`w-2 h-2 rounded-full transition-colors ${
+                    i === currentReviewIndex ? 'bg-foreground' : 'bg-gray-300'
+                  }`}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </section>

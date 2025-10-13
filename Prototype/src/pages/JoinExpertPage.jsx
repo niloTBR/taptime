@@ -217,7 +217,7 @@ const JoinExpertPage = () => {
                   <p className="text-sm text-muted-foreground mb-4">
                     {category.description}
                   </p>
-                  <div className="text-sm font-medium text-green-600">
+                  <div className="text-sm font-medium">
                     {category.averageRate}
                   </div>
                 </CardContent>
@@ -241,7 +241,7 @@ const JoinExpertPage = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {requirements.criteria.map((criterion, index) => (
                   <div key={index} className="flex items-start gap-3">
-                    <CheckCircle className="w-5 h-5 text-green-600 mt-0.5" />
+                    <CheckCircle className="w-5 h-5 text-foreground mt-0.5" />
                     <span className="text-sm">{criterion}</span>
                   </div>
                 ))}
