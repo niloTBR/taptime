@@ -1,5 +1,11 @@
 {
   "buildCommand": "cd Prototype && npm install && npm run build",
   "outputDirectory": "Prototype/dist",
-  "installCommand": "cd Prototype && npm install"
+  "installCommand": "cd Prototype && npm install",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
 }

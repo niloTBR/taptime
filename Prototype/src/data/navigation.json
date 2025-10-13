@@ -4,18 +4,18 @@
     "logo": "/api/placeholder/120/40",
     "links": [
       {
-        "label": "Join as Expert",
+        "label": "Browse Experts",
+        "href": "/browse",
+        "active": false
+      },
+      {
+        "label": "Join As An Expert",
         "href": "/join-expert",
         "active": false
       },
       {
         "label": "Your Journey", 
         "href": "/journey",
-        "active": false
-      },
-      {
-        "label": "Browse expert",
-        "href": "/browse",
         "active": false
       }
     ],
