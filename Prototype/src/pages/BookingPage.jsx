@@ -74,52 +74,52 @@ const BookingPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <section className="py-8 px-4 border-b">
+      {/* Minimal Header */}
+      <section className="py-6 px-4">
         <div className="container mx-auto max-w-6xl">
-          <div className="flex items-center gap-4">
-            <Button variant="ghost" size="sm" className="rounded-full">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Profile
-            </Button>
-            <div className="flex-1">
-              <h1 className="text-2xl font-semibold">Book a Session</h1>
-              <p className="text-muted-foreground">with {expert.name}</p>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <Button variant="ghost" size="sm" className="rounded-full">
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Back
+              </Button>
+              <div>
+                <h1 className="text-xl font-semibold">Book with {expert.name}</h1>
+                <div className="flex items-center gap-2 mt-1">
+                  <Star className="w-4 h-4 fill-black text-black" />
+                  <span className="text-sm">{expert.rating} ({expert.reviewCount})</span>
+                  <span className="text-sm text-muted-foreground">•</span>
+                  <span className="text-sm text-muted-foreground">{expert.title}</span>
+                </div>
+              </div>
             </div>
+            <Button variant="ghost" size="sm" className="rounded-full">
+              Share
+            </Button>
           </div>
         </div>
       </section>
 
-      {/* Progress Steps */}
-      <section className="py-6 px-4 bg-gray-50">
-        <div className="container mx-auto max-w-4xl">
-          <div className="flex items-center justify-center">
+      {/* Minimal Progress */}
+      <section className="py-4 px-4 border-b">
+        <div className="container mx-auto max-w-6xl">
+          <div className="flex items-center justify-center gap-8">
             {bookingSteps.map((step, index) => (
-              <div key={step.step} className="flex items-center">
-                <div className={`flex items-center gap-3 ${index > 0 ? 'ml-8' : ''}`}>
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold ${
-                    currentStep >= step.step 
-                      ? 'bg-foreground text-background' 
-                      : 'bg-gray-200 text-muted-foreground'
-                  }`}>
-                    {currentStep > step.step ? (
-                      <CheckCircle className="w-5 h-5" />
-                    ) : (
-                      step.step
-                    )}
-                  </div>
-                  <div className="hidden sm:block">
-                    <div className={`font-medium text-sm ${
-                      currentStep >= step.step ? 'text-foreground' : 'text-muted-foreground'
-                    }`}>
-                      {step.title}
-                    </div>
-                  </div>
+              <div key={step.step} className="flex items-center gap-2">
+                <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium ${
+                  currentStep >= step.step 
+                    ? 'bg-foreground text-background' 
+                    : 'bg-gray-200 text-muted-foreground'
+                }`}>
+                  {currentStep > step.step ? '✓' : step.step}
                 </div>
+                <span className={`text-sm ${
+                  currentStep >= step.step ? 'text-foreground' : 'text-muted-foreground'
+                }`}>
+                  {step.title}
+                </span>
                 {index < bookingSteps.length - 1 && (
-                  <div className={`hidden sm:block w-16 h-px mx-4 ${
-                    currentStep > step.step ? 'bg-foreground' : 'bg-gray-200'
-                  }`} />
+                  <div className="w-8 h-px bg-gray-200 ml-4" />
                 )}
               </div>
             ))}
@@ -268,7 +268,7 @@ const BookingPage = () => {
                   <CardContent className="space-y-6">
                     <div className="bg-gray-50 p-4 rounded-lg">
                       <div className="flex items-center gap-2 mb-2">
-                        <Shield className="w-4 h-4 text-green-600" />
+                        <Shield className="w-4 h-4 text-foreground" />
                         <span className="text-sm font-medium">Secure Payment</span>
                       </div>
                       <p className="text-sm text-muted-foreground">
@@ -374,7 +374,7 @@ const BookingPage = () => {
                     </div>
                   </div>
 
-                  <Separator />
+                  <div className="border-t my-3" />
 
                   {/* Session Details */}
                   {selectedSession && (
@@ -390,7 +390,7 @@ const BookingPage = () => {
 
                   {selectedDate && selectedTime && (
                     <>
-                      <Separator />
+                      <div className="border-t my-3" />
                       <div>
                         <h5 className="font-medium text-sm mb-2">Date & Time</h5>
                         <div className="flex items-center gap-2 text-sm">
@@ -407,7 +407,7 @@ const BookingPage = () => {
 
                   {selectedSession && (
                     <>
-                      <Separator />
+                      <div className="border-t my-3" />
                       <div className="bg-gray-50 p-3 rounded-lg">
                         <div className="flex justify-between items-center mb-1">
                           <span className="text-sm">Session fee</span>
@@ -426,7 +426,7 @@ const BookingPage = () => {
                     </>
                   )}
 
-                  <Separator />
+                  <div className="border-t my-3" />
 
                   {/* Policies */}
                   <div className="space-y-2">

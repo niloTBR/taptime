@@ -40,7 +40,7 @@ const SafetyPage = () => {
             {safetyFeatures.map((feature, index) => (
               <Card key={index} className="border border-gray-200">
                 <CardHeader>
-                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4 text-blue-600">
+                  <div className="w-12 h-12 bg-foreground rounded-full flex items-center justify-center mb-4 text-foreground">
                     {feature.icon}
                   </div>
                   <CardTitle>{feature.title}</CardTitle>

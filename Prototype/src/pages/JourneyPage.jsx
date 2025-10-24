@@ -141,7 +141,7 @@ const JourneyPage = () => {
                     <div className="flex items-center justify-between mb-3">
                       <h3 className="font-semibold">{goal.title}</h3>
                       {goal.status === 'completed' && (
-                        <CheckCircle className="w-5 h-5 text-green-600" />
+                        <CheckCircle className="w-5 h-5 text-foreground" />
                       )}
                     </div>
                     <p className="text-sm text-muted-foreground mb-4">{goal.description}</p>
@@ -235,7 +235,7 @@ const JourneyPage = () => {
                     <div className="space-y-2 mb-6">
                       {learningPath.completedModules.map((module, index) => (
                         <div key={index} className="flex items-center gap-2">
-                          <CheckCircle className="w-4 h-4 text-green-600" />
+                          <CheckCircle className="w-4 h-4 text-foreground" />
                           <span className="text-sm">{module}</span>
                         </div>
                       ))}

@@ -64,7 +64,7 @@ const BlogPage = () => {
                 key={index}
                 variant={index === 0 ? "default" : "outline"}
                 size="sm"
-                className={index === 0 ? "bg-blue-600 hover:bg-blue-700" : ""}
+                className={index === 0 ? "rounded-full" : "rounded-full border-2 border-foreground"}
               >
                 {category}
               </Button>
@@ -84,7 +84,7 @@ const BlogPage = () => {
                     <Badge variant="secondary">{post.category}</Badge>
                     <span className="text-sm text-gray-500">{post.readTime}</span>
                   </div>
-                  <CardTitle className="text-xl line-clamp-2 hover:text-blue-600 transition-colors">
+                  <CardTitle className="text-xl line-clamp-2 hover:text-foreground transition-colors">
                     {post.title}
                   </CardTitle>
                 </CardHeader>
@@ -103,7 +103,7 @@ const BlogPage = () => {
                         {post.date}
                       </div>
                     </div>
-                    <ArrowRight className="w-4 h-4 text-blue-600" />
+                    <ArrowRight className="w-4 h-4 text-foreground" />
                   </div>
                 </CardContent>
               </Card>
@@ -113,21 +113,21 @@ const BlogPage = () => {
       </section>
 
       {/* Newsletter Signup */}
-      <section className="py-16 bg-blue-600">
+      <section className="py-16 bg-foreground">
         <div className="container mx-auto max-w-4xl px-4 text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">
+          <h2 className="text-3xl font-bold text-background mb-4">
             Stay Updated
           </h2>
-          <p className="text-blue-100 mb-8 text-lg">
+          <p className="text-background/80 mb-8 text-lg">
             Get the latest insights and tips delivered to your inbox
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
             <input
               type="email"
               placeholder="Enter your email"
-              className="flex-1 px-4 py-2 rounded-lg border-0 focus:ring-2 focus:ring-white"
+              className="flex-1 px-4 py-2 rounded-full border-0 focus:ring-2 focus:ring-background"
             />
-            <Button variant="secondary" className="bg-white text-blue-600 hover:bg-gray-100">
+            <Button variant="secondary" className="bg-background text-foreground hover:bg-gray-100 rounded-full">
               Subscribe
             </Button>
           </div>

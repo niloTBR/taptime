@@ -42,16 +42,18 @@ const ScrollingTicker = ({ items, className = '' }) => {
     <div className={`overflow-hidden relative ${className}`}>
       <div 
         ref={tickerRef}
-        className="flex animate-scroll whitespace-nowrap"
+        className="flex animate-scroll"
       >
-        <div className="ticker-content flex items-center gap-16 min-w-full pr-16">
+        <div className="ticker-content flex items-center min-w-max">
           {items.map((item, index) => (
-            <div key={index} className="flex items-center gap-3 shrink-0 whitespace-nowrap min-w-fit px-4">
-              <div className="w-6 h-6 rounded-full border-2 border-foreground flex items-center justify-center shrink-0">
+            <div key={index} className="flex items-center gap-3 px-8 py-4 whitespace-nowrap">
+              <div className="w-6 h-6 rounded-full border-2 border-foreground flex items-center justify-center flex-shrink-0">
                 {getIcon(item.category)}
               </div>
-              <span className="text-base font-medium whitespace-nowrap shrink-0">{item.category}</span>
-              <ArrowRight className="w-4 h-4 text-muted-foreground shrink-0 ml-2" />
+              <span className="text-base font-medium select-none flex-shrink-0">
+                {item.category}
+              </span>
+              <ArrowRight className="w-4 h-4 text-muted-foreground flex-shrink-0 ms-2" />
             </div>
           ))}
         </div>

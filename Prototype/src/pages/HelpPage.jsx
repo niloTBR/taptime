@@ -64,7 +64,7 @@ const HelpPage = () => {
           <div className="grid md:grid-cols-3 gap-6">
             <Card className="text-center">
               <CardHeader>
-                <MessageCircle className="w-8 h-8 mx-auto mb-2 text-blue-600" />
+                <MessageCircle className="w-8 h-8 mx-auto mb-2 text-foreground" />
                 <CardTitle>Live Chat</CardTitle>
               </CardHeader>
               <CardContent>
@@ -75,7 +75,7 @@ const HelpPage = () => {
             
             <Card className="text-center">
               <CardHeader>
-                <Mail className="w-8 h-8 mx-auto mb-2 text-green-600" />
+                <Mail className="w-8 h-8 mx-auto mb-2 text-foreground" />
                 <CardTitle>Email Support</CardTitle>
               </CardHeader>
               <CardContent>
@@ -86,7 +86,7 @@ const HelpPage = () => {
             
             <Card className="text-center">
               <CardHeader>
-                <Phone className="w-8 h-8 mx-auto mb-2 text-purple-600" />
+                <Phone className="w-8 h-8 mx-auto mb-2 text-foreground" />
                 <CardTitle>Phone Support</CardTitle>
               </CardHeader>
               <CardContent>

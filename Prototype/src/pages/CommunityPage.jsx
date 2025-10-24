@@ -32,7 +32,7 @@ const CommunityPage = () => {
         <div className="container mx-auto max-w-4xl text-center">
           <h1 className="text-4xl font-bold text-gray-900 mb-6">TapTime Community</h1>
           <p className="text-xl text-gray-600 mb-8">Connect, learn, and grow with like-minded professionals</p>
-          <Button className="bg-purple-600 hover:bg-purple-700">Join the Community</Button>
+          <Button className="bg-foreground hover:bg-foreground">Join the Community</Button>
         </div>
       </section>
 
@@ -42,7 +42,7 @@ const CommunityPage = () => {
             {communityFeatures.map((feature, index) => (
               <Card key={index} className="border border-gray-200">
                 <CardHeader>
-                  <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-4 text-purple-600">
+                  <div className="w-12 h-12 bg-foreground rounded-full flex items-center justify-center mb-4 text-foreground">
                     {feature.icon}
                   </div>
                   <CardTitle>{feature.title}</CardTitle>

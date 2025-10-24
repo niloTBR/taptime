@@ -89,7 +89,7 @@ const CareersPage = () => {
           <p className="text-xl text-gray-600 mb-8 leading-relaxed">
             Help us build the future of professional mentorship and expert connections. We're looking for passionate individuals who want to make a meaningful impact.
           </p>
-          <Button className="bg-purple-600 hover:bg-purple-700">
+          <Button className="bg-foreground hover:bg-foreground">
             View Open Positions
           </Button>
         </div>
@@ -108,7 +108,7 @@ const CareersPage = () => {
             {values.map((value, index) => (
               <Card key={index} className="border-0 shadow-sm text-center">
                 <CardHeader>
-                  <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4 text-purple-600">
+                  <div className="w-12 h-12 bg-foreground rounded-full flex items-center justify-center mx-auto mb-4 text-foreground">
                     {value.icon}
                   </div>
                   <CardTitle className="text-lg">{value.title}</CardTitle>
@@ -136,7 +136,7 @@ const CareersPage = () => {
               <div className="grid grid-cols-1 gap-3">
                 {benefits.map((benefit, index) => (
                   <div key={index} className="flex items-start gap-3">
-                    <div className="w-2 h-2 bg-purple-600 rounded-full mt-2 shrink-0"></div>
+                    <div className="w-2 h-2 bg-foreground rounded-full mt-2 shrink-0"></div>
                     <span className="text-gray-700">{benefit}</span>
                   </div>
                 ))}
@@ -149,15 +149,15 @@ const CareersPage = () => {
               </p>
               <div className="space-y-3">
                 <div className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4 text-purple-600" />
+                  <MapPin className="w-4 h-4 text-foreground" />
                   <span className="text-sm text-gray-700">Offices in SF, NYC, Austin</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Clock className="w-4 h-4 text-purple-600" />
+                  <Clock className="w-4 h-4 text-foreground" />
                   <span className="text-sm text-gray-700">Flexible working hours</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Users className="w-4 h-4 text-purple-600" />
+                  <Users className="w-4 h-4 text-foreground" />
                   <span className="text-sm text-gray-700">Quarterly team meetups</span>
                 </div>
               </div>
@@ -194,7 +194,7 @@ const CareersPage = () => {
                         </div>
                       </div>
                     </div>
-                    <Button className="bg-purple-600 hover:bg-purple-700 shrink-0">
+                    <Button className="bg-foreground hover:bg-foreground shrink-0">
                       Apply Now
                     </Button>
                   </div>
@@ -211,15 +211,15 @@ const CareersPage = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 bg-purple-600">
+      <section className="py-16 bg-foreground">
         <div className="container mx-auto max-w-4xl px-4 text-center">
           <h2 className="text-3xl font-bold text-white mb-4">
             Don't See Your Role?
           </h2>
-          <p className="text-purple-100 mb-8 text-lg">
+          <p className="text-foreground mb-8 text-lg">
             We're always looking for exceptional talent. Send us your resume and tell us how you'd like to contribute.
           </p>
-          <Button variant="secondary" className="bg-white text-purple-600 hover:bg-gray-100">
+          <Button variant="secondary" className="bg-white text-foreground hover:bg-gray-100">
             Get in Touch
           </Button>
         </div>

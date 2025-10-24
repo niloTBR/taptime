@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
+import { Link } from 'react-router-dom'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { Badge } from '@/components/ui/badge'
@@ -81,12 +82,16 @@ const HomePage = () => {
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-3 justify-center items-center pt-4">
-              <Button size="lg" className="rounded-full px-8">
-                {hero.primaryCta}
-                <ArrowRight className="ml-2 h-4 w-4" />
+              <Button size="lg" className="rounded-full px-8" asChild>
+                <Link to="/browse">
+                  {hero.primaryCta}
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
               </Button>
-              <Button size="lg" variant="outline" className="rounded-full px-8 border-2 border-foreground">
-                {hero.secondaryCta}
+              <Button size="lg" variant="outline" className="rounded-full px-8 border-2 border-foreground" asChild>
+                <Link to="/join-expert">
+                  {hero.secondaryCta}
+                </Link>
               </Button>
             </div>
           </div>
@@ -116,11 +121,13 @@ const HomePage = () => {
             {/* Mobile Carousel */}
             <div className="block md:hidden">
               <div className="flex overflow-x-auto gap-6 pb-4 px-4 -mx-4 scrollbar-hide">
-                {featuredSection.experts.map((expert) => (
+                {featuredSection.experts.map((expert, index) => (
                   <div key={expert.id} className="flex-shrink-0 w-80">
                     <ExpertCard
                       expert={expert}
                       showActions={true}
+                      showCrown={index === 0}
+                      showCharity={index === 1}
                     />
                   </div>
                 ))}
@@ -129,19 +136,23 @@ const HomePage = () => {
 
             {/* Desktop Grid */}
             <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {featuredSection.experts.map((expert) => (
+              {featuredSection.experts.map((expert, index) => (
                 <ExpertCard
                   key={expert.id}
                   expert={expert}
                   showActions={true}
+                  showCrown={index === 0}
+                  showCharity={index === 1}
                 />
               ))}
             </div>
 
             <div className="pt-8">
-              <Button size="lg" variant="outline" className="rounded-full px-8 border-2 border-foreground">
-                View All Experts
-                <ArrowRight className="ml-2 h-4 w-4" />
+              <Button size="lg" variant="outline" className="rounded-full px-8 border-2 border-foreground" asChild>
+                <Link to="/browse">
+                  View All Experts
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
               </Button>
             </div>
           </div>
@@ -323,9 +334,12 @@ const HomePage = () => {
                 <Button 
                   size="lg" 
                   className="rounded-full px-8"
+                  asChild
                 >
-                  {ctaSection.buttonText}
-                  <ArrowRight className="ml-2 h-4 w-4" />
+                  <Link to="/browse">
+                    {ctaSection.buttonText}
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
                 </Button>
               </div>
             </CardContent>

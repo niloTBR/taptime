@@ -97,7 +97,7 @@ const AboutPage = () => {
             {values.map((value, index) => (
               <Card key={index} className="border-0 shadow-sm">
                 <CardHeader className="text-center">
-                  <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 text-green-600">
+                  <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                     {value.icon}
                   </div>
                   <CardTitle className="text-lg">{value.title}</CardTitle>
@@ -134,19 +134,19 @@ const AboutPage = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 bg-green-600">
+      <section className="py-16 bg-foreground">
         <div className="container mx-auto max-w-4xl px-4 text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">
+          <h2 className="text-3xl font-bold text-background mb-4">
             Ready to Get Started?
           </h2>
-          <p className="text-green-100 mb-8 text-lg">
+          <p className="text-background/80 mb-8 text-lg">
             Join thousands of professionals who are already growing with TapTime
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button variant="secondary" asChild className="bg-white text-green-600 hover:bg-gray-100">
+            <Button variant="secondary" asChild className="bg-background text-foreground hover:bg-gray-100 rounded-full px-8">
               <Link to="/browse">Browse Experts</Link>
             </Button>
-            <Button variant="outline" asChild className="border-white text-white hover:bg-white hover:text-green-600">
+            <Button variant="outline" asChild className="border-background text-background hover:bg-background hover:text-foreground rounded-full px-8">
               <Link to="/join-expert">Join as Expert</Link>
             </Button>
           </div>

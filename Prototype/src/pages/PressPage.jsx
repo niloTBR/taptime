@@ -57,7 +57,7 @@ const PressPage = () => {
         <div className="container mx-auto max-w-4xl text-center">
           <h2 className="text-2xl font-bold mb-4">Media Kit</h2>
           <p className="text-gray-600 mb-8">Download our media kit for logos, brand guidelines, and company information.</p>
-          <Button className="bg-blue-600 hover:bg-blue-700">
+          <Button className="bg-foreground hover:bg-foreground">
             <Download className="w-4 h-4 mr-2" />
             Download Media Kit
           </Button>

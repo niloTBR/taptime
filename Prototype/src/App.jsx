@@ -19,6 +19,12 @@ import CommunityPage from '@/pages/CommunityPage'
 import PrivacyPage from '@/pages/PrivacyPage'
 import TermsPage from '@/pages/TermsPage'
 import TestPage from '@/pages/TestPage'
+import PrototypeNavigationPage from '@/pages/PrototypeNavigationPage'
+import AdminUserDashboard from '@/pages/admin/AdminUserDashboard'
+import AdminExpertDashboard from '@/pages/admin/AdminExpertDashboard'
+import CMSDashboard from '@/pages/cms/CMSDashboard'
+import UserDashboard from '@/pages/user/UserDashboard'
+import ExpertDashboard from '@/pages/expert/ExpertDashboard'
 
 function App() {
   return (
@@ -42,9 +48,15 @@ function App() {
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/terms" element={<TermsPage />} />
           <Route path="/test" element={<TestPage />} />
+          <Route path="/prototypes" element={<PrototypeNavigationPage />} />
         </Route>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignUpPage />} />
+        <Route path="/admin/user" element={<AdminUserDashboard />} />
+        <Route path="/admin/expert" element={<AdminExpertDashboard />} />
+        <Route path="/cms" element={<CMSDashboard />} />
+        <Route path="/user/dashboard" element={<UserDashboard />} />
+        <Route path="/expert/dashboard" element={<ExpertDashboard />} />
       </Routes>
     </Router>
   )

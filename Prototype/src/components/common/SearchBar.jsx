@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { Search, Mic } from 'lucide-react'
+import { Search, Mic, Sparkles } from 'lucide-react'
 
 const SearchBar = ({ 
   placeholder = "Search...", 
   onSearch,
   className = "",
   showVoiceSearch = true,
+  showAIMatch = true,
   size = "default",
   animatedPlaceholders = []
 }) => {
@@ -83,6 +84,11 @@ const SearchBar = ({
     console.log('Voice search activated')
   }
 
+  const handleAIMatch = () => {
+    // AI matching implementation would go here
+    console.log('AI matching activated')
+  }
+
   const sizeClasses = {
     sm: "h-8",
     default: "h-12", 
@@ -90,9 +96,9 @@ const SearchBar = ({
   }
 
   const paddingClasses = {
-    sm: "pl-4 pr-20",
-    default: "pl-4 pr-20", 
-    lg: "pl-6 pr-24"
+    sm: "pl-4 pr-32",
+    default: "pl-4 pr-32", 
+    lg: "pl-6 pr-40"
   }
 
   const fontClasses = {
@@ -111,14 +117,14 @@ const SearchBar = ({
           onChange={(e) => setSearchQuery(e.target.value)}
           className={`${paddingClasses[size]} ${sizeClasses[size]} ${fontClasses[size]} rounded-full transition-all duration-300 placeholder:font-medium`}
         />
-        <div className="absolute right-1 top-1/2 -translate-y-1/2 flex gap-1">
+        <div className="absolute right-2 top-1/2 -translate-y-1/2 flex gap-1">
           {showVoiceSearch && (
             <Button
               type="button"
               size={size === 'lg' ? 'default' : 'sm'}
               variant="ghost"
               onClick={handleVoiceSearch}
-              className={`${size === 'lg' ? 'h-12 w-12 p-0' : 'h-8 w-8 p-0'}`}
+              className={`${size === 'lg' ? 'h-12 w-12 p-0' : 'h-8 w-8 p-0'} rounded-full bg-gray-100 hover:bg-black hover:text-white transition-colors`}
             >
               <Mic className={size === 'lg' ? 'w-5 h-5' : 'w-4 h-4'} />
             </Button>
@@ -126,10 +132,22 @@ const SearchBar = ({
           <Button
             type="submit"
             size={size === 'lg' ? 'default' : 'sm'}
-            className={`${size === 'lg' ? 'h-12 px-4 rounded-full' : 'h-8 px-3'}`}
+            className={`${size === 'lg' ? 'h-12 px-4 rounded-full' : 'h-8 px-3'} bg-gray-100 hover:bg-black hover:text-white text-black transition-colors`}
           >
             <Search className={size === 'lg' ? 'w-5 h-5' : 'w-4 h-4'} />
           </Button>
+          {showAIMatch && (
+            <Button
+              type="button"
+              size={size === 'lg' ? 'default' : 'sm'}
+              variant="ghost"
+              onClick={handleAIMatch}
+              className={`${size === 'lg' ? 'h-12 px-5 rounded-full text-xs' : 'h-8 px-4 text-xs'} bg-gray-100 text-black hover:bg-gradient-to-r hover:from-purple-500 hover:to-blue-500 hover:text-white transition-all group`}
+            >
+              <Sparkles className={`${size === 'lg' ? 'w-3 h-3 mr-1' : 'w-3 h-3 mr-1'} text-purple-500 group-hover:text-white`} />
+              {size === 'lg' ? 'Match with AI' : 'AI'}
+            </Button>
+          )}
         </div>
       </div>
     </form>

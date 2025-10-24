@@ -15,6 +15,7 @@ const SignUpPage = () => {
     phone: '',
     password: '',
     confirmPassword: '',
+    userType: 'user', // 'user' or 'expert'
     agreeToTerms: false
   })
 
@@ -67,13 +68,44 @@ const SignUpPage = () => {
           </CardHeader>
           <CardContent className="space-y-4">
             <form onSubmit={handleSubmit} className="space-y-4">
+              {/* User Type Selection */}
+              <div className="space-y-3">
+                <label className="text-sm font-medium">I want to:</label>
+                <div className="grid grid-cols-2 gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setFormData(prev => ({...prev, userType: 'user'}))}
+                    className={`p-3 border-2 rounded-lg text-sm font-medium transition-colors ${
+                      formData.userType === 'user'
+                        ? 'border-foreground bg-foreground text-background'
+                        : 'border-gray-200 hover:border-gray-300'
+                    }`}
+                  >
+                    Find an Expert
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setFormData(prev => ({...prev, userType: 'expert'}))}
+                    className={`p-3 border-2 rounded-lg text-sm font-medium transition-colors ${
+                      formData.userType === 'expert'
+                        ? 'border-foreground bg-foreground text-background'
+                        : 'border-gray-200 hover:border-gray-300'
+                    }`}
+                  >
+                    Join as Expert
+                  </button>
+                </div>
+              </div>
+
               <div className="space-y-4">
-                <Input
-                  id="fullName"
-                  name="fullName"
-                  type="text"
-                  placeholder="Full Name"
-                  className="border-gray-200"
+                <div>
+                  <label htmlFor="fullName" className="block text-sm font-medium mb-2">Full Name</label>
+                  <Input
+                    id="fullName"
+                    name="fullName"
+                    type="text"
+                    placeholder="Enter your full name"
+                    className="border-gray-200"
                   value={formData.firstName + ' ' + formData.lastName}
                   onChange={(e) => {
                     const names = e.target.value.split(' ')
@@ -83,8 +115,9 @@ const SignUpPage = () => {
                       lastName: names.slice(1).join(' ') || ''
                     }))
                   }}
-                  required
-                />
+                    required
+                  />
+                </div>
               </div>
               
               <div className="space-y-2">
