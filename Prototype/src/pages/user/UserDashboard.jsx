@@ -481,83 +481,122 @@ const UserDashboard = () => {
           
           {activeTab === 'discover' && (
             <div className="space-y-6">
-              <Card className="border-2 border-foreground">
-                <CardHeader>
-                  <CardTitle>Recommended for You</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
+              <div>
+                <h2 className="text-xl font-semibold mb-6">Recommended for You</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {suggestedExperts.map((expert, index) => (
-                    <div key={index} className="flex items-center gap-4 p-4 border rounded-lg">
-                      <Avatar className="w-12 h-12">
-                        <AvatarImage src={expert.avatar} alt={expert.name} />
-                        <AvatarFallback>{getInitials(expert.name)}</AvatarFallback>
-                      </Avatar>
-                      <div className="flex-1">
-                        <h4 className="font-semibold">{expert.name}</h4>
-                        <p className="text-sm text-muted-foreground">{expert.title}</p>
-                        <p className="text-xs text-muted-foreground">{expert.reason}</p>
-                        <div className="flex items-center gap-4 mt-1">
-                          <span className="text-sm">⭐ {expert.rating}</span>
-                          <span className="text-sm text-muted-foreground">{expert.sessions} sessions</span>
-                          <span className="text-sm font-medium">{expert.price}</span>
+                    <Card key={index} className="border-2 border-foreground">
+                      <CardContent className="p-6">
+                        <div className="flex items-start gap-4 mb-4">
+                          <Avatar className="w-16 h-16">
+                            <AvatarImage src={expert.avatar} alt={expert.name} />
+                            <AvatarFallback>{getInitials(expert.name)}</AvatarFallback>
+                          </Avatar>
+                          <div className="flex-1">
+                            <h3 className="text-lg font-semibold">{expert.name}</h3>
+                            <p className="text-muted-foreground">{expert.title}</p>
+                            <div className="flex items-center gap-2 mt-2">
+                              <div className="flex items-center gap-1">
+                                <Star className="w-4 h-4 fill-foreground text-foreground" />
+                                <span className="font-medium">{expert.rating}</span>
+                              </div>
+                              <span className="text-sm text-muted-foreground">•</span>
+                              <span className="text-sm text-muted-foreground">{expert.sessions} sessions</span>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <p className="text-xl font-bold">{expert.price}</p>
+                          </div>
                         </div>
-                      </div>
-                      <Button className="rounded-full">Book Session</Button>
-                    </div>
+                        
+                        <div className="mb-4">
+                          <p className="text-sm text-blue-600 bg-blue-50 px-2 py-1 rounded">
+                            💡 {expert.reason}
+                          </p>
+                        </div>
+                        
+                        <div className="flex gap-3">
+                          <Button className="flex-1 rounded-full">
+                            Book Session
+                          </Button>
+                          <Button 
+                            variant="outline" 
+                            className="rounded-full border-2 border-foreground"
+                            onClick={() => window.open(`/expert/${expert.name.toLowerCase().replace(' ', '-')}`, '_blank')}
+                          >
+                            View Profile
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
                   ))}
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             </div>
           )}
         </div>
       </div>
 
-      {/* Session Detail Modal */}
+      {/* Session Detail Overlay Sidebar */}
       {showSessionDetail && selectedSession && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <Card className="w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto border-2 border-foreground">
-            <CardHeader className="border-b">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <Avatar className="w-12 h-12">
-                    <AvatarImage src={selectedSession.avatar} alt={selectedSession.expertName} />
-                    <AvatarFallback>{getInitials(selectedSession.expertName)}</AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <CardTitle>{selectedSession.expertName}</CardTitle>
-                    <p className="text-muted-foreground">{selectedSession.expertTitle}</p>
-                  </div>
-                </div>
+        <div className="fixed inset-0 bg-black/50 z-50">
+          <div className="fixed right-0 top-0 h-full w-96 bg-white shadow-xl overflow-y-auto">
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-semibold">Session Details</h2>
                 <Button 
                   variant="outline" 
-                  onClick={() => setShowSessionDetail(false)}
+                  size="icon"
                   className="rounded-full"
+                  onClick={() => setShowSessionDetail(false)}
                 >
-                  ✕
+                  ×
                 </Button>
               </div>
-            </CardHeader>
-            <CardContent className="p-6 space-y-6">
+              
+              {/* Expert Info */}
+              <div className="flex items-center gap-4 mb-6">
+                <Avatar className="w-16 h-16">
+                  <AvatarImage src={selectedSession.avatar} alt={selectedSession.expertName} />
+                  <AvatarFallback>{getInitials(selectedSession.expertName)}</AvatarFallback>
+                </Avatar>
+                <div>
+                  <h3 className="font-semibold text-lg">{selectedSession.expertName}</h3>
+                  <p className="text-muted-foreground">{selectedSession.expertTitle}</p>
+                  <Button 
+                    variant="link" 
+                    className="p-0 h-auto text-sm"
+                    onClick={() => window.open(`/expert/${selectedSession.expertName.toLowerCase().replace(' ', '-')}`, '_blank')}
+                  >
+                    View Full Profile
+                  </Button>
+                </div>
+              </div>
+              
               {/* Session Info */}
-              <div className="p-4 bg-gray-50 rounded-lg">
-                <h3 className="font-semibold mb-2">{selectedSession.topic}</h3>
-                <p className="text-sm text-muted-foreground mb-2">{selectedSession.summary}</p>
-                <div className="flex items-center gap-4 text-sm">
-                  <span>📅 {selectedSession.date} at {selectedSession.time}</span>
-                  <span>⏱️ {selectedSession.duration}</span>
-                  <span>💰 {selectedSession.cost}</span>
+              <div className="space-y-4 mb-6">
+                <div className="p-4 bg-gray-50 rounded-lg">
+                  <h4 className="font-medium mb-2">{selectedSession.topic}</h4>
+                  <p className="text-sm text-muted-foreground mb-3">{selectedSession.summary}</p>
+                  <div className="flex items-center gap-4 text-sm">
+                    <span>📅 {selectedSession.date} at {selectedSession.time}</span>
+                  </div>
+                  <div className="flex items-center gap-4 text-sm mt-1">
+                    <span>⏱️ {selectedSession.duration}</span>
+                    <span>💰 {selectedSession.cost}</span>
+                  </div>
                 </div>
               </div>
               
               {/* Actions */}
-              <div className="flex gap-3">
-                <Button className="rounded-full">
+              <div className="space-y-3">
+                <Button className="w-full rounded-full">
                   <Video className="w-4 h-4 mr-2" />
                   Join Session
                 </Button>
                 <Button 
                   variant="outline" 
-                  className="rounded-full border-2 border-foreground"
+                  className="w-full rounded-full border-2 border-foreground"
                   onClick={() => {
                     setShowSessionDetail(false)
                     setShowReschedule(true)
@@ -565,39 +604,23 @@ const UserDashboard = () => {
                 >
                   Reschedule
                 </Button>
+                <Button variant="outline" className="w-full rounded-full border-2 border-foreground">
+                  <MessageCircle className="w-4 h-4 mr-2" />
+                  Message Expert
+                </Button>
               </div>
               
-              {/* Expert Profile Tab Content */}
-              <div className="border-t pt-6">
-                <h4 className="font-semibold mb-4">About {selectedSession.expertName}</h4>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Dr. Michael Chen is a seasoned product strategist with over 10 years of experience 
-                  helping companies build successful products. He has worked with Fortune 500 companies 
-                  and startups alike, specializing in product roadmap development and market strategy.
-                </p>
-                
-                <h4 className="font-semibold mb-2">Expertise</h4>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  <Badge variant="secondary">Product Strategy</Badge>
-                  <Badge variant="secondary">Roadmap Planning</Badge>
-                  <Badge variant="secondary">Market Analysis</Badge>
-                </div>
-                
-                <h4 className="font-semibold mb-2">Reviews</h4>
-                <div className="space-y-3">
-                  <div className="p-3 border rounded-lg">
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="font-medium">Sarah K.</span>
-                      <div className="flex">⭐⭐⭐⭐⭐</div>
-                    </div>
-                    <p className="text-sm text-muted-foreground">
-                      "Incredible session! Michael helped us completely restructure our product roadmap."
-                    </p>
-                  </div>
-                </div>
+              {/* Session Notes */}
+              <div className="mt-6 pt-6 border-t">
+                <h4 className="font-medium mb-3">Session Notes</h4>
+                <textarea 
+                  className="w-full p-3 border-2 border-gray-200 rounded-lg" 
+                  rows="3" 
+                  placeholder="Add any notes or questions for this session..."
+                ></textarea>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </div>
       )}
       
