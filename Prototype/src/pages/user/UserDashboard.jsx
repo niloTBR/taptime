@@ -25,7 +25,9 @@ import {
   Mail,
   Phone,
   Building,
-  Edit
+  Edit,
+  Eye,
+  X
 } from 'lucide-react'
 
 const UserDashboard = () => {
@@ -33,6 +35,7 @@ const UserDashboard = () => {
   const [showReschedule, setShowReschedule] = useState(false)
   const [selectedSession, setSelectedSession] = useState(null)
   const [showSessionDetail, setShowSessionDetail] = useState(false)
+  const [sessionDetailTab, setSessionDetailTab] = useState('details')
 
   // Mock user data from onboarding
   const user = {
@@ -114,7 +117,14 @@ const UserDashboard = () => {
       topic: 'Product Roadmap Review',
       summary: 'Review your current product strategy and identify areas for improvement. We\'ll discuss market positioning and competitive analysis.',
       cost: '$200',
-      avatar: '/api/placeholder/40/40'
+      avatar: '/api/placeholder/40/40',
+      expertImage: '/api/placeholder/300/120',
+      category: 'Strategy',
+      rating: 4.9,
+      reviewCount: 89,
+      verified: true,
+      paymentStatus: 'paid',
+      expertise: ['Product Strategy']
     },
     {
       id: 2,
@@ -126,7 +136,14 @@ const UserDashboard = () => {
       topic: 'Growth Marketing Session',
       summary: 'Deep dive into growth marketing tactics and customer acquisition strategies for your business.',
       cost: '$150',
-      avatar: '/api/placeholder/40/40'
+      avatar: '/api/placeholder/40/40',
+      expertImage: '/api/placeholder/300/120',
+      category: 'Marketing',
+      rating: 4.8,
+      reviewCount: 65,
+      verified: true,
+      paymentStatus: 'pending',
+      expertise: ['Growth Marketing']
     }
   ]
 
@@ -141,7 +158,15 @@ const UserDashboard = () => {
       duration: '60 min',
       cost: '$180',
       feedback: 'Excellent insights on building scalable design systems. Very actionable advice.',
-      hasReview: false
+      hasReview: false,
+      avatar: '/api/placeholder/40/40',
+      expertImage: '/api/placeholder/300/120',
+      category: 'Design',
+      expertRating: 4.9,
+      reviewCount: 76,
+      verified: true,
+      paymentStatus: 'paid',
+      expertise: ['UX Design']
     },
     {
       id: 2,
@@ -153,7 +178,15 @@ const UserDashboard = () => {
       duration: '75 min',
       cost: '$200',
       feedback: 'Great strategic guidance. Helped clarify our business direction.',
-      hasReview: true
+      hasReview: true,
+      avatar: '/api/placeholder/40/40',
+      expertImage: '/api/placeholder/300/120',
+      category: 'Business',
+      expertRating: 4.7,
+      reviewCount: 54,
+      verified: true,
+      paymentStatus: 'paid',
+      expertise: ['Business Strategy']
     },
     {
       id: 3,
@@ -165,7 +198,15 @@ const UserDashboard = () => {
       duration: '60 min',
       cost: '$160',
       feedback: 'Amazing session! Clear roadmap and priorities established.',
-      hasReview: true
+      hasReview: true,
+      avatar: '/api/placeholder/40/40',
+      expertImage: '/api/placeholder/300/120',
+      category: 'Product',
+      expertRating: 4.8,
+      reviewCount: 92,
+      verified: true,
+      paymentStatus: 'paid',
+      expertise: ['Product Strategy']
     }
   ]
 
@@ -175,9 +216,7 @@ const UserDashboard = () => {
 
   const tabs = [
     { id: 'upcoming', label: 'Upcoming', count: upcomingSessions.length },
-    { id: 'past', label: 'Past Sessions', count: pastSessions.length },
-    { id: 'analytics', label: 'Analytics' },
-    { id: 'discover', label: 'Discover' }
+    { id: 'past', label: 'Past Sessions', count: pastSessions.length }
   ]
 
   return (
@@ -204,82 +243,126 @@ const UserDashboard = () => {
         </div>
       </header>
 
+      {/* Progress Cards Above the Fold */}
+      <section className="bg-gray-50 border-b px-6 py-8">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-lg font-semibold mb-6">Your Progress</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <Card className="border-2">
+              <CardContent className="p-6">
+                <div className="flex items-center gap-3 mb-2">
+                  <BookOpen className="w-5 h-5 text-muted-foreground" />
+                  <span className="text-sm text-muted-foreground">Total Sessions</span>
+                </div>
+                <p className="text-2xl font-bold">{pastSessions.length + upcomingSessions.length}</p>
+              </CardContent>
+            </Card>
+            
+            <Card className="border-2">
+              <CardContent className="p-6">
+                <div className="flex items-center gap-3 mb-2">
+                  <TrendingUp className="w-5 h-5 text-muted-foreground" />
+                  <span className="text-sm text-muted-foreground">This Month</span>
+                </div>
+                <p className="text-2xl font-bold">6</p>
+              </CardContent>
+            </Card>
+            
+            <Card className="border-2">
+              <CardContent className="p-6">
+                <div className="flex items-center gap-3 mb-2">
+                  <Star className="w-5 h-5 text-muted-foreground" />
+                  <span className="text-sm text-muted-foreground">Avg Rating Given</span>
+                </div>
+                <p className="text-2xl font-bold">4.7</p>
+              </CardContent>
+            </Card>
+            
+            <Card className="border-2">
+              <CardContent className="p-6">
+                <div className="flex items-center gap-3 mb-2">
+                  <Target className="w-5 h-5 text-muted-foreground" />
+                  <span className="text-sm text-muted-foreground">Budget Range</span>
+                </div>
+                <p className="text-lg font-bold">{user.budget}</p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
       {/* Main Content with Sidebar */}
       <div className="max-w-7xl mx-auto flex gap-6 p-6">
         {/* Sidebar */}
-        <div className="w-80 space-y-6">
+        <div className="w-80">
           {/* User Profile Card */}
           <Card className="border-2 border-foreground">
             <CardContent className="p-6">
-              <div className="flex items-center gap-4 mb-4">
-                <Avatar className="w-16 h-16">
-                  <AvatarImage src={user.avatar} alt={user.name} />
-                  <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
-                </Avatar>
-                <div className="flex-1">
-                  <h3 className="font-semibold text-lg">{user.name}</h3>
-                  <p className="text-sm text-muted-foreground">{user.role} at {user.company}</p>
+              <div className="text-center mb-6">
+                <div className="relative inline-block mb-4">
+                  <Avatar className="w-24 h-24">
+                    <AvatarImage src={user.avatar} alt={user.name} />
+                    <AvatarFallback className="text-xl">{getInitials(user.name)}</AvatarFallback>
+                  </Avatar>
+                  <Button 
+                    size="sm" 
+                    variant="outline" 
+                    className="absolute -bottom-1 -right-1 rounded-full w-8 h-8 p-0 bg-white shadow-md"
+                  >
+                    <Edit className="w-3 h-3" />
+                  </Button>
                 </div>
-                <Button variant="outline" size="icon" className="rounded-full">
-                  <Edit className="w-4 h-4" />
-                </Button>
+                <h3 className="font-semibold text-xl mb-1">{user.name}</h3>
+                <p className="text-muted-foreground text-base mb-1">{user.role}</p>
+                <p className="text-sm text-muted-foreground mb-3">{user.company}</p>
+                
+                <div className="p-3 bg-blue-50 rounded-lg">
+                  <div className="flex items-center justify-center gap-2 text-sm text-blue-700">
+                    <Eye className="w-4 h-4" />
+                    <span>Profile visible to experts</span>
+                  </div>
+                </div>
               </div>
               
-              <div className="space-y-3 text-sm">
-                <div className="flex items-center gap-2">
+              <div className="space-y-4 text-sm">
+                <div className="flex items-center gap-3">
                   <Mail className="w-4 h-4 text-muted-foreground" />
                   <span>{user.email}</span>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3">
                   <Phone className="w-4 h-4 text-muted-foreground" />
                   <span>{user.phone}</span>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3">
                   <MapPin className="w-4 h-4 text-muted-foreground" />
                   <span>{user.location}</span>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3">
                   <Building className="w-4 h-4 text-muted-foreground" />
                   <span>{user.industry} • {user.experience}</span>
                 </div>
               </div>
               
-              <div className="mt-4 pt-4 border-t">
-                <h4 className="font-medium mb-2">Interests</h4>
-                <div className="flex flex-wrap gap-1">
+              <div className="mt-6">
+                <h4 className="font-medium mb-3">Interests</h4>
+                <div className="flex flex-wrap gap-2">
                   {user.interests.map((interest, index) => (
-                    <Badge key={index} variant="secondary" className="text-xs">
+                    <Badge key={index} variant="secondary" className="bg-gray-100 text-gray-700 hover:bg-gray-200 rounded-full px-3 py-1">
                       {interest}
                     </Badge>
                   ))}
                 </div>
               </div>
               
-              <div className="mt-4">
-                <h4 className="font-medium mb-2">Goal</h4>
+              <div className="mt-6">
+                <h4 className="font-medium mb-2">Goals</h4>
                 <p className="text-sm text-muted-foreground">{user.goals}</p>
               </div>
-            </CardContent>
-          </Card>
-          
-          {/* Quick Stats */}
-          <Card className="border-2 border-foreground">
-            <CardContent className="p-6">
-              <h3 className="font-semibold mb-4">Your Progress</h3>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm">Total Sessions</span>
-                  <span className="font-semibold">{pastSessions.length + upcomingSessions.length}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm">This Month</span>
-                  <span className="font-semibold">6</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm">Avg Rating Given</span>
-                  <span className="font-semibold">4.7 ⭐</span>
-                </div>
-              </div>
+              
+              <Button className="w-full mt-6 rounded-full">
+                <Edit className="w-4 h-4 mr-2" />
+                Edit Profile
+              </Button>
             </CardContent>
           </Card>
         </div>
@@ -316,41 +399,111 @@ const UserDashboard = () => {
               {upcomingSessions.map((session) => (
                 <Card 
                   key={session.id} 
-                  className="border-2 border-foreground cursor-pointer hover:bg-gray-50"
+                  className="group hover:shadow-xl hover:scale-105 transition-all duration-300 border-2 hover:border-foreground cursor-pointer h-full relative"
                   onClick={() => {
                     setSelectedSession(session)
                     setShowSessionDetail(true)
                   }}
                 >
-                  <CardContent className="p-6">
-                    <div className="space-y-4">
-                      {/* Expert Info */}
-                      <div className="flex items-center gap-3">
-                        <Avatar className="w-16 h-16">
-                          <AvatarImage src={session.avatar} alt={session.expertName} />
-                          <AvatarFallback>{getInitials(session.expertName)}</AvatarFallback>
-                        </Avatar>
-                        <div className="flex-1">
-                          <h3 className="text-lg font-semibold">{session.expertName}</h3>
-                          <p className="text-muted-foreground">{session.expertTitle}</p>
+                  {/* Expert Photo Header */}
+                  <div className="relative h-32 overflow-hidden rounded-t-lg bg-gray-100">
+                    <img 
+                      src={session.expertImage} 
+                      alt={session.expertName}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                    
+                    {/* Category Badge */}
+                    <div className="absolute top-3 right-3">
+                      <Badge variant="secondary" className="bg-white/90 backdrop-blur-sm text-black text-xs px-2 py-1 shadow-sm">
+                        {session.category}
+                      </Badge>
+                    </div>
+                    
+                    {/* Payment Status */}
+                    <div className="absolute top-3 left-3">
+                      <Badge className={`text-xs px-2 py-1 shadow-sm ${
+                        session.paymentStatus === 'paid' 
+                          ? 'bg-green-600 text-white' 
+                          : 'bg-yellow-600 text-white'
+                      }`}>
+                        {session.paymentStatus === 'paid' ? '✓ Paid' : '⏳ Payment Pending'}
+                      </Badge>
+                    </div>
+                  </div>
+
+                  <CardContent className="p-6 flex flex-col min-h-0">
+                    <div className="flex-1 space-y-4 text-left">
+                      {/* Rating and Verification Row */}
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-1">
+                            <Star className="w-4 h-4 fill-black text-black" />
+                            <span className="text-sm font-medium">{session.rating}</span>
+                          </div>
+                          <span className="text-xs text-muted-foreground">
+                            ({session.reviewCount})
+                          </span>
                         </div>
+                        {session.verified && (
+                          <div className="w-5 h-5 flex items-center justify-center flex-shrink-0">
+                            <CheckCircle className="w-5 h-5 text-blue-600" />
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Expert Name and Title */}
+                      <div>
+                        <h3 className="font-semibold text-base leading-tight text-left">
+                          {session.expertName}
+                        </h3>
+                        <p className="text-xs text-muted-foreground mt-1 text-left">
+                          {session.expertTitle}
+                        </p>
+                      </div>
+                      
+                      {/* Session Topic and Summary */}
+                      <div>
+                        <h4 className="font-medium text-sm mb-1">{session.topic}</h4>
+                        <p className="text-xs text-muted-foreground text-left leading-relaxed line-clamp-2">
+                          {session.summary}
+                        </p>
                       </div>
                       
                       {/* Session Details */}
-                      <div>
-                        <h4 className="font-medium mb-2">{session.topic}</h4>
-                        <p className="text-sm text-muted-foreground mb-3">{session.summary}</p>
-                        
-                        <div className="space-y-1 text-sm text-muted-foreground">
-                          <p>📅 {session.date} at {session.time}</p>
-                          <p>⏱️ Duration: {session.duration}</p>
-                        </div>
+                      <div className="space-y-1 text-xs text-muted-foreground">
+                        <p>📅 {session.date} at {session.time}</p>
+                        <p>⏱️ {session.duration}</p>
                       </div>
-                      
-                      {/* Price */}
-                      <div className="flex items-center justify-between pt-4 border-t">
-                        <span className="text-2xl font-bold">{session.cost}</span>
-                        <Button className="rounded-full">
+                    </div>
+
+                    {/* Actions - Always at Bottom */}
+                    <div className="mt-auto flex-shrink-0 pt-4">
+                      <div className="flex justify-between items-center">
+                        <div className="flex flex-col gap-2">
+                          {session.paymentStatus === 'paid' ? (
+                            <Button 
+                              size="sm" 
+                              className="rounded-full px-4 bg-green-600 hover:bg-green-700"
+                            >
+                              ✓ Paid • {session.duration}
+                            </Button>
+                          ) : (
+                            <Button 
+                              size="sm" 
+                              className="rounded-full px-4 bg-yellow-600 hover:bg-yellow-700"
+                            >
+                              💳 Complete Payment
+                            </Button>
+                          )}
+                        </div>
+                        
+                        <Button 
+                          size="sm" 
+                          variant="outline"
+                          className="rounded-full border-2 border-foreground px-4"
+                        >
                           View Details
                         </Button>
                       </div>
@@ -365,53 +518,106 @@ const UserDashboard = () => {
           {activeTab === 'past' && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {pastSessions.map((session) => (
-                <Card key={session.id} className="border-2 border-foreground">
-                  <CardContent className="p-6">
-                    <div className="space-y-4">
-                      {/* Expert Info */}
-                      <div className="flex items-center gap-3">
-                        <Avatar className="w-16 h-16">
-                          <AvatarImage src={session.avatar} alt={session.expertName} />
-                          <AvatarFallback>{getInitials(session.expertName)}</AvatarFallback>
-                        </Avatar>
-                        <div className="flex-1">
-                          <h3 className="text-lg font-semibold">{session.expertName}</h3>
-                          <p className="text-muted-foreground">{session.expertTitle}</p>
-                        </div>
-                        <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                      </div>
-                      
-                      {/* Session Details */}
-                      <div>
-                        <h4 className="font-medium mb-2">{session.topic}</h4>
-                        <p className="text-sm text-muted-foreground mb-3">{session.feedback}</p>
-                        
-                        <div className="flex items-center gap-2 mb-2">
+                <Card key={session.id} className="group hover:shadow-xl hover:scale-105 transition-all duration-300 border-2 hover:border-foreground cursor-pointer h-full relative">
+                  {/* Expert Photo Header */}
+                  <div className="relative h-32 overflow-hidden rounded-t-lg bg-gray-100">
+                    <img 
+                      src={session.expertImage} 
+                      alt={session.expertName}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                    
+                    {/* Category Badge */}
+                    <div className="absolute top-3 right-3">
+                      <Badge variant="secondary" className="bg-white/90 backdrop-blur-sm text-black text-xs px-2 py-1 shadow-sm">
+                        {session.category}
+                      </Badge>
+                    </div>
+                    
+                    {/* Completed Status */}
+                    <div className="absolute top-3 left-3">
+                      <Badge className="bg-green-600 text-white text-xs px-2 py-1 shadow-sm">
+                        ✓ Completed
+                      </Badge>
+                    </div>
+                  </div>
+
+                  <CardContent className="p-6 flex flex-col min-h-0">
+                    <div className="flex-1 space-y-4 text-left">
+                      {/* Rating and Verification Row */}
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
                           <div className="flex items-center gap-1">
-                            {[...Array(5)].map((_, i) => (
-                              <Star 
-                                key={i} 
-                                className={`w-4 h-4 ${i < session.rating ? 'fill-foreground text-foreground' : 'text-gray-300'}`} 
-                              />
-                            ))}
+                            <Star className="w-4 h-4 fill-black text-black" />
+                            <span className="text-sm font-medium">{session.expertRating}</span>
                           </div>
-                          <span className="text-sm text-muted-foreground">• {session.date}</span>
+                          <span className="text-xs text-muted-foreground">
+                            ({session.reviewCount})
+                          </span>
                         </div>
+                        {session.verified && (
+                          <div className="w-5 h-5 flex items-center justify-center flex-shrink-0">
+                            <CheckCircle className="w-5 h-5 text-blue-600" />
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Expert Name and Title */}
+                      <div>
+                        <h3 className="font-semibold text-base leading-tight text-left">
+                          {session.expertName}
+                        </h3>
+                        <p className="text-xs text-muted-foreground mt-1 text-left">
+                          {session.expertTitle}
+                        </p>
                       </div>
                       
-                      {/* Price and Actions */}
-                      <div className="space-y-3 pt-4 border-t">
-                        <div className="flex items-center justify-between">
-                          <span className="text-xl font-bold">{session.cost}</span>
-                          <span className="text-sm text-muted-foreground">{session.duration}</span>
+                      {/* Session Topic and Feedback */}
+                      <div>
+                        <h4 className="font-medium text-sm mb-1">{session.topic}</h4>
+                        <p className="text-xs text-muted-foreground text-left leading-relaxed line-clamp-2">
+                          {session.feedback}
+                        </p>
+                      </div>
+                      
+                      {/* Your Rating and Date */}
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs text-muted-foreground">Your rating:</span>
+                        <div className="flex items-center gap-1">
+                          {[...Array(5)].map((_, i) => (
+                            <Star 
+                              key={i} 
+                              className={`w-3 h-3 ${i < session.rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`} 
+                            />
+                          ))}
+                        </div>
+                        <span className="text-xs text-muted-foreground">• {session.date}</span>
+                      </div>
+                    </div>
+
+                    {/* Actions - Always at Bottom */}
+                    <div className="mt-auto flex-shrink-0 pt-4">
+                      <div className="flex justify-between items-center mb-3">
+                        <div className="flex flex-col gap-2">
+                          <Button 
+                            size="sm" 
+                            className="rounded-full px-4 flex items-center gap-2"
+                          >
+                            <span className="text-sm font-medium">{session.cost.split('$')[1]}</span>
+                            <span className="text-xs opacity-75">• {session.duration}</span>
+                            <span className="ms-1">Book Again</span>
+                          </Button>
                         </div>
                         
-                        <div className="flex gap-2">
-                          <Button variant="outline" className="flex-1 rounded-full border-2 border-foreground">
-                            Book Again
-                          </Button>
+                        <div className="flex items-center gap-2">
+                          <div className="w-3 h-3 bg-green-500 rounded-full"></div>
                           {!session.hasReview && (
-                            <Button variant="outline" className="rounded-full border-2 border-foreground">
+                            <Button 
+                              size="sm" 
+                              variant="outline" 
+                              className="rounded-full border-2 border-foreground px-3"
+                            >
                               Rate
                             </Button>
                           )}
@@ -425,114 +631,101 @@ const UserDashboard = () => {
           )}
           
           
-          {activeTab === 'analytics' && (
-            <div className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <Card className="border-2 border-foreground">
-                  <CardHeader>
-                    <CardTitle>Session Activity</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <ChartContainer config={{}} className="h-[200px]">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <BarChart data={activityData}>
-                          <XAxis dataKey="month" />
-                          <YAxis />
-                          <ChartTooltip content={<ChartTooltipContent />} />
-                          <Bar dataKey="sessions" fill="#000000" />
-                        </BarChart>
-                      </ResponsiveContainer>
-                    </ChartContainer>
-                  </CardContent>
-                </Card>
-                
-                <Card className="border-2 border-foreground">
-                  <CardHeader>
-                    <CardTitle>Topics of Interest</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <ChartContainer config={{}} className="h-[200px]">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <PieChart>
-                          <Pie
-                            data={topicsData}
-                            cx="50%"
-                            cy="50%"
-                            outerRadius={80}
-                            dataKey="value"
-                            label={({ name, value }) => `${name}: ${value}%`}
-                          >
-                            {topicsData.map((entry, index) => (
-                              <Cell key={`cell-${index}`} fill={entry.color} />
-                            ))}
-                          </Pie>
-                          <ChartTooltip content={<ChartTooltipContent />} />
-                        </PieChart>
-                      </ResponsiveContainer>
-                    </ChartContainer>
-                  </CardContent>
-                </Card>
-              </div>
-            </div>
-          )}
-          
-          {activeTab === 'discover' && (
-            <div className="space-y-6">
-              <div>
-                <h2 className="text-xl font-semibold mb-6">Recommended for You</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {suggestedExperts.map((expert, index) => (
-                    <Card key={index} className="border-2 border-foreground">
-                      <CardContent className="p-6">
-                        <div className="flex items-start gap-4 mb-4">
-                          <Avatar className="w-16 h-16">
-                            <AvatarImage src={expert.avatar} alt={expert.name} />
-                            <AvatarFallback>{getInitials(expert.name)}</AvatarFallback>
-                          </Avatar>
-                          <div className="flex-1">
-                            <h3 className="text-lg font-semibold">{expert.name}</h3>
-                            <p className="text-muted-foreground">{expert.title}</p>
-                            <div className="flex items-center gap-2 mt-2">
-                              <div className="flex items-center gap-1">
-                                <Star className="w-4 h-4 fill-foreground text-foreground" />
-                                <span className="font-medium">{expert.rating}</span>
-                              </div>
-                              <span className="text-sm text-muted-foreground">•</span>
-                              <span className="text-sm text-muted-foreground">{expert.sessions} sessions</span>
-                            </div>
-                          </div>
-                          <div className="text-right">
-                            <p className="text-xl font-bold">{expert.price}</p>
-                          </div>
-                        </div>
-                        
-                        <div className="mb-4">
-                          <p className="text-sm text-blue-600 bg-blue-50 px-2 py-1 rounded">
-                            💡 {expert.reason}
-                          </p>
-                        </div>
-                        
-                        <div className="flex gap-3">
-                          <Button className="flex-1 rounded-full">
-                            Book Session
-                          </Button>
-                          <Button 
-                            variant="outline" 
-                            className="rounded-full border-2 border-foreground"
-                            onClick={() => window.open(`/expert/${expert.name.toLowerCase().replace(' ', '-')}`, '_blank')}
-                          >
-                            View Profile
-                          </Button>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
         </div>
       </div>
+
+      {/* Experts Recommended for You - Footer Section */}
+      <section className="bg-gray-50 border-t px-6 py-12">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-xl font-semibold mb-6">Experts Recommended for You</h2>
+          <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide">
+            {suggestedExperts.map((expert, index) => (
+              <div key={index} className="flex-none w-80">
+                <Card className="group hover:shadow-xl hover:scale-105 transition-all duration-300 border-2 hover:border-foreground h-full cursor-pointer relative">
+                  {/* Photo Header - Full Width */}
+                  <div className="relative h-32 overflow-hidden rounded-t-lg bg-gray-100">
+                    <img 
+                      src={expert.image || '/api/placeholder/300/120'} 
+                      alt={expert.name}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                    
+                    {/* Category Badge - Top Right */}
+                    <div className="absolute top-3 right-3">
+                      <Badge variant="secondary" className="bg-white/90 backdrop-blur-sm text-black text-xs px-2 py-1 shadow-sm">
+                        Strategy
+                      </Badge>
+                    </div>
+                  </div>
+
+                  <CardContent className="p-6 flex flex-col min-h-0">
+                    <div className="flex-1 space-y-4 text-left">
+                      {/* Rating and Verification Row */}
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-1">
+                            <Star className="w-4 h-4 fill-black text-black" />
+                            <span className="text-sm font-medium">{expert.rating}</span>
+                          </div>
+                          <span className="text-xs text-muted-foreground">
+                            ({expert.sessions})
+                          </span>
+                        </div>
+                        <Badge variant="outline" className="text-xs border-yellow-500 text-yellow-600 bg-yellow-50 px-2 py-1 rounded-full inline-flex items-center gap-1">
+                          Top Expert
+                        </Badge>
+                      </div>
+
+                      {/* Name and Title */}
+                      <div>
+                        <h3 className="font-semibold text-base leading-tight text-left">
+                          {expert.name}
+                        </h3>
+                        <p className="text-xs text-muted-foreground mt-1 text-left">
+                          {expert.title}
+                        </p>
+                      </div>
+                      
+                      {/* Recommendation Reason */}
+                      <div>
+                        <p className="text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded leading-relaxed">
+                          💡 {expert.reason}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Actions - Always at Bottom */}
+                    <div className="mt-auto flex-shrink-0 pt-4">
+                      <div className="flex justify-between items-center">
+                        <div className="flex flex-col gap-2">
+                          <Button 
+                            size="sm" 
+                            className="rounded-full px-4 flex items-center gap-2"
+                          >
+                            <span className="text-sm font-medium">{expert.price.split('/')[0]}</span>
+                            <span className="text-xs opacity-75">/{expert.price.split('/')[1]}</span>
+                            <span className="ms-1">Book</span>
+                          </Button>
+                        </div>
+                        
+                        <Button 
+                          size="sm" 
+                          variant="outline"
+                          className="rounded-full border-2 border-foreground px-4"
+                          onClick={() => window.open(`/expert/${expert.name.toLowerCase().replace(' ', '-')}`, '_blank')}
+                        >
+                          View Profile
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* Session Detail Overlay Sidebar */}
       {showSessionDetail && selectedSession && (
@@ -540,14 +733,14 @@ const UserDashboard = () => {
           <div className="fixed right-0 top-0 h-full w-96 bg-white shadow-xl overflow-y-auto">
             <div className="p-6">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-semibold">Session Details</h2>
+                <h2 className="text-xl font-semibold">Session</h2>
                 <Button 
                   variant="outline" 
                   size="icon"
                   className="rounded-full"
                   onClick={() => setShowSessionDetail(false)}
                 >
-                  ×
+                  <X className="w-4 h-4" />
                 </Button>
               </div>
               
@@ -557,94 +750,146 @@ const UserDashboard = () => {
                   <AvatarImage src={selectedSession.avatar} alt={selectedSession.expertName} />
                   <AvatarFallback>{getInitials(selectedSession.expertName)}</AvatarFallback>
                 </Avatar>
-                <div>
+                <div className="flex-1">
                   <h3 className="font-semibold text-lg">{selectedSession.expertName}</h3>
-                  <p className="text-muted-foreground">{selectedSession.expertTitle}</p>
+                  <p className="text-muted-foreground text-sm">{selectedSession.expertTitle}</p>
                   <Button 
-                    variant="link" 
-                    className="p-0 h-auto text-sm"
+                    size="sm" 
+                    className="mt-2 rounded-full"
                     onClick={() => window.open(`/expert/${selectedSession.expertName.toLowerCase().replace(' ', '-')}`, '_blank')}
                   >
+                    <Eye className="w-4 h-4 mr-2" />
                     View Full Profile
                   </Button>
                 </div>
               </div>
               
-              {/* Session Info */}
-              <div className="space-y-4 mb-6">
-                <div className="p-4 bg-gray-50 rounded-lg">
-                  <h4 className="font-medium mb-2">{selectedSession.topic}</h4>
-                  <p className="text-sm text-muted-foreground mb-3">{selectedSession.summary}</p>
-                  <div className="flex items-center gap-4 text-sm">
-                    <span>📅 {selectedSession.date} at {selectedSession.time}</span>
-                  </div>
-                  <div className="flex items-center gap-4 text-sm mt-1">
-                    <span>⏱️ {selectedSession.duration}</span>
-                    <span>💰 {selectedSession.cost}</span>
-                  </div>
+              {/* Tab Navigation */}
+              <div className="border-b mb-6">
+                <div className="flex space-x-6">
+                  <button
+                    onClick={() => setSessionDetailTab('details')}
+                    className={`py-3 px-1 border-b-2 font-medium text-sm ${
+                      sessionDetailTab === 'details'
+                        ? 'border-foreground text-foreground'
+                        : 'border-transparent text-gray-500 hover:text-gray-700'
+                    }`}
+                  >
+                    Session Details
+                  </button>
+                  <button
+                    onClick={() => setSessionDetailTab('chat')}
+                    className={`py-3 px-1 border-b-2 font-medium text-sm ${
+                      sessionDetailTab === 'chat'
+                        ? 'border-foreground text-foreground'
+                        : 'border-transparent text-gray-500 hover:text-gray-700'
+                    }`}
+                  >
+                    Chat
+                  </button>
                 </div>
               </div>
               
-              {/* Actions */}
-              <div className="space-y-3">
-                <Button className="w-full rounded-full">
-                  <Video className="w-4 h-4 mr-2" />
-                  Join Session
-                </Button>
-                <Button 
-                  variant="outline" 
-                  className="w-full rounded-full border-2 border-foreground"
-                  onClick={() => {
-                    setShowSessionDetail(false)
-                    setShowReschedule(true)
-                  }}
-                >
-                  Reschedule
-                </Button>
-              </div>
+              {/* Tab Content */}
+              {sessionDetailTab === 'details' && (
+                <div className="space-y-6">
+                  {/* Session Info */}
+                  <div className="p-4 bg-gray-50 rounded-lg">
+                    <h4 className="font-medium mb-2">{selectedSession.topic}</h4>
+                    <p className="text-sm text-muted-foreground mb-3">{selectedSession.summary}</p>
+                    <div className="space-y-1 text-sm">
+                      <p>📅 {selectedSession.date} at {selectedSession.time}</p>
+                      <p>⏱️ {selectedSession.duration}</p>
+                      <p>💰 {selectedSession.cost}</p>
+                    </div>
+                  </div>
+                  
+                  {/* Payment Status */}
+                  <div className="p-4 border rounded-lg">
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className={`w-3 h-3 rounded-full ${
+                        selectedSession.paymentStatus === 'paid' ? 'bg-green-500' : 'bg-yellow-500'
+                      }`}></div>
+                      <span className="font-medium">Payment Status</span>
+                    </div>
+                    <p className="text-sm text-muted-foreground">
+                      {selectedSession.paymentStatus === 'paid' 
+                        ? 'Payment completed successfully' 
+                        : 'Payment is being processed'}
+                    </p>
+                  </div>
+                  
+                  {/* Actions */}
+                  <div className="space-y-3">
+                    <Button className="w-full rounded-full">
+                      <Video className="w-4 h-4 mr-2" />
+                      Join Session
+                    </Button>
+                    <div className="grid grid-cols-2 gap-3">
+                      <Button 
+                        variant="outline" 
+                        className="rounded-full border-2 border-foreground"
+                        onClick={() => {
+                          setShowSessionDetail(false)
+                          setShowReschedule(true)
+                        }}
+                      >
+                        Reschedule
+                      </Button>
+                      <Button 
+                        variant="outline" 
+                        className="rounded-full border-2 border-red-500 text-red-600 hover:bg-red-50"
+                      >
+                        Cancel Session
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              )}
               
-              {/* Session Conversation */}
-              <div className="mt-6 pt-6 border-t">
-                <h4 className="font-medium mb-3">Conversation with Expert</h4>
-                <div className="space-y-3 mb-4">
-                  {/* Previous messages */}
-                  <div className="p-3 bg-gray-50 rounded-lg">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-sm font-medium">{selectedSession.expertName}</span>
-                      <span className="text-xs text-muted-foreground">Yesterday 3:20 PM</span>
+              {sessionDetailTab === 'chat' && (
+                <div className="space-y-4">
+                  {/* Conversation History */}
+                  <div className="space-y-3 max-h-96 overflow-y-auto">
+                    {/* Previous messages */}
+                    <div className="p-3 bg-gray-50 rounded-lg">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-sm font-medium">{selectedSession.expertName}</span>
+                        <span className="text-xs text-muted-foreground">Yesterday 3:20 PM</span>
+                      </div>
+                      <p className="text-sm">Looking forward to our session tomorrow! I've prepared some materials based on your goals.</p>
                     </div>
-                    <p className="text-sm">Looking forward to our session tomorrow! I've prepared some materials based on your goals.</p>
+                    
+                    <div className="p-3 bg-blue-50 rounded-lg ml-6">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-sm font-medium">You</span>
+                        <span className="text-xs text-muted-foreground">Yesterday 4:15 PM</span>
+                      </div>
+                      <p className="text-sm">Perfect! I'm excited to dive into the roadmap discussion. Thanks for the prep work.</p>
+                    </div>
+                    
+                    <div className="p-3 bg-gray-50 rounded-lg">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-sm font-medium">{selectedSession.expertName}</span>
+                        <span className="text-xs text-muted-foreground">Today 9:30 AM</span>
+                      </div>
+                      <p className="text-sm">Just sent you the session agenda and some pre-reading materials via email.</p>
+                    </div>
                   </div>
                   
-                  <div className="p-3 bg-blue-50 rounded-lg ml-6">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-sm font-medium">You</span>
-                      <span className="text-xs text-muted-foreground">Yesterday 4:15 PM</span>
-                    </div>
-                    <p className="text-sm">Perfect! I'm excited to dive into the roadmap discussion. Thanks for the prep work.</p>
-                  </div>
-                  
-                  <div className="p-3 bg-gray-50 rounded-lg">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-sm font-medium">{selectedSession.expertName}</span>
-                      <span className="text-xs text-muted-foreground">Today 9:30 AM</span>
-                    </div>
-                    <p className="text-sm">Just sent you the session agenda and some pre-reading materials via email.</p>
+                  {/* New message input */}
+                  <div className="flex gap-2 pt-4 border-t">
+                    <input 
+                      type="text" 
+                      className="flex-1 p-3 border-2 border-gray-200 rounded-lg" 
+                      placeholder="Type a message..."
+                    />
+                    <Button size="sm" className="rounded-lg px-4">
+                      Send
+                    </Button>
                   </div>
                 </div>
-                
-                {/* New message input */}
-                <div className="flex gap-2">
-                  <input 
-                    type="text" 
-                    className="flex-1 p-2 border-2 border-gray-200 rounded-lg" 
-                    placeholder="Type a message..."
-                  />
-                  <Button size="sm" className="rounded-lg">
-                    Send
-                  </Button>
-                </div>
-              </div>
+              )}
             </div>
           </div>
         </div>
