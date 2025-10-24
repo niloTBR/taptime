@@ -190,6 +190,24 @@ const BrowsePage = () => {
     return name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()
   }
 
+  const getCategoryFromExpertise = (expertise) => {
+    const categoryMap = {
+      'Tech Strategy': 'Technology',
+      'Startup Scaling': 'Business',
+      'E-commerce': 'Business',
+      'Brand Building': 'Marketing',
+      'Product Strategy': 'Technology',
+      'Tech Leadership': 'Technology',
+      'Marketing Strategy': 'Marketing',
+      'Growth Hacking': 'Marketing',
+      'UX Design': 'Design',
+      'Design Systems': 'Design',
+      'Financial Planning': 'Finance',
+      'Fundraising': 'Finance'
+    }
+    return categoryMap[expertise] || 'Business'
+  }
+
   const ExpertTableRow = ({ expert, index }) => (
     <tr className="border-b hover:bg-gray-50 cursor-pointer" onClick={() => window.location.href = `/expert/${expert.id}`}>
       <td className="p-4">
@@ -200,6 +218,14 @@ const BrowsePage = () => {
               <AvatarImage src={expert.image} alt={expert.name} className="object-cover" />
               <AvatarFallback className="text-lg font-medium rounded-lg">{getInitials(expert.name)}</AvatarFallback>
             </Avatar>
+            {/* Category Badge - Top Right */}
+            {expert.expertise && expert.expertise.length > 0 && (
+              <div className="absolute top-0 right-0 transform translate-x-2 -translate-y-2">
+                <Badge variant="secondary" className="bg-white text-black text-xs px-2 py-1 shadow-sm">
+                  {getCategoryFromExpertise(expert.expertise[0])}
+                </Badge>
+              </div>
+            )}
             {/* Verified Badge on Photo */}
             {expert.badge === 'Verified' && (
               <div className="absolute -bottom-1 -right-1 w-5 h-5 flex items-center justify-center">
@@ -214,25 +240,39 @@ const BrowsePage = () => {
           </div>
           
           {/* Name and Title */}
-          <div className="flex-1">
-            <h3 className="font-semibold text-base leading-tight">{expert.name}</h3>
-            <p className="text-xs text-muted-foreground mt-1">{expert.title}</p>
-            
-            {/* Rating */}
-            <div className="flex items-center gap-2 mt-2">
-              <div className="flex items-center gap-1">
-                <Star className="w-4 h-4 fill-black text-black" />
-                <span className="text-sm font-medium">{expert.rating}</span>
+          <div className="flex-1 space-y-3">
+            {/* Rating and Badge Row - First */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1">
+                  <Star className="w-4 h-4 fill-black text-black" />
+                  <span className="text-sm font-medium">{expert.rating}</span>
+                </div>
+                <span className="text-xs text-muted-foreground">
+                  ({expert.reviewCount})
+                </span>
               </div>
-              <span className="text-xs text-muted-foreground">
-                ({expert.reviewCount})
-              </span>
+              {expert.badge === 'Top Expert' && (
+                <Badge variant="outline" className="text-xs border-yellow-500 text-yellow-600 bg-yellow-50 px-2 py-1 rounded-full inline-flex items-center gap-1">
+                  <Crown className="w-3 h-3" />
+                  Top Expert
+                </Badge>
+              )}
             </div>
             
+            {/* Name and Title */}
+            <div>
+              <h3 className="font-semibold text-base leading-tight">{expert.name}</h3>
+              <p className="text-xs text-muted-foreground mt-2">{expert.title}</p>
+            </div>
+            
+            {/* Bio Description */}
             {expert.bio && (
-              <p className="text-xs text-muted-foreground mt-2 leading-relaxed line-clamp-2">
-                {expert.bio}
-              </p>
+              <div>
+                <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">
+                  {expert.bio}
+                </p>
+              </div>
             )}
           </div>
         </div>

@@ -18,18 +18,27 @@ const ExpertCard = ({ expert, showActions = true, className = '', showCrown = fa
       .toUpperCase()
   }
 
+  const getCategoryFromExpertise = (expertise) => {
+    const categoryMap = {
+      'Tech Strategy': 'Technology',
+      'Startup Scaling': 'Business',
+      'E-commerce': 'Business',
+      'Brand Building': 'Marketing',
+      'Product Strategy': 'Technology',
+      'Tech Leadership': 'Technology',
+      'Marketing Strategy': 'Marketing',
+      'Growth Hacking': 'Marketing',
+      'UX Design': 'Design',
+      'Design Systems': 'Design',
+      'Financial Planning': 'Finance',
+      'Fundraising': 'Finance'
+    }
+    return categoryMap[expertise] || 'Business'
+  }
+
   return (
     <Link to={`/expert/${id}`} className="block h-full">
       <Card className={`group hover:shadow-xl hover:scale-105 transition-all duration-300 border-2 hover:border-foreground ${className} h-full cursor-pointer relative`}>
-        {/* Top Expert Badge - Top Right of Card */}
-        {badge && badge === 'Top Expert' && (
-          <div className="absolute top-3 right-3 z-10">
-            <Badge variant="outline" className="text-xs bg-gradient-to-r from-yellow-400 to-orange-500 text-white border-0 px-2 py-1 rounded-full inline-flex items-center gap-1 w-fit">
-              <Crown className="w-3 h-3" />
-              Top Expert
-            </Badge>
-          </div>
-        )}
         {/* Photo Header - Full Width */}
         <div className="relative h-32 overflow-hidden rounded-t-lg bg-gray-100">
           {image ? (
@@ -51,10 +60,37 @@ const ExpertCard = ({ expert, showActions = true, className = '', showCrown = fa
             </div>
           )}
           
+          {/* Category Badge - Top Right */}
+          {expertise && expertise.length > 0 && (
+            <div className="absolute top-3 right-3">
+              <Badge variant="secondary" className="bg-white/90 backdrop-blur-sm text-black text-xs px-2 py-1 shadow-sm">
+                {getCategoryFromExpertise(expertise[0])}
+              </Badge>
+            </div>
+          )}
         </div>
 
         <CardContent className="p-6 flex flex-col min-h-0">
-          <div className="flex-1 space-y-4 text-left">
+          <div className="flex-1 space-y-5 text-left">
+            {/* Rating and Badge Row - First */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1">
+                  <Star className="w-4 h-4 fill-black text-black" />
+                  <span className="text-sm font-medium">{rating}</span>
+                </div>
+                <span className="text-xs text-muted-foreground">
+                  ({reviewCount})
+                </span>
+              </div>
+              {badge === 'Top Expert' && (
+                <Badge variant="outline" className="text-xs border-yellow-500 text-yellow-600 bg-yellow-50 px-2 py-1 rounded-full inline-flex items-center gap-1">
+                  <Crown className="w-3 h-3" />
+                  Top Expert
+                </Badge>
+              )}
+            </div>
+
             {/* Name and Title */}
             <div>
               <div className="flex items-center gap-2">
@@ -72,27 +108,19 @@ const ExpertCard = ({ expert, showActions = true, className = '', showCrown = fa
                   </div>
                 )}
               </div>
-              <p className="text-xs text-muted-foreground mt-1 text-left">
+              <p className="text-xs text-muted-foreground mt-2 text-left">
                 {title}
               </p>
+            </div>
               
-              {/* Rating */}
-              <div className="flex items-center gap-2 mt-2">
-                <div className="flex items-center gap-1">
-                  <Star className="w-4 h-4 fill-black text-black" />
-                  <span className="text-sm font-medium">{rating}</span>
-                </div>
-                <span className="text-xs text-muted-foreground">
-                  ({reviewCount})
-                </span>
-              </div>
-              
-              {bio && (
-                <p className="text-xs text-muted-foreground mt-2 text-left leading-relaxed line-clamp-3">
+            {/* Bio Description */}
+            {bio && (
+              <div>
+                <p className="text-xs text-muted-foreground text-left leading-relaxed line-clamp-3">
                   {bio}
                 </p>
-              )}
-            </div>
+              </div>
+            )}
           </div>
 
           {/* Actions - Always at Bottom */}
