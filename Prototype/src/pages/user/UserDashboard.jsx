@@ -5,6 +5,7 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
+import ExpertCard from '@/components/common/ExpertCard'
 import { 
   Calendar,
   Clock,
@@ -68,22 +69,30 @@ const UserDashboard = () => {
 
   const suggestedExperts = [
     {
+      id: 'robert-kim',
       name: 'Dr. Robert Kim',
       title: 'AI Product Strategy',
       rating: 4.9,
-      sessions: 200,
-      price: '$220/hr',
-      reason: 'Based on your interest in Product Strategy',
-      avatar: '/api/placeholder/40/40'
+      reviewCount: 200,
+      rate: '$220/hr',
+      bio: 'Helping companies build AI-powered products that scale. Former VP of Product at Google, now consulting on product strategy and team leadership.',
+      image: '/api/placeholder/300/120',
+      badge: 'Top Expert',
+      expertise: ['Product Strategy', 'AI Strategy', 'Team Leadership'],
+      reason: 'Based on your interest in Product Strategy'
     },
     {
+      id: 'maria-santos',
       name: 'Maria Santos',
       title: 'Team Leadership Coach',
       rating: 4.8,
-      sessions: 150,
-      price: '$180/hr',
-      reason: 'Matches your leadership goals',
-      avatar: '/api/placeholder/40/40'
+      reviewCount: 150,
+      rate: '$180/hr',
+      bio: 'Executive coach specializing in leadership development and team performance. Helping managers become effective leaders through practical frameworks.',
+      image: '/api/placeholder/300/120',
+      badge: 'Verified',
+      expertise: ['Team Leadership', 'Executive Coaching', 'Performance Management'],
+      reason: 'Matches your leadership goals'
     }
   ]
 
@@ -583,86 +592,18 @@ const UserDashboard = () => {
           <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide">
             {suggestedExperts.map((expert, index) => (
               <div key={index} className="flex-none w-80">
-                <Card className="group hover:shadow-xl transition-all duration-300 border-2 hover:border-foreground h-full cursor-pointer relative">
-                  {/* Photo Header - Full Width */}
-                  <div className="relative h-32 overflow-hidden rounded-t-lg bg-gray-100">
-                    <img 
-                      src={expert.image || '/api/placeholder/300/120'} 
-                      alt={expert.name}
-                      className="w-full h-full object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                    
-                    {/* Category Badge - Top Right */}
-                    <div className="absolute top-3 right-3">
-                      <Badge variant="secondary" className="bg-white/90 backdrop-blur-sm text-black text-xs px-2 py-1 shadow-sm">
-                        Strategy
-                      </Badge>
-                    </div>
-                  </div>
-
-                  <CardContent className="p-6 flex flex-col min-h-0">
-                    <div className="flex-1 space-y-4 text-left">
-                      {/* Rating and Verification Row */}
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <div className="flex items-center gap-1">
-                            <Star className="w-4 h-4 fill-black text-black" />
-                            <span className="text-sm font-medium">{expert.rating}</span>
-                          </div>
-                          <span className="text-xs text-muted-foreground">
-                            ({expert.sessions})
-                          </span>
-                        </div>
-                        <Badge variant="outline" className="text-xs border-yellow-500 text-yellow-600 bg-yellow-50 px-2 py-1 rounded-full inline-flex items-center gap-1">
-                          Top Expert
-                        </Badge>
-                      </div>
-
-                      {/* Name and Title */}
-                      <div>
-                        <h3 className="font-semibold text-base leading-tight text-left">
-                          {expert.name}
-                        </h3>
-                        <p className="text-xs text-muted-foreground mt-1 text-left">
-                          {expert.title}
-                        </p>
-                      </div>
-                      
-                      {/* Recommendation Reason */}
-                      <div>
-                        <p className="text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded leading-relaxed">
-                          💡 {expert.reason}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Actions - Always at Bottom */}
-                    <div className="mt-auto flex-shrink-0 pt-4">
-                      <div className="flex justify-between items-center">
-                        <div className="flex flex-col gap-2">
-                          <Button 
-                            size="sm" 
-                            className="rounded-full px-4 flex items-center gap-2"
-                          >
-                            <span className="text-sm font-medium">{expert.price.split('/')[0]}</span>
-                            <span className="text-xs opacity-75">/{expert.price.split('/')[1]}</span>
-                            <span className="ms-1">Book</span>
-                          </Button>
-                        </div>
-                        
-                        <Button 
-                          size="sm" 
-                          variant="outline"
-                          className="rounded-full border-2 border-foreground px-4"
-                          onClick={() => window.open(`/expert/${expert.name.toLowerCase().replace(' ', '-')}`, '_blank')}
-                        >
-                          View Profile
-                        </Button>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+                <div className="mb-4 p-3 bg-blue-50 rounded-lg">
+                  <p className="text-xs text-blue-600 leading-relaxed">
+                    💡 {expert.reason}
+                  </p>
+                </div>
+                <ExpertCard 
+                  expert={expert}
+                  showActions={true}
+                  className=""
+                  showCrown={expert.badge === 'Top Expert'}
+                  showCharity={false}
+                />
               </div>
             ))}
           </div>
