@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
-import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
+import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, LineChart, Line } from 'recharts'
 import ExpertCard from '@/components/common/ExpertCard'
 import { 
   Calendar,
@@ -28,7 +28,14 @@ import {
   Building,
   Edit,
   Eye,
-  X
+  X,
+  ChevronLeft,
+  ChevronRight,
+  Crown,
+  Shield,
+  CreditCard,
+  Download,
+  Receipt
 } from 'lucide-react'
 
 const UserDashboard = () => {
@@ -37,6 +44,11 @@ const UserDashboard = () => {
   const [selectedSession, setSelectedSession] = useState(null)
   const [showSessionDetail, setShowSessionDetail] = useState(false)
   const [sessionDetailTab, setSessionDetailTab] = useState('details')
+  const [showRatingPopup, setShowRatingPopup] = useState(false)
+  const [selectedRating, setSelectedRating] = useState(0)
+  const [ratingComment, setRatingComment] = useState('')
+  const [expertsScrollPosition, setExpertsScrollPosition] = useState(0)
+  const [showPaymentMessage, setShowPaymentMessage] = useState(false)
 
   // Mock user data from onboarding
   const user = {
@@ -46,25 +58,22 @@ const UserDashboard = () => {
     location: 'San Francisco, CA',
     company: 'TechCorp Inc.',
     role: 'Product Manager',
-    industry: 'Technology',
-    experience: '5+ years',
     avatar: '/api/placeholder/40/40',
     memberSince: 'January 2024',
     interests: ['Product Strategy', 'Team Leadership', 'Growth Marketing'],
-    goals: 'Build better products and lead high-performing teams',
-    budget: '$100-250 per session'
+    goals: 'Build better products and lead high-performing teams'
   }
 
-  const activityData = [
+  const sessionData = [
     { month: 'Jan', sessions: 2 },
     { month: 'Feb', sessions: 4 },
     { month: 'Mar', sessions: 6 }
   ]
 
-  const topicsData = [
-    { name: 'Product Strategy', value: 40, color: '#000000' },
-    { name: 'Team Leadership', value: 35, color: '#666666' },
-    { name: 'Growth Marketing', value: 25, color: '#999999' }
+  const learningData = [
+    { month: 'Jan', hours: 8 },
+    { month: 'Feb', hours: 12 },
+    { month: 'Mar', hours: 15 }
   ]
 
   const suggestedExperts = [
@@ -77,7 +86,9 @@ const UserDashboard = () => {
       rate: '$220/hr',
       bio: 'Helping companies build AI-powered products that scale. Former VP of Product at Google, now consulting on product strategy.',
       image: '/api/placeholder/300/120',
-      expertise: ['Product Strategy']
+      expertise: ['Product Strategy'],
+      isTopExpert: true,
+      isVerified: true
     },
     {
       id: 'maria-santos',
@@ -88,7 +99,9 @@ const UserDashboard = () => {
       rate: '$180/hr',
       bio: 'Executive coach specializing in leadership development and team performance. Helping managers become effective leaders.',
       image: '/api/placeholder/300/120',
-      expertise: ['Team Leadership']
+      expertise: ['Team Leadership'],
+      isTopExpert: false,
+      isVerified: true
     },
     {
       id: 'david-chen',
@@ -99,7 +112,9 @@ const UserDashboard = () => {
       rate: '$160/hr',
       bio: 'Growth marketing specialist who has scaled startups from 0 to millions in revenue. Expert in digital marketing and analytics.',
       image: '/api/placeholder/300/120',
-      expertise: ['Growth Marketing']
+      expertise: ['Growth Marketing'],
+      isTopExpert: true,
+      isVerified: false
     },
     {
       id: 'sarah-jones',
@@ -110,7 +125,9 @@ const UserDashboard = () => {
       rate: '$190/hr',
       bio: 'Senior UX designer with 8+ years creating user-centered digital experiences for Fortune 500 companies.',
       image: '/api/placeholder/300/120',
-      expertise: ['UX Design']
+      expertise: ['UX Design'],
+      isTopExpert: false,
+      isVerified: true
     },
     {
       id: 'michael-taylor',
@@ -121,7 +138,9 @@ const UserDashboard = () => {
       rate: '$200/hr',
       bio: 'Former McKinsey consultant helping businesses develop strategic roadmaps and optimize operations for growth.',
       image: '/api/placeholder/300/120',
-      expertise: ['Business Strategy']
+      expertise: ['Business Strategy'],
+      isTopExpert: false,
+      isVerified: false
     },
     {
       id: 'emily-wilson',
@@ -132,7 +151,9 @@ const UserDashboard = () => {
       rate: '$210/hr',
       bio: 'Data scientist with expertise in machine learning and analytics. Helping companies make data-driven decisions.',
       image: '/api/placeholder/300/120',
-      expertise: ['Data Science']
+      expertise: ['Data Science'],
+      isTopExpert: true,
+      isVerified: true
     },
     {
       id: 'james-brown',
@@ -143,7 +164,9 @@ const UserDashboard = () => {
       rate: '$170/hr',
       bio: 'Sales leader with track record of building high-performing sales teams and scaling revenue operations.',
       image: '/api/placeholder/300/120',
-      expertise: ['Sales Strategy']
+      expertise: ['Sales Strategy'],
+      isTopExpert: false,
+      isVerified: true
     },
     {
       id: 'lisa-garcia',
@@ -154,7 +177,9 @@ const UserDashboard = () => {
       rate: '$150/hr',
       bio: 'Content strategist helping brands build authentic connections through storytelling and content marketing.',
       image: '/api/placeholder/300/120',
-      expertise: ['Content Marketing']
+      expertise: ['Content Marketing'],
+      isTopExpert: false,
+      isVerified: false
     }
   ]
 
@@ -221,6 +246,7 @@ const UserDashboard = () => {
   const pastSessions = [
     {
       id: 1,
+      sessionNumber: '#5',
       expertName: 'Emily Rodriguez',
       expertTitle: 'UX Design Lead',
       date: 'Mar 18',
@@ -241,6 +267,7 @@ const UserDashboard = () => {
     },
     {
       id: 2,
+      sessionNumber: '#4',
       expertName: 'James Wilson',
       expertTitle: 'Business Coach',
       date: 'Mar 10',
@@ -261,10 +288,11 @@ const UserDashboard = () => {
     },
     {
       id: 3,
+      sessionNumber: '#3',
       expertName: 'Anna Taylor',
       expertTitle: 'Product Manager',
       date: 'Mar 5',
-      rating: 5,
+      rating: null,
       topic: 'Product Roadmap Planning',
       duration: '60 min',
       cost: '$160',
@@ -317,6 +345,103 @@ const UserDashboard = () => {
         </div>
       </header>
 
+      {/* Analytics Header Section */}
+      <section className="bg-gray-50 border-b px-6 py-6">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-lg font-semibold mb-4">Your Learning Progress</h2>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            {/* Total Sessions */}
+            <Card className="border-2">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <BookOpen className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-sm text-muted-foreground">Total Sessions</span>
+                  </div>
+                  <TrendingUp className="w-4 h-4 text-green-600" />
+                </div>
+                <p className="text-2xl font-bold mb-2">{pastSessions.length + upcomingSessions.length}</p>
+                <div className="h-8 w-full">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={sessionData}>
+                      <Bar dataKey="sessions" fill="#000000" radius={[2, 2, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+            
+            {/* Learning Hours */}
+            <Card className="border-2">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <Target className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-sm text-muted-foreground">Learning Hours</span>
+                  </div>
+                  <TrendingUp className="w-4 h-4 text-blue-600" />
+                </div>
+                <p className="text-2xl font-bold mb-2">35</p>
+                <div className="h-8 w-full">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={learningData}>
+                      <Line dataKey="hours" stroke="#000000" strokeWidth={2} dot={false} />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+            
+            {/* Top Categories */}
+            <Card className="border-2">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <Star className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-sm text-muted-foreground">Top Categories</span>
+                  </div>
+                  <span className="text-xs text-muted-foreground">3 areas</span>
+                </div>
+                <p className="text-2xl font-bold mb-3">Product</p>
+                <div className="flex flex-wrap gap-1">
+                  <Badge variant="secondary" className="bg-purple-100 text-purple-700 text-xs px-2 py-1">
+                    Product Strategy
+                  </Badge>
+                  <Badge variant="secondary" className="bg-blue-100 text-blue-700 text-xs px-2 py-1">
+                    Team Leadership
+                  </Badge>
+                  <Badge variant="secondary" className="bg-green-100 text-green-700 text-xs px-2 py-1">
+                    UX Design
+                  </Badge>
+                </div>
+              </CardContent>
+            </Card>
+            
+            {/* Completion Rate */}
+            <Card className="border-2">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-sm text-muted-foreground">Completion Rate</span>
+                  </div>
+                  <TrendingUp className="w-4 h-4 text-green-600" />
+                </div>
+                <p className="text-2xl font-bold mb-2">94%</p>
+                <div className="space-y-1">
+                  <div className="flex justify-between text-xs">
+                    <span>Sessions completed</span>
+                    <span>17/18</span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-1">
+                    <div className="bg-green-600 h-1 rounded-full" style={{width: '94%'}}></div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
 
       {/* Main Content with Sidebar */}
       <div className="max-w-7xl mx-auto flex gap-6 p-6">
@@ -341,8 +466,7 @@ const UserDashboard = () => {
                 </div>
                 <h3 className="font-bold text-2xl mb-2">{user.name}</h3>
                 <p className="text-foreground text-lg font-medium mb-1">{user.role}</p>
-                <p className="text-muted-foreground text-base mb-1">{user.company}</p>
-                <p className="text-muted-foreground text-sm mb-3">{user.industry} • {user.experience}</p>
+                <p className="text-muted-foreground text-base mb-3">{user.company}</p>
                 
                 <div className="p-3 bg-blue-50 rounded-lg">
                   <div className="flex items-center justify-center gap-2 text-sm text-blue-700">
@@ -387,6 +511,75 @@ const UserDashboard = () => {
                 <Edit className="w-4 h-4 mr-2" />
                 Edit Profile
               </Button>
+            </CardContent>
+          </Card>
+          
+          {/* Billing Section */}
+          <Card className="border-2">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <CreditCard className="w-4 h-4" />
+                Billing & Invoices
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-6 pt-0">
+              <div className="space-y-4">
+                {/* Payment Methods */}
+                <div>
+                  <h4 className="font-medium mb-2">Payment Methods</h4>
+                  <div className="p-3 border rounded-lg">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-5 bg-gradient-to-r from-blue-600 to-purple-600 rounded text-white text-xs flex items-center justify-center font-bold">
+                          VISA
+                        </div>
+                        <div>
+                          <p className="font-medium text-sm">•••• 4242</p>
+                          <p className="text-xs text-muted-foreground">Expires 12/25</p>
+                        </div>
+                      </div>
+                      <Button variant="outline" size="sm" className="text-xs">
+                        Edit
+                      </Button>
+                    </div>
+                  </div>
+                  <Button variant="outline" className="w-full mt-2 text-sm">
+                    <Plus className="w-4 h-4 mr-2" />
+                    Add Payment Method
+                  </Button>
+                </div>
+                
+                {/* Recent Invoices */}
+                <div>
+                  <h4 className="font-medium mb-2">Recent Invoices</h4>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between p-2 hover:bg-gray-50 rounded">
+                      <div>
+                        <p className="font-medium text-sm">Invoice #INV-001</p>
+                        <p className="text-xs text-muted-foreground">Mar 18, 2024 • $180</p>
+                      </div>
+                      <Button variant="outline" size="sm" className="text-xs">
+                        <Download className="w-3 h-3 mr-1" />
+                        PDF
+                      </Button>
+                    </div>
+                    <div className="flex items-center justify-between p-2 hover:bg-gray-50 rounded">
+                      <div>
+                        <p className="font-medium text-sm">Invoice #INV-002</p>
+                        <p className="text-xs text-muted-foreground">Mar 10, 2024 • $200</p>
+                      </div>
+                      <Button variant="outline" size="sm" className="text-xs">
+                        <Download className="w-3 h-3 mr-1" />
+                        PDF
+                      </Button>
+                    </div>
+                  </div>
+                  <Button variant="outline" className="w-full mt-2 text-sm">
+                    <Receipt className="w-4 h-4 mr-2" />
+                    View All Invoices
+                  </Button>
+                </div>
+              </div>
             </CardContent>
           </Card>
         </div>
@@ -499,7 +692,7 @@ const UserDashboard = () => {
                           {session.paymentStatus === 'paid' ? (
                             <Button 
                               size="sm" 
-                              className="rounded-full px-3 py-1 text-xs h-7 flex-1"
+                              className="rounded-full px-3 py-1 text-xs h-8 flex-1"
                             >
                               Join Session
                             </Button>
@@ -507,7 +700,11 @@ const UserDashboard = () => {
                             <Button 
                               size="sm" 
                               variant="outline"
-                              className="rounded-full px-3 py-1 text-xs h-7 flex-1 border-2 border-red-500 text-red-600 hover:bg-red-50"
+                              className="rounded-full px-3 py-1 text-xs h-8 flex-1 border-2 border-gray-300 text-gray-400 bg-gray-100 cursor-not-allowed"
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                setShowPaymentMessage(true)
+                              }}
                             >
                               Complete Payment
                             </Button>
@@ -516,7 +713,7 @@ const UserDashboard = () => {
                           <Button 
                             size="sm" 
                             variant="outline"
-                            className="rounded-full border-2 border-foreground px-3 py-1 text-xs h-7"
+                            className="rounded-full border-2 border-foreground px-3 py-1 text-xs h-8"
                           >
                             View
                           </Button>
@@ -533,7 +730,14 @@ const UserDashboard = () => {
           {activeTab === 'past' && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {pastSessions.map((session) => (
-                <Card key={session.id} className="group hover:shadow-xl hover:scale-105 transition-all duration-300 border-2 hover:border-foreground cursor-pointer h-full relative">
+                <Card 
+                  key={session.id} 
+                  className="group hover:shadow-xl hover:scale-105 transition-all duration-300 border-2 hover:border-foreground cursor-pointer h-full relative"
+                  onClick={() => {
+                    setSelectedSession(session)
+                    setShowSessionDetail(true)
+                  }}
+                >
                   {/* Expert Photo Header */}
                   <div className="relative h-32 overflow-hidden rounded-t-lg bg-gray-100">
                     <img 
@@ -577,7 +781,7 @@ const UserDashboard = () => {
                         </p>
                       </div>
                       
-                      {/* Session Topic and Feedback */}
+                      {/* Session Topic and Summary */}
                       <div>
                         <h4 className="font-medium text-sm mb-1">{session.topic}</h4>
                         <p className="text-xs text-muted-foreground text-left leading-relaxed line-clamp-2">
@@ -585,41 +789,46 @@ const UserDashboard = () => {
                         </p>
                       </div>
                       
-                      {/* Your Rating and Date */}
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs text-muted-foreground">Your rating:</span>
-                        <div className="flex items-center gap-1">
-                          {[...Array(5)].map((_, i) => (
-                            <Star 
-                              key={i} 
-                              className={`w-3 h-3 ${i < session.rating ? 'fill-black text-black' : 'text-gray-300'}`} 
-                            />
-                          ))}
+                      {/* Session Details */}
+                      <div className="space-y-1 text-xs text-muted-foreground">
+                        <p>📅 {session.date} • Session {session.sessionNumber}</p>
+                        <p>⏱️ {session.duration}</p>
+                        <div className="flex items-center gap-2">
+                          {session.rating ? (
+                            <>
+                              <span>Your rating:</span>
+                              <div className="flex items-center gap-1">
+                                {[...Array(5)].map((_, i) => (
+                                  <Star 
+                                    key={i} 
+                                    className={`w-3 h-3 ${i < session.rating ? 'fill-black text-black' : 'text-gray-300'}`} 
+                                  />
+                                ))}
+                              </div>
+                            </>
+                          ) : (
+                            <span className="text-orange-600">Unrated - Please rate this session</span>
+                          )}
                         </div>
-                        <span className="text-xs text-muted-foreground">• {session.date}</span>
                       </div>
                     </div>
 
                     {/* Actions - Always at Bottom */}
                     <div className="mt-auto flex-shrink-0 pt-4">
-                      <div className="flex justify-between items-center mb-3">
-                        <div className="flex justify-between items-center">
-                          <div className="flex flex-col gap-2">
-                            <Button 
-                              size="sm" 
-                              className="rounded-full px-4 flex items-center gap-2"
-                            >
-                              <span className="text-sm font-medium">{session.cost.split('$')[1]}</span>
-                              <span className="text-xs opacity-75">/{session.duration}</span>
-                              <span className="ms-1">Book</span>
-                            </Button>
-                          </div>
+                      <div className="flex justify-between items-center">
+                        <div className="flex gap-2 w-full">
+                          <Button 
+                            size="sm" 
+                            className="rounded-full px-3 py-1 text-xs h-8 flex-1"
+                          >
+                            {session.cost}/hr Book Again
+                          </Button>
                           
                           <div className="relative">
                             <Button 
                               size="sm" 
                               variant="outline"
-                              className="rounded-full border-2 border-foreground px-3 py-1 text-xs h-7"
+                              className="rounded-full border-2 border-foreground px-3 py-1 text-xs h-8"
                             >
                               View
                             </Button>
@@ -642,20 +851,51 @@ const UserDashboard = () => {
       <section className="bg-gray-50 border-t px-6 py-12">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-semibold">Experts Recommended for You</h2>
-            <Button variant="outline" className="rounded-full border-2 border-foreground">
-              View All Experts
-            </Button>
+            <h2 className="text-xl font-semibold">Recommended for You</h2>
+            <div className="flex items-center gap-4">
+              <div className="flex gap-2">
+                <Button 
+                  variant="outline" 
+                  size="icon"
+                  className="rounded-full border-2 border-foreground"
+                  onClick={() => {
+                    const container = document.getElementById('experts-scroll-container')
+                    if (container) {
+                      container.scrollBy({ left: -320, behavior: 'smooth' })
+                    }
+                  }}
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="icon"
+                  className="rounded-full border-2 border-foreground"
+                  onClick={() => {
+                    const container = document.getElementById('experts-scroll-container')
+                    if (container) {
+                      container.scrollBy({ left: 320, behavior: 'smooth' })
+                    }
+                  }}
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </Button>
+              </div>
+              <Button variant="outline" className="rounded-full border-2 border-foreground">
+                View All Experts
+              </Button>
+            </div>
           </div>
-          <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide">
-            {suggestedExperts.map((expert, index) => (
+          <div id="experts-scroll-container" className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide">
+            {suggestedExperts.slice(0, 8).map((expert, index) => (
               <div key={index} className="flex-none w-80">
                 <ExpertCard 
                   expert={expert}
                   showActions={true}
                   className=""
-                  showCrown={false}
+                  showCrown={expert.isTopExpert}
                   showCharity={false}
+                  showVerified={expert.isVerified}
                 />
               </div>
             ))}
@@ -949,6 +1189,42 @@ const UserDashboard = () => {
                   }}
                 >
                   Submit Rating
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+      
+      {/* Payment Message Popup */}
+      {showPaymentMessage && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <Card className="w-full max-w-md mx-4 border-2 border-foreground">
+            <CardHeader>
+              <CardTitle>Payment Required</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-sm text-muted-foreground">
+                Please make the payment to confirm your session booking. Once payment is completed, you'll be able to join your session.
+              </p>
+              
+              <div className="flex gap-3">
+                <Button 
+                  variant="outline" 
+                  className="flex-1 rounded-full border-2 border-foreground"
+                  onClick={() => setShowPaymentMessage(false)}
+                >
+                  Cancel
+                </Button>
+                <Button 
+                  className="flex-1 rounded-full"
+                  onClick={() => {
+                    setShowPaymentMessage(false)
+                    // Redirect to payment page or handle payment
+                    console.log('Redirect to payment')
+                  }}
+                >
+                  Make Payment
                 </Button>
               </div>
             </CardContent>

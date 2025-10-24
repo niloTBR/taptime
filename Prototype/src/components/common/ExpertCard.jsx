@@ -6,8 +6,8 @@ import { Star, Heart, Crown, CheckCircle, HeartHandshake } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import LazyImage from './LazyImage'
 
-const ExpertCard = ({ expert, showActions = true, className = '', showCrown = false, showCharity = false }) => {
-  const { id, name, title, rate, rating, reviewCount, image, badge, expertise, bio } = expert
+const ExpertCard = ({ expert, showActions = true, className = '', showCrown = false, showCharity = false, showVerified = false }) => {
+  const { id, name, title, rate, rating, reviewCount, image, badge, expertise, bio, isTopExpert, isVerified } = expert
 
   const getInitials = (name) => {
     return name
@@ -83,7 +83,7 @@ const ExpertCard = ({ expert, showActions = true, className = '', showCrown = fa
                   ({reviewCount})
                 </span>
               </div>
-              {badge === 'Top Expert' && (
+              {(showCrown || isTopExpert) && (
                 <Badge variant="outline" className="text-xs border-yellow-500 text-yellow-600 bg-yellow-50 px-2 py-1 rounded-full inline-flex items-center gap-1">
                   <Crown className="w-3 h-3" />
                   Top Expert
@@ -97,7 +97,7 @@ const ExpertCard = ({ expert, showActions = true, className = '', showCrown = fa
                 <h3 className="font-semibold text-base leading-tight text-left">
                   {name}
                 </h3>
-                {badge && badge === 'Verified' && (
+                {(showVerified || isVerified || (badge && badge === 'Verified')) && (
                   <div className="w-5 h-5 flex items-center justify-center flex-shrink-0">
                     <svg viewBox="0 0 24 24" className="w-5 h-5">
                       <g>
