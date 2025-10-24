@@ -1,157 +1,171 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
+import { Badge } from '@/components/ui/badge'
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
+import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
 import { 
-  Search,
   Calendar,
   Clock,
   Star,
-  MessageCircle,
   Video,
-  Phone,
-  DollarSign,
-  CreditCard,
-  FileText,
-  Settings,
+  Plus,
+  CheckCircle,
+  ArrowRight,
+  MessageCircle,
+  MoreHorizontal,
   User,
-  Heart,
+  Settings,
+  Bell,
   BookOpen,
   TrendingUp,
+  Target,
   MapPin,
   Mail,
-  Bell,
-  Plus,
-  Filter,
-  MoreHorizontal,
-  Play,
-  CheckCircle,
-  XCircle,
-  AlertCircle
+  Phone,
+  Building,
+  Edit
 } from 'lucide-react'
 
 const UserDashboard = () => {
-  const [selectedTab, setSelectedTab] = useState('dashboard')
-  const [searchQuery, setSearchQuery] = useState('')
+  const [activeTab, setActiveTab] = useState('upcoming')
+  const [showReschedule, setShowReschedule] = useState(false)
+  const [selectedSession, setSelectedSession] = useState(null)
+  const [showSessionDetail, setShowSessionDetail] = useState(false)
 
-  // Mock user data
+  // Mock user data from onboarding
   const user = {
     name: 'Sarah Johnson',
     email: 'sarah.j@email.com',
+    phone: '+1 (555) 123-4567',
     location: 'San Francisco, CA',
+    company: 'TechCorp Inc.',
+    role: 'Product Manager',
+    industry: 'Technology',
+    experience: '5+ years',
     avatar: '/api/placeholder/40/40',
-    memberSince: '2024-01-15',
-    totalSessions: 12,
-    totalSpent: '$1,240'
+    memberSince: 'January 2024',
+    interests: ['Product Strategy', 'Team Leadership', 'Growth Marketing'],
+    goals: 'Build better products and lead high-performing teams',
+    budget: '$100-250 per session'
   }
 
-  const stats = {
-    upcomingSessions: 3,
-    completedSessions: 12,
-    savedExperts: 8,
-    totalSpent: 1240
-  }
+  const activityData = [
+    { month: 'Jan', sessions: 2 },
+    { month: 'Feb', sessions: 4 },
+    { month: 'Mar', sessions: 6 }
+  ]
+
+  const topicsData = [
+    { name: 'Product Strategy', value: 40, color: '#000000' },
+    { name: 'Team Leadership', value: 35, color: '#666666' },
+    { name: 'Growth Marketing', value: 25, color: '#999999' }
+  ]
+
+  const suggestedExperts = [
+    {
+      name: 'Dr. Robert Kim',
+      title: 'AI Product Strategy',
+      rating: 4.9,
+      sessions: 200,
+      price: '$220/hr',
+      reason: 'Based on your interest in Product Strategy',
+      avatar: '/api/placeholder/40/40'
+    },
+    {
+      name: 'Maria Santos',
+      title: 'Team Leadership Coach',
+      rating: 4.8,
+      sessions: 150,
+      price: '$180/hr',
+      reason: 'Matches your leadership goals',
+      avatar: '/api/placeholder/40/40'
+    }
+  ]
+
+  const conversations = [
+    {
+      id: 1,
+      expertName: 'Dr. Michael Chen',
+      lastMessage: 'Looking forward to our session tomorrow!',
+      time: '2 hours ago',
+      unread: 1,
+      avatar: '/api/placeholder/40/40'
+    },
+    {
+      id: 2,
+      expertName: 'Lisa Park',
+      lastMessage: 'Here are the resources I mentioned...',
+      time: '1 day ago',
+      unread: 0,
+      avatar: '/api/placeholder/40/40'
+    }
+  ]
 
   const upcomingSessions = [
     {
       id: 1,
       expertName: 'Dr. Michael Chen',
-      expertTitle: 'Senior Product Manager',
-      date: '2024-03-20',
+      expertTitle: 'Product Strategy Expert',
+      date: 'Tomorrow',
       time: '2:00 PM',
       duration: '60 min',
-      type: 'video',
-      topic: 'Product Strategy Review',
-      status: 'confirmed',
+      topic: 'Product Roadmap Review',
+      summary: 'Review your current product strategy and identify areas for improvement. We\'ll discuss market positioning and competitive analysis.',
+      cost: '$200',
       avatar: '/api/placeholder/40/40'
     },
     {
       id: 2,
-      expertName: 'Emily Rodriguez',
-      expertTitle: 'UX Design Lead',
-      date: '2024-03-22',
+      expertName: 'Lisa Park',
+      expertTitle: 'Marketing Strategy',
+      date: 'March 25',
       time: '10:00 AM',
       duration: '45 min',
-      type: 'phone',
-      topic: 'Design System Consultation',
-      status: 'pending',
-      avatar: '/api/placeholder/40/40'
-    },
-    {
-      id: 3,
-      expertName: 'David Thompson',
-      expertTitle: 'Tech Startup Advisor',
-      date: '2024-03-25',
-      time: '4:00 PM',
-      duration: '90 min',
-      type: 'video',
-      topic: 'Fundraising Strategy',
-      status: 'confirmed',
+      topic: 'Growth Marketing Session',
+      summary: 'Deep dive into growth marketing tactics and customer acquisition strategies for your business.',
+      cost: '$150',
       avatar: '/api/placeholder/40/40'
     }
   ]
 
-  const recentSessions = [
+  const pastSessions = [
     {
       id: 1,
-      expertName: 'Lisa Park',
-      expertTitle: 'Marketing Director',
-      date: '2024-03-15',
+      expertName: 'Emily Rodriguez',
+      expertTitle: 'UX Design Lead',
+      date: 'Mar 18',
       rating: 5,
-      feedback: 'Excellent insights on growth strategies. Very helpful!',
-      cost: '$120',
-      duration: '60 min'
+      topic: 'Design System Consultation',
+      duration: '60 min',
+      cost: '$180',
+      feedback: 'Excellent insights on building scalable design systems. Very actionable advice.',
+      hasReview: false
     },
     {
       id: 2,
       expertName: 'James Wilson',
-      expertTitle: 'Finance Expert',
-      date: '2024-03-10',
+      expertTitle: 'Business Coach',
+      date: 'Mar 10',
       rating: 4,
-      feedback: 'Great financial planning advice. Recommended!',
-      cost: '$150',
-      duration: '75 min'
+      topic: 'Business Planning Strategy',
+      duration: '75 min',
+      cost: '$200',
+      feedback: 'Great strategic guidance. Helped clarify our business direction.',
+      hasReview: true
     },
     {
       id: 3,
       expertName: 'Anna Taylor',
-      expertTitle: 'Business Coach',
-      date: '2024-03-05',
+      expertTitle: 'Product Manager',
+      date: 'Mar 5',
       rating: 5,
-      feedback: 'Amazing coaching session. Clear action items.',
-      cost: '$100',
-      duration: '60 min'
-    }
-  ]
-
-  const savedExperts = [
-    {
-      id: 1,
-      name: 'Dr. Robert Kim',
-      title: 'AI Research Scientist',
-      rating: 4.9,
-      sessions: 150,
-      price: '$200/hr',
-      avatar: '/api/placeholder/40/40'
-    },
-    {
-      id: 2,
-      name: 'Maria Garcia',
-      title: 'Sales Strategy Expert',
-      rating: 4.8,
-      sessions: 89,
-      price: '$180/hr',
-      avatar: '/api/placeholder/40/40'
-    },
-    {
-      id: 3,
-      name: 'Alex Johnson',
-      title: 'Digital Marketing Guru',
-      rating: 4.7,
-      sessions: 200,
-      price: '$160/hr',
-      avatar: '/api/placeholder/40/40'
+      topic: 'Product Roadmap Planning',
+      duration: '60 min',
+      cost: '$160',
+      feedback: 'Amazing session! Clear roadmap and priorities established.',
+      hasReview: true
     }
   ]
 
@@ -159,313 +173,494 @@ const UserDashboard = () => {
     return name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()
   }
 
-  const getStatusColor = (status) => {
-    switch (status) {
-      case 'confirmed': return 'bg-green-100 text-green-800'
-      case 'pending': return 'bg-yellow-100 text-yellow-800'
-      case 'cancelled': return 'bg-red-100 text-red-800'
-      default: return 'bg-gray-100 text-gray-800'
-    }
-  }
-
-  const getSessionIcon = (type) => {
-    switch (type) {
-      case 'video': return <Video className="w-4 h-4" />
-      case 'phone': return <Phone className="w-4 h-4" />
-      default: return <MessageCircle className="w-4 h-4" />
-    }
-  }
-
   const tabs = [
-    { id: 'dashboard', label: 'Dashboard' },
-    { id: 'sessions', label: 'My Sessions' },
-    { id: 'experts', label: 'Saved Experts' },
-    { id: 'billing', label: 'Billing' },
-    { id: 'profile', label: 'Profile' }
+    { id: 'upcoming', label: 'Upcoming', count: upcomingSessions.length },
+    { id: 'past', label: 'Past Sessions', count: pastSessions.length },
+    { id: 'messages', label: 'Messages', count: conversations.filter(c => c.unread > 0).length },
+    { id: 'analytics', label: 'Analytics' },
+    { id: 'discover', label: 'Discover' }
   ]
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 px-6 py-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
+      <header className="border-b px-6 py-4">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <div className="flex items-center gap-6">
             <div className="w-8 h-8 bg-foreground text-background rounded-lg flex items-center justify-center font-bold">
               T
             </div>
-            <h1 className="text-2xl font-semibold">My Dashboard</h1>
-            <Badge variant="secondary">Find Expert Panel</Badge>
+            <h1 className="text-2xl font-semibold">Dashboard</h1>
           </div>
           
           <div className="flex items-center gap-4">
-            <Button variant="outline" size="sm" className="rounded-full border-2 border-foreground">
+            <Button className="rounded-full">
               <Plus className="w-4 h-4 mr-2" />
               Book Session
             </Button>
-            <Button variant="outline" size="sm" className="rounded-full">
+            <Button variant="outline" size="icon" className="rounded-full">
               <Bell className="w-4 h-4" />
             </Button>
-            <Avatar className="w-8 h-8">
-              <AvatarImage src={user.avatar} alt={user.name} />
-              <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
-            </Avatar>
           </div>
         </div>
       </header>
 
-      {/* Navigation Tabs */}
-      <div className="bg-white border-b border-gray-200 px-6">
-        <div className="flex space-x-8">
-          {tabs.map(tab => (
-            <button
-              key={tab.id}
-              onClick={() => setSelectedTab(tab.id)}
-              className={`py-4 px-1 border-b-2 font-medium text-sm ${
-                selectedTab === tab.id
-                  ? 'border-foreground text-foreground'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Content */}
-      <div className="p-6">
-        {selectedTab === 'dashboard' && (
-          <div className="space-y-6">
-            {/* Welcome Section */}
-            <div className="bg-white rounded-lg p-6 border-2 border-foreground">
-              <div className="flex items-center gap-4">
+      {/* Main Content with Sidebar */}
+      <div className="max-w-7xl mx-auto flex gap-6 p-6">
+        {/* Sidebar */}
+        <div className="w-80 space-y-6">
+          {/* User Profile Card */}
+          <Card className="border-2 border-foreground">
+            <CardContent className="p-6">
+              <div className="flex items-center gap-4 mb-4">
                 <Avatar className="w-16 h-16">
                   <AvatarImage src={user.avatar} alt={user.name} />
                   <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
                 </Avatar>
-                <div>
-                  <h2 className="text-2xl font-semibold">Welcome back, {user.name}!</h2>
-                  <p className="text-muted-foreground">Ready to connect with amazing experts today?</p>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-lg">{user.name}</h3>
+                  <p className="text-sm text-muted-foreground">{user.role} at {user.company}</p>
+                </div>
+                <Button variant="outline" size="icon" className="rounded-full">
+                  <Edit className="w-4 h-4" />
+                </Button>
+              </div>
+              
+              <div className="space-y-3 text-sm">
+                <div className="flex items-center gap-2">
+                  <Mail className="w-4 h-4 text-muted-foreground" />
+                  <span>{user.email}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Phone className="w-4 h-4 text-muted-foreground" />
+                  <span>{user.phone}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <MapPin className="w-4 h-4 text-muted-foreground" />
+                  <span>{user.location}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Building className="w-4 h-4 text-muted-foreground" />
+                  <span>{user.industry} • {user.experience}</span>
                 </div>
               </div>
+              
+              <div className="mt-4 pt-4 border-t">
+                <h4 className="font-medium mb-2">Interests</h4>
+                <div className="flex flex-wrap gap-1">
+                  {user.interests.map((interest, index) => (
+                    <Badge key={index} variant="secondary" className="text-xs">
+                      {interest}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+              
+              <div className="mt-4">
+                <h4 className="font-medium mb-2">Goal</h4>
+                <p className="text-sm text-muted-foreground">{user.goals}</p>
+              </div>
+            </CardContent>
+          </Card>
+          
+          {/* Quick Stats */}
+          <Card className="border-2 border-foreground">
+            <CardContent className="p-6">
+              <h3 className="font-semibold mb-4">Your Progress</h3>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm">Total Sessions</span>
+                  <span className="font-semibold">{pastSessions.length + upcomingSessions.length}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm">This Month</span>
+                  <span className="font-semibold">6</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm">Avg Rating Given</span>
+                  <span className="font-semibold">4.7 ⭐</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+        
+        {/* Main Content Area */}
+        <div className="flex-1">
+          {/* Navigation Tabs */}
+          <div className="border-b mb-6">
+            <div className="flex space-x-8">
+              {tabs.map(tab => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2 ${
+                    activeTab === tab.id
+                      ? 'border-foreground text-foreground'
+                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  }`}
+                >
+                  {tab.label}
+                  {tab.count > 0 && (
+                    <Badge variant="secondary" className="ml-1">
+                      {tab.count}
+                    </Badge>
+                  )}
+                </button>
+              ))}
             </div>
-
-            {/* Stats Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <Card className="border-2 border-foreground">
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium text-muted-foreground">Upcoming Sessions</p>
-                      <p className="text-2xl font-bold">{stats.upcomingSessions}</p>
-                    </div>
-                    <Calendar className="w-8 h-8 text-muted-foreground" />
-                  </div>
-                </CardContent>
-              </Card>
-              
-              <Card className="border-2 border-foreground">
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium text-muted-foreground">Completed Sessions</p>
-                      <p className="text-2xl font-bold">{stats.completedSessions}</p>
-                    </div>
-                    <CheckCircle className="w-8 h-8 text-muted-foreground" />
-                  </div>
-                </CardContent>
-              </Card>
-              
-              <Card className="border-2 border-foreground">
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium text-muted-foreground">Saved Experts</p>
-                      <p className="text-2xl font-bold">{stats.savedExperts}</p>
-                    </div>
-                    <Heart className="w-8 h-8 text-muted-foreground" />
-                  </div>
-                </CardContent>
-              </Card>
-              
-              <Card className="border-2 border-foreground">
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium text-muted-foreground">Total Invested</p>
-                      <p className="text-2xl font-bold">${stats.totalSpent}</p>
-                    </div>
-                    <DollarSign className="w-8 h-8 text-muted-foreground" />
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Upcoming Sessions */}
-            <Card className="border-2 border-foreground">
-              <CardHeader>
-                <CardTitle>Upcoming Sessions</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {upcomingSessions.map(session => (
-                    <div key={session.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+          </div>
+          
+          {/* Tab Content */}
+          {activeTab === 'upcoming' && (
+            <div className="space-y-4">
+              {upcomingSessions.map((session) => (
+                <Card 
+                  key={session.id} 
+                  className="border-2 border-foreground cursor-pointer hover:bg-gray-50"
+                  onClick={() => {
+                    setSelectedSession(session)
+                    setShowSessionDetail(true)
+                  }}
+                >
+                  <CardContent className="p-6">
+                    <div className="flex items-start justify-between">
                       <div className="flex items-center gap-4">
                         <Avatar className="w-12 h-12">
                           <AvatarImage src={session.avatar} alt={session.expertName} />
                           <AvatarFallback>{getInitials(session.expertName)}</AvatarFallback>
                         </Avatar>
                         <div>
-                          <h3 className="font-medium">{session.expertName}</h3>
+                          <h3 className="font-semibold">{session.expertName}</h3>
                           <p className="text-sm text-muted-foreground">{session.expertTitle}</p>
-                          <p className="text-sm text-muted-foreground">{session.topic}</p>
+                          <p className="text-sm text-muted-foreground">
+                            {session.date} at {session.time} • {session.duration}
+                          </p>
                         </div>
                       </div>
-                      <div className="flex items-center gap-4">
-                        <div className="text-right">
-                          <p className="font-medium">{session.date}</p>
-                          <p className="text-sm text-muted-foreground">{session.time} • {session.duration}</p>
-                          <div className="flex items-center gap-2 mt-1">
-                            {getSessionIcon(session.type)}
-                            <Badge className={getStatusColor(session.status)}>
-                              {session.status}
-                            </Badge>
+                      <div className="text-right">
+                        <p className="font-bold">{session.cost}</p>
+                        <p className="text-sm text-muted-foreground">{session.topic}</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
+
+          
+          {activeTab === 'past' && (
+            <div className="space-y-4">
+              {pastSessions.map((session) => (
+                <Card key={session.id} className="border-2 border-foreground">
+                  <CardContent className="p-6">
+                    <div className="flex items-start justify-between mb-4">
+                      <div>
+                        <h3 className="font-semibold">{session.topic}</h3>
+                        <p className="text-muted-foreground">with {session.expertName} • {session.date}</p>
+                        <div className="flex items-center gap-2 mt-2">
+                          <div className="flex items-center gap-1">
+                            {[...Array(5)].map((_, i) => (
+                              <Star 
+                                key={i} 
+                                className={`w-4 h-4 ${i < session.rating ? 'fill-foreground text-foreground' : 'text-gray-300'}`} 
+                              />
+                            ))}
                           </div>
+                          <span className="text-sm text-muted-foreground">• {session.duration}</span>
                         </div>
-                        <Button variant="outline" size="sm" className="rounded-full">
-                          <MoreHorizontal className="w-4 h-4" />
+                      </div>
+                      <div className="text-right">
+                        <p className="font-semibold">{session.cost}</p>
+                        <div className="w-3 h-3 bg-green-500 rounded-full mt-2"></div>
+                      </div>
+                    </div>
+                    
+                    {session.feedback && (
+                      <p className="text-sm text-muted-foreground mb-4">{session.feedback}</p>
+                    )}
+                    
+                    <div className="flex gap-3">
+                      <Button variant="outline" className="rounded-full border-2 border-foreground">
+                        Book Again
+                      </Button>
+                      {!session.hasReview && (
+                        <Button variant="outline" className="rounded-full border-2 border-foreground">
+                          Leave Review
                         </Button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Recent Sessions */}
-            <Card className="border-2 border-foreground">
-              <CardHeader>
-                <CardTitle>Recent Sessions</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {recentSessions.slice(0, 3).map(session => (
-                    <div key={session.id} className="p-4 bg-gray-50 rounded-lg">
-                      <div className="flex items-start justify-between mb-3">
-                        <div>
-                          <h3 className="font-medium">{session.expertName}</h3>
-                          <p className="text-sm text-muted-foreground">{session.expertTitle}</p>
-                        </div>
-                        <div className="text-right">
-                          <p className="text-sm text-muted-foreground">{session.date}</p>
-                          <p className="font-medium">{session.cost}</p>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-2 mb-2">
-                        {[...Array(5)].map((_, i) => (
-                          <Star 
-                            key={i} 
-                            className={`w-4 h-4 ${i < session.rating ? 'fill-foreground text-foreground' : 'text-gray-300'}`} 
-                          />
-                        ))}
-                        <span className="text-sm text-muted-foreground">• {session.duration}</span>
-                      </div>
-                      <p className="text-sm text-gray-600">{session.feedback}</p>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        )}
-
-        {selectedTab === 'sessions' && (
-          <div className="space-y-6">
-            <Card className="border-2 border-foreground">
-              <CardHeader>
-                <CardTitle>Session Management</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center py-12">
-                  <Calendar className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-500">Session management interface coming soon...</p>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        )}
-
-        {selectedTab === 'experts' && (
-          <div className="space-y-6">
-            {/* Saved Experts Grid */}
-            <Card className="border-2 border-foreground">
-              <CardHeader>
-                <CardTitle>Saved Experts</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {savedExperts.map(expert => (
-                    <div key={expert.id} className="p-4 bg-gray-50 rounded-lg">
-                      <div className="flex items-center gap-3 mb-3">
-                        <Avatar className="w-12 h-12">
-                          <AvatarImage src={expert.avatar} alt={expert.name} />
-                          <AvatarFallback>{getInitials(expert.name)}</AvatarFallback>
-                        </Avatar>
-                        <div>
-                          <h3 className="font-medium">{expert.name}</h3>
-                          <p className="text-sm text-muted-foreground">{expert.title}</p>
-                        </div>
-                      </div>
-                      <div className="flex items-center justify-between mb-3">
-                        <div className="flex items-center gap-2">
-                          <Star className="w-4 h-4 fill-foreground text-foreground" />
-                          <span className="text-sm">{expert.rating} ({expert.sessions})</span>
-                        </div>
-                        <span className="font-medium">{expert.price}</span>
-                      </div>
-                      <Button className="w-full rounded-full" size="sm">
-                        Book Session
+                      )}
+                      <Button variant="outline" className="rounded-full border-2 border-foreground">
+                        <ArrowRight className="w-4 h-4 mr-2" />
+                        View Expert
                       </Button>
                     </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
+          
+          {activeTab === 'messages' && (
+            <div className="space-y-4">
+              {conversations.map((conversation) => (
+                <Card key={conversation.id} className="border-2 border-foreground cursor-pointer hover:bg-gray-50">
+                  <CardContent className="p-6">
+                    <div className="flex items-center gap-4">
+                      <Avatar className="w-12 h-12">
+                        <AvatarImage src={conversation.avatar} alt={conversation.expertName} />
+                        <AvatarFallback>{getInitials(conversation.expertName)}</AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between">
+                          <h3 className="font-semibold">{conversation.expertName}</h3>
+                          <span className="text-sm text-muted-foreground">{conversation.time}</span>
+                        </div>
+                        <p className="text-sm text-muted-foreground">{conversation.lastMessage}</p>
+                      </div>
+                      {conversation.unread > 0 && (
+                        <Badge className="bg-red-500">{conversation.unread}</Badge>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
+          
+          {activeTab === 'analytics' && (
+            <div className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <Card className="border-2 border-foreground">
+                  <CardHeader>
+                    <CardTitle>Session Activity</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <ChartContainer config={{}} className="h-[200px]">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={activityData}>
+                          <XAxis dataKey="month" />
+                          <YAxis />
+                          <ChartTooltip content={<ChartTooltipContent />} />
+                          <Bar dataKey="sessions" fill="#000000" />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </ChartContainer>
+                  </CardContent>
+                </Card>
+                
+                <Card className="border-2 border-foreground">
+                  <CardHeader>
+                    <CardTitle>Topics of Interest</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <ChartContainer config={{}} className="h-[200px]">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <PieChart>
+                          <Pie
+                            data={topicsData}
+                            cx="50%"
+                            cy="50%"
+                            outerRadius={80}
+                            dataKey="value"
+                            label={({ name, value }) => `${name}: ${value}%`}
+                          >
+                            {topicsData.map((entry, index) => (
+                              <Cell key={`cell-${index}`} fill={entry.color} />
+                            ))}
+                          </Pie>
+                          <ChartTooltip content={<ChartTooltipContent />} />
+                        </PieChart>
+                      </ResponsiveContainer>
+                    </ChartContainer>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          )}
+          
+          {activeTab === 'discover' && (
+            <div className="space-y-6">
+              <Card className="border-2 border-foreground">
+                <CardHeader>
+                  <CardTitle>Recommended for You</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {suggestedExperts.map((expert, index) => (
+                    <div key={index} className="flex items-center gap-4 p-4 border rounded-lg">
+                      <Avatar className="w-12 h-12">
+                        <AvatarImage src={expert.avatar} alt={expert.name} />
+                        <AvatarFallback>{getInitials(expert.name)}</AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1">
+                        <h4 className="font-semibold">{expert.name}</h4>
+                        <p className="text-sm text-muted-foreground">{expert.title}</p>
+                        <p className="text-xs text-muted-foreground">{expert.reason}</p>
+                        <div className="flex items-center gap-4 mt-1">
+                          <span className="text-sm">⭐ {expert.rating}</span>
+                          <span className="text-sm text-muted-foreground">{expert.sessions} sessions</span>
+                          <span className="text-sm font-medium">{expert.price}</span>
+                        </div>
+                      </div>
+                      <Button className="rounded-full">Book Session</Button>
+                    </div>
                   ))}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        )}
-
-        {selectedTab === 'billing' && (
-          <div className="space-y-6">
-            <Card className="border-2 border-foreground">
-              <CardHeader>
-                <CardTitle>Billing & Payments</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center py-12">
-                  <CreditCard className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-500">Billing management interface coming soon...</p>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        )}
-
-        {selectedTab === 'profile' && (
-          <div className="space-y-6">
-            <Card className="border-2 border-foreground">
-              <CardHeader>
-                <CardTitle>Profile Settings</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center py-12">
-                  <User className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-500">Profile management interface coming soon...</p>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        )}
+                </CardContent>
+              </Card>
+            </div>
+          )}
+        </div>
       </div>
+
+      {/* Session Detail Modal */}
+      {showSessionDetail && selectedSession && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <Card className="w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto border-2 border-foreground">
+            <CardHeader className="border-b">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <Avatar className="w-12 h-12">
+                    <AvatarImage src={selectedSession.avatar} alt={selectedSession.expertName} />
+                    <AvatarFallback>{getInitials(selectedSession.expertName)}</AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <CardTitle>{selectedSession.expertName}</CardTitle>
+                    <p className="text-muted-foreground">{selectedSession.expertTitle}</p>
+                  </div>
+                </div>
+                <Button 
+                  variant="outline" 
+                  onClick={() => setShowSessionDetail(false)}
+                  className="rounded-full"
+                >
+                  ✕
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent className="p-6 space-y-6">
+              {/* Session Info */}
+              <div className="p-4 bg-gray-50 rounded-lg">
+                <h3 className="font-semibold mb-2">{selectedSession.topic}</h3>
+                <p className="text-sm text-muted-foreground mb-2">{selectedSession.summary}</p>
+                <div className="flex items-center gap-4 text-sm">
+                  <span>📅 {selectedSession.date} at {selectedSession.time}</span>
+                  <span>⏱️ {selectedSession.duration}</span>
+                  <span>💰 {selectedSession.cost}</span>
+                </div>
+              </div>
+              
+              {/* Actions */}
+              <div className="flex gap-3">
+                <Button className="rounded-full">
+                  <Video className="w-4 h-4 mr-2" />
+                  Join Session
+                </Button>
+                <Button 
+                  variant="outline" 
+                  className="rounded-full border-2 border-foreground"
+                  onClick={() => {
+                    setShowSessionDetail(false)
+                    setShowReschedule(true)
+                  }}
+                >
+                  Reschedule
+                </Button>
+              </div>
+              
+              {/* Expert Profile Tab Content */}
+              <div className="border-t pt-6">
+                <h4 className="font-semibold mb-4">About {selectedSession.expertName}</h4>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Dr. Michael Chen is a seasoned product strategist with over 10 years of experience 
+                  helping companies build successful products. He has worked with Fortune 500 companies 
+                  and startups alike, specializing in product roadmap development and market strategy.
+                </p>
+                
+                <h4 className="font-semibold mb-2">Expertise</h4>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  <Badge variant="secondary">Product Strategy</Badge>
+                  <Badge variant="secondary">Roadmap Planning</Badge>
+                  <Badge variant="secondary">Market Analysis</Badge>
+                </div>
+                
+                <h4 className="font-semibold mb-2">Reviews</h4>
+                <div className="space-y-3">
+                  <div className="p-3 border rounded-lg">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="font-medium">Sarah K.</span>
+                      <div className="flex">⭐⭐⭐⭐⭐</div>
+                    </div>
+                    <p className="text-sm text-muted-foreground">
+                      "Incredible session! Michael helped us completely restructure our product roadmap."
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+      
+      {/* Reschedule Modal */}
+      {showReschedule && selectedSession && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <Card className="w-full max-w-md mx-4 border-2 border-foreground">
+            <CardHeader>
+              <CardTitle>Reschedule Session</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="p-4 bg-gray-50 rounded-lg">
+                <h4 className="font-medium">{selectedSession.topic}</h4>
+                <p className="text-sm text-muted-foreground">with {selectedSession.expertName}</p>
+                <p className="text-sm text-muted-foreground">Currently: {selectedSession.date} at {selectedSession.time}</p>
+              </div>
+              
+              <div className="space-y-3">
+                <div>
+                  <label className="text-sm font-medium">New Date</label>
+                  <input type="date" className="w-full mt-1 p-2 border-2 border-foreground rounded-lg" />
+                </div>
+                <div>
+                  <label className="text-sm font-medium">New Time</label>
+                  <select className="w-full mt-1 p-2 border-2 border-foreground rounded-lg">
+                    <option>9:00 AM</option>
+                    <option>10:00 AM</option>
+                    <option>2:00 PM</option>
+                    <option>4:00 PM</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="text-sm font-medium">Reason (Optional)</label>
+                  <textarea 
+                    className="w-full mt-1 p-2 border-2 border-foreground rounded-lg" 
+                    rows="2" 
+                    placeholder="Let the expert know why you're rescheduling..."
+                  ></textarea>
+                </div>
+              </div>
+              
+              <div className="flex gap-3">
+                <Button 
+                  variant="outline" 
+                  className="flex-1 rounded-full border-2 border-foreground"
+                  onClick={() => setShowReschedule(false)}
+                >
+                  Cancel
+                </Button>
+                <Button 
+                  className="flex-1 rounded-full"
+                  onClick={() => {
+                    setShowReschedule(false)
+                    setSelectedSession(null)
+                  }}
+                >
+                  Confirm Reschedule
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
     </div>
   )
 }

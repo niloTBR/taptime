@@ -25,6 +25,8 @@ import AdminExpertDashboard from '@/pages/admin/AdminExpertDashboard'
 import CMSDashboard from '@/pages/cms/CMSDashboard'
 import UserDashboard from '@/pages/user/UserDashboard'
 import ExpertDashboard from '@/pages/expert/ExpertDashboard'
+import SignUpUserPage from '@/pages/SignUpUserPage'
+import SignUpExpertPage from '@/pages/SignUpExpertPage'
 
 function App() {
   return (
@@ -52,6 +54,8 @@ function App() {
         </Route>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignUpPage />} />
+        <Route path="/signup/user" element={<SignUpUserPage />} />
+        <Route path="/signup/expert" element={<SignUpExpertPage />} />
         <Route path="/admin/user" element={<AdminUserDashboard />} />
         <Route path="/admin/expert" element={<AdminExpertDashboard />} />
         <Route path="/cms" element={<CMSDashboard />} />

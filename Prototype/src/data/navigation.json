@@ -12,11 +12,14 @@
         "label": "Join As An Expert",
         "href": "/join-expert",
         "active": false
-      },
+      }
+    ],
+    "hiddenLinks": [
       {
         "label": "Your Journey", 
         "href": "/journey",
-        "active": false
+        "active": false,
+        "note": "Hidden - logged in user feature"
       }
     ],
     "actions": [

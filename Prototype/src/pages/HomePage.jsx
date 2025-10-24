@@ -196,6 +196,7 @@ const HomePage = () => {
               miniTitle="What Our Users Say"
               title={reviews.title}
               description={reviews.subtitle}
+              className="text-left"
             />
             <div className="flex gap-2">
               <Button

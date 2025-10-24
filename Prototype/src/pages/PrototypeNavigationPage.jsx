@@ -18,95 +18,57 @@ const PrototypeNavigationPage = () => {
     {
       id: 'website',
       title: 'Website Prototype',
-      description: 'Main public-facing website with homepage, browse experts, join expert flow, and all marketing pages.',
-      features: ['Homepage & Landing', 'Browse Experts', 'Expert Profiles', 'Join as Expert', 'Blog & Content'],
+      description: 'Main public-facing website with homepage, browse experts, expert profiles, and join expert flow.',
+      features: ['Homepage & Landing', 'Browse Experts', 'Expert Profiles', 'Join as Expert', 'Marketing Pages'],
       icon: <Globe className="w-8 h-8" />,
       url: '/',
       status: 'Live',
-      badge: 'Current',
+      badge: 'Main Site',
       color: 'bg-foreground text-background'
     },
     {
-      id: 'admin-user',
-      title: 'Admin Panel: Find Expert',
-      description: 'Administrative interface for users looking for experts. Includes user management, booking oversight, and analytics.',
-      features: ['User Dashboard', 'Booking Management', 'Payment Tracking', 'Support Tools', 'Analytics'],
+      id: 'user-flow',
+      title: 'User Learning Journey',
+      description: 'Complete user experience from signup to learning dashboard with goal tracking and session management.',
+      features: ['User Registration', 'Learning Goals', 'Progress Tracking', 'Session Booking', 'Learning Analytics'],
       icon: <UserCheck className="w-8 h-8" />,
-      url: '/admin/user',
+      url: '/signup/user',
       status: 'Live',
-      badge: 'Admin',
-      color: 'bg-foreground text-background'
+      badge: 'User Journey',
+      color: 'bg-blue-600 text-white'
     },
     {
-      id: 'admin-expert',
-      title: 'Admin Panel: Join As Expert',
-      description: 'Administrative interface for expert onboarding, verification, profile management, and performance tracking.',
-      features: ['Expert Verification', 'Profile Management', 'Earnings Dashboard', 'Schedule Management', 'Performance Metrics'],
+      id: 'expert-flow',
+      title: 'Expert Teaching Platform',
+      description: 'Expert application, verification, and teaching dashboard with student management and earnings tracking.',
+      features: ['Expert Application', 'Profile Setup', 'Student Management', 'Earnings Analytics', 'Teaching Tools'],
       icon: <Crown className="w-8 h-8" />,
-      url: '/admin/expert',
+      url: '/signup/expert',
       status: 'Live',
-      badge: 'Admin',
-      color: 'bg-foreground text-background'
-    },
-    {
-      id: 'cms',
-      title: 'Content Management System',
-      description: 'Backend CMS for managing all website content, user data, expert profiles, and system configurations.',
-      features: ['Content Management', 'User Administration', 'Expert Management', 'System Settings', 'Analytics'],
-      icon: <Settings className="w-8 h-8" />,
-      url: '/cms',
-      status: 'Live',
-      badge: 'CMS',
-      color: 'bg-foreground text-background'
+      badge: 'Expert Platform',
+      color: 'bg-purple-600 text-white'
     },
     {
       id: 'user-dashboard',
-      title: 'User Dashboard',
-      description: 'Personal dashboard for users finding experts. Track sessions, manage bookings, view history, and manage profile.',
-      features: ['Session Management', 'Booking History', 'Saved Experts', 'Billing & Payments', 'Profile Settings'],
-      icon: <Users className="w-8 h-8" />,
+      title: 'User Dashboard (Logged In)',
+      description: 'Clean learning dashboard showing progress, upcoming sessions, and learning path with Domestika-inspired design.',
+      features: ['Learning Progress', 'Session Management', 'Goal Tracking', 'Recent Activity', 'Next Session'],
+      icon: <Settings className="w-8 h-8" />,
       url: '/user/dashboard',
       status: 'Live',
-      badge: 'User',
-      color: 'bg-foreground text-background'
+      badge: 'Dashboard',
+      color: 'bg-green-600 text-white'
     },
     {
       id: 'expert-dashboard',
-      title: 'Expert Dashboard',
-      description: 'Professional dashboard for experts. Manage schedule, track earnings, view client feedback, and update profile.',
-      features: ['Schedule Management', 'Earnings Analytics', 'Client Feedback', 'Performance Metrics', 'Profile Management'],
-      icon: <Crown className="w-8 h-8" />,
+      title: 'Expert Dashboard (Logged In)',
+      description: 'Professional teaching dashboard with performance metrics, schedule management, and student feedback.',
+      features: ['Performance Metrics', 'Today\'s Schedule', 'Student Feedback', 'Quick Actions', 'Growth Analytics'],
+      icon: <FileText className="w-8 h-8" />,
       url: '/expert/dashboard',
       status: 'Live',
-      badge: 'Expert',
-      color: 'bg-foreground text-background'
-    }
-  ]
-
-  const designReferences = [
-    {
-      category: 'Website Designs',
-      count: '14 screens',
-      folder: 'Website',
-      description: 'Homepage, Browse, Filter, Match, Blog, Journey, Join, Expert Profile, Voucher, Login, Sign Up, Privacy'
-    },
-    {
-      category: 'User Panel Designs',
-      count: '11 screens',
-      folder: 'User',
-      description: 'User dashboard, booking flow, session management, payment, profile settings'
-    },
-    {
-      category: 'Expert Panel Designs',
-      count: '21 screens',
-      folder: 'Expert',
-      description: 'Expert dashboard, profile setup, schedule management, earnings, analytics, verification'
-    },
-    {
-      category: 'Admin Panel Designs',
-      count: '11 screens',
-      folder: 'Admin',
-      description: 'Admin dashboard, user management, expert verification, system analytics, content management'
+      badge: 'Teaching Hub',
+      color: 'bg-orange-600 text-white'
     }
   ]
 
@@ -147,7 +109,7 @@ const PrototypeNavigationPage = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16 max-w-5xl mx-auto">
             {prototypes.map((prototype) => (
               <Card key={prototype.id} className="border-2 border-foreground h-full">
                 <CardHeader>
@@ -205,94 +167,6 @@ const PrototypeNavigationPage = () => {
                 </CardContent>
               </Card>
             ))}
-          </div>
-
-          {/* Design References */}
-          <div className="border-t pt-16">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-semibold mb-4">Design References</h2>
-              <p className="text-muted-foreground">
-                View the design mockups and specifications for each interface
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {designReferences.map((ref, index) => (
-                <Card key={index} className="border-2 border-foreground">
-                  <CardContent className="p-6 text-center space-y-4">
-                    <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto">
-                      <FileText className="w-6 h-6" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold">{ref.category}</h3>
-                      <div className="text-sm text-muted-foreground mt-1">{ref.count}</div>
-                    </div>
-                    <p className="text-xs text-muted-foreground leading-relaxed">
-                      {ref.description}
-                    </p>
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      className="rounded-full border-2 border-foreground w-full"
-                      onClick={() => {
-                        // This would open the design folder in the actual implementation
-                        alert(`Opening ${ref.folder} design folder with ${ref.count}`)
-                      }}
-                    >
-                      View Designs
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-
-          {/* Documentation Links */}
-          <div className="border-t pt-16 mt-16">
-            <div className="text-center">
-              <h2 className="text-3xl font-semibold mb-8">Project Documentation</h2>
-              
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-                <Card className="border-2 border-foreground">
-                  <CardContent className="p-6 text-center space-y-4">
-                    <FileText className="w-8 h-8 mx-auto" />
-                    <h3 className="font-semibold">Business Requirements</h3>
-                    <p className="text-sm text-muted-foreground">
-                      Complete BRD documentation
-                    </p>
-                    <Button variant="outline" size="sm" className="rounded-full border-2 border-foreground">
-                      View BRD
-                    </Button>
-                  </CardContent>
-                </Card>
-
-                <Card className="border-2 border-foreground">
-                  <CardContent className="p-6 text-center space-y-4">
-                    <FileText className="w-8 h-8 mx-auto" />
-                    <h3 className="font-semibold">Functional Requirements</h3>
-                    <p className="text-sm text-muted-foreground">
-                      Detailed FRD specifications
-                    </p>
-                    <Button variant="outline" size="sm" className="rounded-full border-2 border-foreground">
-                      View FRD
-                    </Button>
-                  </CardContent>
-                </Card>
-
-                <Card className="border-2 border-foreground">
-                  <CardContent className="p-6 text-center space-y-4">
-                    <Users className="w-8 h-8 mx-auto" />
-                    <h3 className="font-semibold">User Personas</h3>
-                    <p className="text-sm text-muted-foreground">
-                      Target user profiles
-                    </p>
-                    <Button variant="outline" size="sm" className="rounded-full border-2 border-foreground">
-                      View Personas
-                    </Button>
-                  </CardContent>
-                </Card>
-              </div>
-            </div>
           </div>
         </div>
       </section>
