@@ -615,13 +615,16 @@ const UserDashboard = () => {
                             </Button>
                           </div>
                           
-                          <Button 
-                            size="sm" 
-                            variant="outline"
-                            className="rounded-full w-9 h-9 p-0 border-2 border-foreground"
-                          >
-                            <MessageCircle className="w-4 h-4" />
-                          </Button>
+                          <div className="relative">
+                            <Button 
+                              size="sm" 
+                              variant="outline"
+                              className="rounded-full border-2 border-foreground px-3 py-1 text-xs h-7"
+                            >
+                              View
+                            </Button>
+                            <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></div>
+                          </div>
                         </div>
                       </div>
                     </div>
