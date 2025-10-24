@@ -239,57 +239,13 @@ const UserDashboard = () => {
             <Button variant="outline" size="icon" className="rounded-full">
               <Bell className="w-4 h-4" />
             </Button>
+            <Button variant="outline" className="rounded-full">
+              Logout
+            </Button>
           </div>
         </div>
       </header>
 
-      {/* Progress Cards Above the Fold */}
-      <section className="bg-gray-50 border-b px-6 py-8">
-        <div className="max-w-7xl mx-auto">
-          <h2 className="text-lg font-semibold mb-6">Your Progress</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <Card className="border-2">
-              <CardContent className="p-6">
-                <div className="flex items-center gap-3 mb-2">
-                  <BookOpen className="w-5 h-5 text-muted-foreground" />
-                  <span className="text-sm text-muted-foreground">Total Sessions</span>
-                </div>
-                <p className="text-2xl font-bold">{pastSessions.length + upcomingSessions.length}</p>
-              </CardContent>
-            </Card>
-            
-            <Card className="border-2">
-              <CardContent className="p-6">
-                <div className="flex items-center gap-3 mb-2">
-                  <TrendingUp className="w-5 h-5 text-muted-foreground" />
-                  <span className="text-sm text-muted-foreground">This Month</span>
-                </div>
-                <p className="text-2xl font-bold">6</p>
-              </CardContent>
-            </Card>
-            
-            <Card className="border-2">
-              <CardContent className="p-6">
-                <div className="flex items-center gap-3 mb-2">
-                  <Star className="w-5 h-5 text-muted-foreground" />
-                  <span className="text-sm text-muted-foreground">Avg Rating Given</span>
-                </div>
-                <p className="text-2xl font-bold">4.7</p>
-              </CardContent>
-            </Card>
-            
-            <Card className="border-2">
-              <CardContent className="p-6">
-                <div className="flex items-center gap-3 mb-2">
-                  <Target className="w-5 h-5 text-muted-foreground" />
-                  <span className="text-sm text-muted-foreground">Budget Range</span>
-                </div>
-                <p className="text-lg font-bold">{user.budget}</p>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
 
       {/* Main Content with Sidebar */}
       <div className="max-w-7xl mx-auto flex gap-6 p-6">
@@ -312,9 +268,10 @@ const UserDashboard = () => {
                     <Edit className="w-3 h-3" />
                   </Button>
                 </div>
-                <h3 className="font-semibold text-xl mb-1">{user.name}</h3>
-                <p className="text-muted-foreground text-base mb-1">{user.role}</p>
-                <p className="text-sm text-muted-foreground mb-3">{user.company}</p>
+                <h3 className="font-bold text-2xl mb-2">{user.name}</h3>
+                <p className="text-foreground text-lg font-medium mb-1">{user.role}</p>
+                <p className="text-muted-foreground text-base mb-1">{user.company}</p>
+                <p className="text-muted-foreground text-sm mb-3">{user.industry} • {user.experience}</p>
                 
                 <div className="p-3 bg-blue-50 rounded-lg">
                   <div className="flex items-center justify-center gap-2 text-sm text-blue-700">
@@ -324,22 +281,18 @@ const UserDashboard = () => {
                 </div>
               </div>
               
-              <div className="space-y-4 text-sm">
+              <div className="space-y-3 text-sm">
                 <div className="flex items-center gap-3">
                   <Mail className="w-4 h-4 text-muted-foreground" />
-                  <span>{user.email}</span>
+                  <span className="text-muted-foreground">{user.email}</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <Phone className="w-4 h-4 text-muted-foreground" />
-                  <span>{user.phone}</span>
+                  <span className="text-muted-foreground">{user.phone}</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <MapPin className="w-4 h-4 text-muted-foreground" />
-                  <span>{user.location}</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Building className="w-4 h-4 text-muted-foreground" />
-                  <span>{user.industry} • {user.experience}</span>
+                  <span className="text-muted-foreground">{user.location}</span>
                 </div>
               </div>
               
@@ -421,16 +374,6 @@ const UserDashboard = () => {
                       </Badge>
                     </div>
                     
-                    {/* Payment Status */}
-                    <div className="absolute top-3 left-3">
-                      <Badge className={`text-xs px-2 py-1 shadow-sm ${
-                        session.paymentStatus === 'paid' 
-                          ? 'bg-green-600 text-white' 
-                          : 'bg-yellow-600 text-white'
-                      }`}>
-                        {session.paymentStatus === 'paid' ? '✓ Paid' : '⏳ Payment Pending'}
-                      </Badge>
-                    </div>
                   </div>
 
                   <CardContent className="p-6 flex flex-col min-h-0">
@@ -475,6 +418,11 @@ const UserDashboard = () => {
                       <div className="space-y-1 text-xs text-muted-foreground">
                         <p>📅 {session.date} at {session.time}</p>
                         <p>⏱️ {session.duration}</p>
+                        {session.paymentStatus === 'paid' ? (
+                          <p className="text-green-600 font-medium">✓ Paid</p>
+                        ) : (
+                          <p className="text-yellow-600 font-medium">⏳ Payment Pending</p>
+                        )}
                       </div>
                     </div>
 
@@ -485,9 +433,9 @@ const UserDashboard = () => {
                           {session.paymentStatus === 'paid' ? (
                             <Button 
                               size="sm" 
-                              className="rounded-full px-4 bg-green-600 hover:bg-green-700"
+                              className="rounded-full px-4"
                             >
-                              ✓ Paid • {session.duration}
+                              Join Session
                             </Button>
                           ) : (
                             <Button 
@@ -535,12 +483,6 @@ const UserDashboard = () => {
                       </Badge>
                     </div>
                     
-                    {/* Completed Status */}
-                    <div className="absolute top-3 left-3">
-                      <Badge className="bg-green-600 text-white text-xs px-2 py-1 shadow-sm">
-                        ✓ Completed
-                      </Badge>
-                    </div>
                   </div>
 
                   <CardContent className="p-6 flex flex-col min-h-0">
@@ -641,7 +583,7 @@ const UserDashboard = () => {
           <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide">
             {suggestedExperts.map((expert, index) => (
               <div key={index} className="flex-none w-80">
-                <Card className="group hover:shadow-xl hover:scale-105 transition-all duration-300 border-2 hover:border-foreground h-full cursor-pointer relative">
+                <Card className="group hover:shadow-xl transition-all duration-300 border-2 hover:border-foreground h-full cursor-pointer relative">
                   {/* Photo Header - Full Width */}
                   <div className="relative h-32 overflow-hidden rounded-t-lg bg-gray-100">
                     <img 
