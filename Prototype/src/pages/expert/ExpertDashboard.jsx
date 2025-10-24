@@ -168,7 +168,6 @@ const ExpertDashboard = () => {
   const tabs = [
     { id: 'upcoming', label: 'Upcoming', count: upcomingSessions.length },
     { id: 'past', label: 'Past Sessions', count: pastSessions.length },
-    { id: 'messages', label: 'Messages', count: conversations.filter(c => c.unread > 0).length },
     { id: 'students', label: 'My Students' },
     { id: 'schedule', label: 'Schedule' }
   ]
@@ -501,32 +500,6 @@ const ExpertDashboard = () => {
             </div>
           )}
           
-          {activeTab === 'messages' && (
-            <div className="space-y-4">
-              {conversations.map((conversation) => (
-                <Card key={conversation.id} className="border-2 border-foreground cursor-pointer hover:bg-gray-50">
-                  <CardContent className="p-6">
-                    <div className="flex items-center gap-4">
-                      <Avatar className="w-12 h-12">
-                        <AvatarImage src={conversation.avatar} alt={conversation.clientName} />
-                        <AvatarFallback>{getInitials(conversation.clientName)}</AvatarFallback>
-                      </Avatar>
-                      <div className="flex-1">
-                        <div className="flex items-center justify-between">
-                          <h3 className="font-semibold">{conversation.clientName}</h3>
-                          <span className="text-sm text-muted-foreground">{conversation.time}</span>
-                        </div>
-                        <p className="text-sm text-muted-foreground">{conversation.lastMessage}</p>
-                      </div>
-                      {conversation.unread > 0 && (
-                        <Badge className="bg-red-500">{conversation.unread}</Badge>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          )}
           
           {activeTab === 'students' && (
             <div className="text-center py-12">
@@ -595,10 +568,6 @@ const ExpertDashboard = () => {
                   Start Session
                 </Button>
                 <Button variant="outline" className="w-full rounded-full border-2 border-foreground">
-                  <MessageCircle className="w-4 h-4 mr-2" />
-                  Message Client
-                </Button>
-                <Button variant="outline" className="w-full rounded-full border-2 border-foreground">
                   <Calendar className="w-4 h-4 mr-2" />
                   Reschedule
                 </Button>
@@ -608,8 +577,51 @@ const ExpertDashboard = () => {
                 </Button>
               </div>
               
-              {/* Session Prep */}
+              {/* Session Conversation */}
               <div className="mt-6 pt-6 border-t">
+                <h4 className="font-medium mb-3">Conversation with Student</h4>
+                <div className="space-y-3 mb-4">
+                  {/* Previous messages */}
+                  <div className="p-3 bg-blue-50 rounded-lg ml-6">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-sm font-medium">You</span>
+                      <span className="text-xs text-muted-foreground">Yesterday 3:20 PM</span>
+                    </div>
+                    <p className="text-sm">Looking forward to our session tomorrow! I've prepared some materials based on your goals.</p>
+                  </div>
+                  
+                  <div className="p-3 bg-gray-50 rounded-lg">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-sm font-medium">{selectedSession.clientName}</span>
+                      <span className="text-xs text-muted-foreground">Yesterday 4:15 PM</span>
+                    </div>
+                    <p className="text-sm">Perfect! I'm excited to dive into the roadmap discussion. Thanks for the prep work.</p>
+                  </div>
+                  
+                  <div className="p-3 bg-blue-50 rounded-lg ml-6">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-sm font-medium">You</span>
+                      <span className="text-xs text-muted-foreground">Today 9:30 AM</span>
+                    </div>
+                    <p className="text-sm">Just sent you the session agenda and some pre-reading materials via email.</p>
+                  </div>
+                </div>
+                
+                {/* New message input */}
+                <div className="flex gap-2 mb-4">
+                  <input 
+                    type="text" 
+                    className="flex-1 p-2 border-2 border-gray-200 rounded-lg" 
+                    placeholder="Message your student..."
+                  />
+                  <Button size="sm" className="rounded-lg">
+                    Send
+                  </Button>
+                </div>
+              </div>
+              
+              {/* Session Prep */}
+              <div className="pt-4 border-t">
                 <h4 className="font-medium mb-3">Session Preparation</h4>
                 <div className="space-y-2 text-sm">
                   <div className="flex items-center gap-2">
