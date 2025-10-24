@@ -487,7 +487,7 @@ const UserDashboard = () => {
                         {session.paymentStatus === 'paid' ? (
                           <p className="text-gray-600 font-medium">✓ Paid</p>
                         ) : (
-                          <p className="text-gray-600 font-medium">⏳ Payment Pending</p>
+                          <p className="text-orange-600 font-medium">⏳ Payment Pending</p>
                         )}
                       </div>
                     </div>
@@ -506,7 +506,8 @@ const UserDashboard = () => {
                           ) : (
                             <Button 
                               size="sm" 
-                              className="rounded-full px-3 py-1 text-xs h-7 flex-1 bg-gray-600 hover:bg-gray-700"
+                              variant="outline"
+                              className="rounded-full px-3 py-1 text-xs h-7 flex-1 border-2 border-red-500 text-red-600 hover:bg-red-50"
                             >
                               Complete Payment
                             </Button>
@@ -517,7 +518,7 @@ const UserDashboard = () => {
                             variant="outline"
                             className="rounded-full border-2 border-foreground px-3 py-1 text-xs h-7"
                           >
-                            Details
+                            View
                           </Button>
                         </div>
                       </div>
@@ -602,25 +603,25 @@ const UserDashboard = () => {
                     {/* Actions - Always at Bottom */}
                     <div className="mt-auto flex-shrink-0 pt-4">
                       <div className="flex justify-between items-center mb-3">
-                        <div className="flex gap-2 w-full items-center">
-                          <Button 
-                            size="sm" 
-                            className="rounded-full px-3 py-1 text-xs h-7 flex-1"
-                          >
-                            Book Again
-                          </Button>
-                          
-                          <div className="w-3 h-3 bg-black rounded-full"></div>
-                          
-                          {!session.hasReview && (
+                        <div className="flex justify-between items-center">
+                          <div className="flex flex-col gap-2">
                             <Button 
                               size="sm" 
-                              variant="outline" 
-                              className="rounded-full border-2 border-foreground px-3 py-1 text-xs h-7"
+                              className="rounded-full px-4 flex items-center gap-2"
                             >
-                              Rate
+                              <span className="text-sm font-medium">{session.cost.split('$')[1]}</span>
+                              <span className="text-xs opacity-75">/{session.duration}</span>
+                              <span className="ms-1">Book</span>
                             </Button>
-                          )}
+                          </div>
+                          
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            className="rounded-full w-9 h-9 p-0 border-2 border-foreground"
+                          >
+                            <MessageCircle className="w-4 h-4" />
+                          </Button>
                         </div>
                       </div>
                     </div>
@@ -881,6 +882,70 @@ const UserDashboard = () => {
                   }}
                 >
                   Confirm Reschedule
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+      
+      {/* Rating Popup */}
+      {showRatingPopup && selectedSession && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <Card className="w-full max-w-md mx-4 border-2 border-foreground">
+            <CardHeader>
+              <CardTitle>Rate Your Session</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="text-center">
+                <h4 className="font-medium mb-2">{selectedSession.topic}</h4>
+                <p className="text-sm text-muted-foreground">with {selectedSession.expertName}</p>
+              </div>
+              
+              <div className="flex justify-center gap-2">
+                {[...Array(5)].map((_, i) => (
+                  <Star 
+                    key={i} 
+                    className={`w-8 h-8 cursor-pointer ${i < selectedRating ? 'fill-black text-black' : 'text-gray-300 hover:text-black'}`}
+                    onClick={() => setSelectedRating(i + 1)}
+                  />
+                ))}
+              </div>
+              
+              <div>
+                <label className="text-sm font-medium mb-2 block">Leave a comment (optional)</label>
+                <textarea 
+                  className="w-full p-3 border-2 border-gray-200 rounded-lg resize-none" 
+                  rows="3" 
+                  placeholder="How was your session with the expert?"
+                  value={ratingComment}
+                  onChange={(e) => setRatingComment(e.target.value)}
+                />
+              </div>
+              
+              <div className="flex gap-3">
+                <Button 
+                  variant="outline" 
+                  className="flex-1 rounded-full border-2 border-foreground"
+                  onClick={() => {
+                    setShowRatingPopup(false)
+                    setSelectedRating(0)
+                    setRatingComment('')
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button 
+                  className="flex-1 rounded-full"
+                  onClick={() => {
+                    // Here you would save the rating
+                    console.log('Rating:', selectedRating, 'Comment:', ratingComment)
+                    setShowRatingPopup(false)
+                    setSelectedRating(0)
+                    setRatingComment('')
+                  }}
+                >
+                  Submit Rating
                 </Button>
               </div>
             </CardContent>
