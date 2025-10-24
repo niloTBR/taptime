@@ -75,11 +75,9 @@ const UserDashboard = () => {
       rating: 4.9,
       reviewCount: 200,
       rate: '$220/hr',
-      bio: 'Helping companies build AI-powered products that scale. Former VP of Product at Google, now consulting on product strategy and team leadership.',
+      bio: 'Helping companies build AI-powered products that scale. Former VP of Product at Google, now consulting on product strategy.',
       image: '/api/placeholder/300/120',
-      badge: 'Top Expert',
-      expertise: ['Product Strategy', 'AI Strategy', 'Team Leadership'],
-      reason: 'Based on your interest in Product Strategy'
+      expertise: ['Product Strategy']
     },
     {
       id: 'maria-santos',
@@ -88,11 +86,75 @@ const UserDashboard = () => {
       rating: 4.8,
       reviewCount: 150,
       rate: '$180/hr',
-      bio: 'Executive coach specializing in leadership development and team performance. Helping managers become effective leaders through practical frameworks.',
+      bio: 'Executive coach specializing in leadership development and team performance. Helping managers become effective leaders.',
       image: '/api/placeholder/300/120',
-      badge: 'Verified',
-      expertise: ['Team Leadership', 'Executive Coaching', 'Performance Management'],
-      reason: 'Matches your leadership goals'
+      expertise: ['Team Leadership']
+    },
+    {
+      id: 'david-chen',
+      name: 'David Chen',
+      title: 'Growth Marketing Expert',
+      rating: 4.7,
+      reviewCount: 89,
+      rate: '$160/hr',
+      bio: 'Growth marketing specialist who has scaled startups from 0 to millions in revenue. Expert in digital marketing and analytics.',
+      image: '/api/placeholder/300/120',
+      expertise: ['Growth Marketing']
+    },
+    {
+      id: 'sarah-jones',
+      name: 'Sarah Jones',
+      title: 'UX Design Lead',
+      rating: 4.9,
+      reviewCount: 167,
+      rate: '$190/hr',
+      bio: 'Senior UX designer with 8+ years creating user-centered digital experiences for Fortune 500 companies.',
+      image: '/api/placeholder/300/120',
+      expertise: ['UX Design']
+    },
+    {
+      id: 'michael-taylor',
+      name: 'Michael Taylor',
+      title: 'Business Strategy Consultant',
+      rating: 4.6,
+      reviewCount: 234,
+      rate: '$200/hr',
+      bio: 'Former McKinsey consultant helping businesses develop strategic roadmaps and optimize operations for growth.',
+      image: '/api/placeholder/300/120',
+      expertise: ['Business Strategy']
+    },
+    {
+      id: 'emily-wilson',
+      name: 'Emily Wilson',
+      title: 'Data Science Expert',
+      rating: 4.8,
+      reviewCount: 156,
+      rate: '$210/hr',
+      bio: 'Data scientist with expertise in machine learning and analytics. Helping companies make data-driven decisions.',
+      image: '/api/placeholder/300/120',
+      expertise: ['Data Science']
+    },
+    {
+      id: 'james-brown',
+      name: 'James Brown',
+      title: 'Sales Strategy Expert',
+      rating: 4.7,
+      reviewCount: 198,
+      rate: '$170/hr',
+      bio: 'Sales leader with track record of building high-performing sales teams and scaling revenue operations.',
+      image: '/api/placeholder/300/120',
+      expertise: ['Sales Strategy']
+    },
+    {
+      id: 'lisa-garcia',
+      name: 'Lisa Garcia',
+      title: 'Content Marketing Specialist',
+      rating: 4.9,
+      reviewCount: 143,
+      rate: '$150/hr',
+      bio: 'Content strategist helping brands build authentic connections through storytelling and content marketing.',
+      image: '/api/placeholder/300/120',
+      expertise: ['Content Marketing']
     }
   ]
 
@@ -398,11 +460,6 @@ const UserDashboard = () => {
                             ({session.reviewCount})
                           </span>
                         </div>
-                        {session.verified && (
-                          <div className="w-5 h-5 flex items-center justify-center flex-shrink-0">
-                            <CheckCircle className="w-5 h-5 text-blue-600" />
-                          </div>
-                        )}
                       </div>
 
                       {/* Expert Name and Title */}
@@ -428,9 +485,9 @@ const UserDashboard = () => {
                         <p>📅 {session.date} at {session.time}</p>
                         <p>⏱️ {session.duration}</p>
                         {session.paymentStatus === 'paid' ? (
-                          <p className="text-green-600 font-medium">✓ Paid</p>
+                          <p className="text-gray-600 font-medium">✓ Paid</p>
                         ) : (
-                          <p className="text-yellow-600 font-medium">⏳ Payment Pending</p>
+                          <p className="text-gray-600 font-medium">⏳ Payment Pending</p>
                         )}
                       </div>
                     </div>
@@ -438,31 +495,31 @@ const UserDashboard = () => {
                     {/* Actions - Always at Bottom */}
                     <div className="mt-auto flex-shrink-0 pt-4">
                       <div className="flex justify-between items-center">
-                        <div className="flex flex-col gap-2">
+                        <div className="flex gap-2 w-full">
                           {session.paymentStatus === 'paid' ? (
                             <Button 
                               size="sm" 
-                              className="rounded-full px-4"
+                              className="rounded-full px-3 py-1 text-xs h-7 flex-1"
                             >
                               Join Session
                             </Button>
                           ) : (
                             <Button 
                               size="sm" 
-                              className="rounded-full px-4 bg-yellow-600 hover:bg-yellow-700"
+                              className="rounded-full px-3 py-1 text-xs h-7 flex-1 bg-gray-600 hover:bg-gray-700"
                             >
-                              💳 Complete Payment
+                              Complete Payment
                             </Button>
                           )}
+                          
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            className="rounded-full border-2 border-foreground px-3 py-1 text-xs h-7"
+                          >
+                            Details
+                          </Button>
                         </div>
-                        
-                        <Button 
-                          size="sm" 
-                          variant="outline"
-                          className="rounded-full border-2 border-foreground px-4"
-                        >
-                          View Details
-                        </Button>
                       </div>
                     </div>
                   </CardContent>
@@ -507,11 +564,6 @@ const UserDashboard = () => {
                             ({session.reviewCount})
                           </span>
                         </div>
-                        {session.verified && (
-                          <div className="w-5 h-5 flex items-center justify-center flex-shrink-0">
-                            <CheckCircle className="w-5 h-5 text-blue-600" />
-                          </div>
-                        )}
                       </div>
 
                       {/* Expert Name and Title */}
@@ -539,7 +591,7 @@ const UserDashboard = () => {
                           {[...Array(5)].map((_, i) => (
                             <Star 
                               key={i} 
-                              className={`w-3 h-3 ${i < session.rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`} 
+                              className={`w-3 h-3 ${i < session.rating ? 'fill-black text-black' : 'text-gray-300'}`} 
                             />
                           ))}
                         </div>
@@ -550,24 +602,21 @@ const UserDashboard = () => {
                     {/* Actions - Always at Bottom */}
                     <div className="mt-auto flex-shrink-0 pt-4">
                       <div className="flex justify-between items-center mb-3">
-                        <div className="flex flex-col gap-2">
+                        <div className="flex gap-2 w-full items-center">
                           <Button 
                             size="sm" 
-                            className="rounded-full px-4 flex items-center gap-2"
+                            className="rounded-full px-3 py-1 text-xs h-7 flex-1"
                           >
-                            <span className="text-sm font-medium">{session.cost.split('$')[1]}</span>
-                            <span className="text-xs opacity-75">• {session.duration}</span>
-                            <span className="ms-1">Book Again</span>
+                            Book Again
                           </Button>
-                        </div>
-                        
-                        <div className="flex items-center gap-2">
-                          <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                          
+                          <div className="w-3 h-3 bg-black rounded-full"></div>
+                          
                           {!session.hasReview && (
                             <Button 
                               size="sm" 
                               variant="outline" 
-                              className="rounded-full border-2 border-foreground px-3"
+                              className="rounded-full border-2 border-foreground px-3 py-1 text-xs h-7"
                             >
                               Rate
                             </Button>
@@ -588,20 +637,20 @@ const UserDashboard = () => {
       {/* Experts Recommended for You - Footer Section */}
       <section className="bg-gray-50 border-t px-6 py-12">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-xl font-semibold mb-6">Experts Recommended for You</h2>
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-semibold">Experts Recommended for You</h2>
+            <Button variant="outline" className="rounded-full border-2 border-foreground">
+              View All Experts
+            </Button>
+          </div>
           <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide">
             {suggestedExperts.map((expert, index) => (
               <div key={index} className="flex-none w-80">
-                <div className="mb-4 p-3 bg-blue-50 rounded-lg">
-                  <p className="text-xs text-blue-600 leading-relaxed">
-                    💡 {expert.reason}
-                  </p>
-                </div>
                 <ExpertCard 
                   expert={expert}
                   showActions={true}
                   className=""
-                  showCrown={expert.badge === 'Top Expert'}
+                  showCrown={false}
                   showCharity={false}
                 />
               </div>
