@@ -420,7 +420,7 @@ const ExpertDashboard = () => {
           
           {/* Tab Content */}
           {activeTab === 'upcoming' && (
-            <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {upcomingSessions.map((session) => (
                 <Card 
                   key={session.id} 
@@ -431,23 +431,36 @@ const ExpertDashboard = () => {
                   }}
                 >
                   <CardContent className="p-6">
-                    <div className="flex items-start justify-between">
-                      <div className="flex items-center gap-4">
-                        <Avatar className="w-12 h-12">
+                    <div className="space-y-4">
+                      {/* Client Info */}
+                      <div className="flex items-center gap-3">
+                        <Avatar className="w-16 h-16">
                           <AvatarImage src={session.avatar} alt={session.clientName} />
                           <AvatarFallback>{getInitials(session.clientName)}</AvatarFallback>
                         </Avatar>
-                        <div>
-                          <h3 className="font-semibold">{session.clientName}</h3>
-                          <p className="text-sm text-muted-foreground">{session.clientTitle}</p>
-                          <p className="text-sm text-muted-foreground">
-                            {session.date} at {session.time} • {session.duration}
-                          </p>
+                        <div className="flex-1">
+                          <h3 className="text-lg font-semibold">{session.clientName}</h3>
+                          <p className="text-muted-foreground">{session.clientTitle}</p>
                         </div>
                       </div>
-                      <div className="text-right">
-                        <p className="font-bold">{session.cost}</p>
-                        <p className="text-sm text-muted-foreground">{session.topic}</p>
+                      
+                      {/* Session Details */}
+                      <div>
+                        <h4 className="font-medium mb-2">{session.topic}</h4>
+                        <p className="text-sm text-muted-foreground mb-3">{session.summary}</p>
+                        
+                        <div className="space-y-1 text-sm text-muted-foreground">
+                          <p>📅 {session.date} at {session.time}</p>
+                          <p>⏱️ Duration: {session.duration}</p>
+                        </div>
+                      </div>
+                      
+                      {/* Price */}
+                      <div className="flex items-center justify-between pt-4 border-t">
+                        <span className="text-2xl font-bold">{session.cost}</span>
+                        <Button className="rounded-full">
+                          View Details
+                        </Button>
                       </div>
                     </div>
                   </CardContent>
@@ -457,15 +470,30 @@ const ExpertDashboard = () => {
           )}
           
           {activeTab === 'past' && (
-            <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {pastSessions.map((session) => (
                 <Card key={session.id} className="border-2 border-foreground">
                   <CardContent className="p-6">
-                    <div className="flex items-start justify-between mb-4">
+                    <div className="space-y-4">
+                      {/* Client Info - need to add avatar placeholder since past sessions don't have avatar */}
+                      <div className="flex items-center gap-3">
+                        <Avatar className="w-16 h-16">
+                          <AvatarImage src="/api/placeholder/40/40" alt={session.clientName} />
+                          <AvatarFallback>{getInitials(session.clientName)}</AvatarFallback>
+                        </Avatar>
+                        <div className="flex-1">
+                          <h3 className="text-lg font-semibold">{session.clientName}</h3>
+                          <p className="text-muted-foreground">{session.clientTitle}</p>
+                        </div>
+                        <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                      </div>
+                      
+                      {/* Session Details */}
                       <div>
-                        <h3 className="font-semibold">{session.topic}</h3>
-                        <p className="text-muted-foreground">with {session.clientName} • {session.date}</p>
-                        <div className="flex items-center gap-2 mt-2">
+                        <h4 className="font-medium mb-2">{session.topic}</h4>
+                        <p className="text-sm text-muted-foreground mb-3">{session.feedback}</p>
+                        
+                        <div className="flex items-center gap-2 mb-2">
                           <div className="flex items-center gap-1">
                             {[...Array(5)].map((_, i) => (
                               <Star 
@@ -474,25 +502,26 @@ const ExpertDashboard = () => {
                               />
                             ))}
                           </div>
-                          <span className="text-sm text-muted-foreground">• {session.duration}</span>
+                          <span className="text-sm text-muted-foreground">• {session.date}</span>
                         </div>
                       </div>
-                      <div className="text-right">
-                        <p className="font-semibold">{session.cost}</p>
-                        <div className="w-3 h-3 bg-green-500 rounded-full mt-2"></div>
+                      
+                      {/* Price and Actions */}
+                      <div className="space-y-3 pt-4 border-t">
+                        <div className="flex items-center justify-between">
+                          <span className="text-xl font-bold">{session.cost}</span>
+                          <span className="text-sm text-muted-foreground">{session.duration}</span>
+                        </div>
+                        
+                        <div className="flex gap-2">
+                          <Button variant="outline" className="flex-1 rounded-full border-2 border-foreground">
+                            Contact Again
+                          </Button>
+                          <Button variant="outline" className="rounded-full border-2 border-foreground">
+                            <MessageCircle className="w-4 h-4" />
+                          </Button>
+                        </div>
                       </div>
-                    </div>
-                    
-                    <p className="text-sm text-muted-foreground mb-4">{session.feedback}</p>
-                    
-                    <div className="flex gap-3">
-                      <Button variant="outline" className="rounded-full border-2 border-foreground">
-                        Contact Again
-                      </Button>
-                      <Button variant="outline" className="rounded-full border-2 border-foreground">
-                        <MessageCircle className="w-4 h-4 mr-2" />
-                        Message
-                      </Button>
                     </div>
                   </CardContent>
                 </Card>
