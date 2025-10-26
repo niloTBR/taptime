@@ -16,9 +16,13 @@ const HomePage = () => {
   const { hero, valuePropositions, featuredSection, categories, ctaSection, stats, reviews } = homepageData
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0)
   const [newsletterEmail, setNewsletterEmail] = useState('')
+  const [currentExpertPage, setCurrentExpertPage] = useState(0)
   
   const reviewsPerPage = 3
   const totalPages = Math.ceil(reviews.testimonials.length / reviewsPerPage)
+  
+  const expertsPerPage = 4
+  const expertTotalPages = Math.ceil(featuredSection.experts.length / expertsPerPage)
   
   const nextReviews = () => {
     setCurrentReviewIndex((prev) => (prev + 1) % totalPages)
@@ -31,6 +35,19 @@ const HomePage = () => {
   const getCurrentReviews = () => {
     const start = currentReviewIndex * reviewsPerPage
     return reviews.testimonials.slice(start, start + reviewsPerPage)
+  }
+
+  const nextExperts = () => {
+    setCurrentExpertPage((prev) => (prev + 1) % expertTotalPages)
+  }
+  
+  const prevExperts = () => {
+    setCurrentExpertPage((prev) => (prev - 1 + expertTotalPages) % expertTotalPages)
+  }
+
+  const getCurrentExperts = () => {
+    const start = currentExpertPage * expertsPerPage
+    return featuredSection.experts.slice(start, start + expertsPerPage)
   }
 
   const handleSearch = (query) => {
@@ -130,10 +147,32 @@ const HomePage = () => {
               description={featuredSection.subtitle}
             />
 
+            {/* Pagination Controls */}
+            <div className="flex justify-center gap-2 mb-8">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={prevExperts}
+                className="rounded-full p-2 border-2 border-foreground"
+                disabled={expertTotalPages <= 1}
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={nextExperts}
+                className="rounded-full p-2 border-2 border-foreground"
+                disabled={expertTotalPages <= 1}
+              >
+                <ChevronRight className="w-4 h-4" />
+              </Button>
+            </div>
+
             {/* Mobile Carousel */}
             <div className="block md:hidden">
               <div className="flex overflow-x-auto gap-6 pb-4 px-4 -mx-4 scrollbar-hide">
-                {featuredSection.experts.map((expert, index) => (
+                {getCurrentExperts().map((expert, index) => (
                   <div key={expert.id} className="flex-shrink-0 w-80">
                     <ExpertCard
                       expert={expert}
@@ -148,7 +187,7 @@ const HomePage = () => {
 
             {/* Desktop Grid */}
             <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {featuredSection.experts.map((expert, index) => (
+              {getCurrentExperts().map((expert, index) => (
                 <ExpertCard
                   key={expert.id}
                   expert={expert}
@@ -157,6 +196,21 @@ const HomePage = () => {
                   showCharity={index === 1}
                 />
               ))}
+            </div>
+
+            {/* Expert Pagination Dots */}
+            <div className="flex justify-center mt-8">
+              <div className="flex gap-2">
+                {Array.from({ length: expertTotalPages }, (_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setCurrentExpertPage(i)}
+                    className={`w-2 h-2 rounded-full transition-colors ${
+                      i === currentExpertPage ? 'bg-foreground' : 'bg-gray-300'
+                    }`}
+                  />
+                ))}
+              </div>
             </div>
 
             <div className="pt-8">

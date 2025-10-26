@@ -252,12 +252,6 @@ const BrowsePage = () => {
                   ({expert.reviewCount})
                 </span>
               </div>
-              {expert.badge === 'Top Expert' && (
-                <Badge variant="outline" className="text-xs border-yellow-500 text-yellow-600 bg-yellow-50 px-2 py-1 rounded-full inline-flex items-center gap-1">
-                  <Crown className="w-3 h-3" />
-                  Top Expert
-                </Badge>
-              )}
             </div>
             
             {/* Name and Title */}
@@ -280,12 +274,19 @@ const BrowsePage = () => {
       
       {/* Expert Level */}
       <td className="p-4">
-        {expert.badge === 'Top Expert' && (
-          <Badge variant="outline" className="text-xs bg-gradient-to-r from-yellow-400 to-orange-500 text-white border-0 px-2 py-1 rounded-full inline-flex items-center gap-1 w-fit">
-            <Crown className="w-3 h-3" />
-            Top Expert
-          </Badge>
-        )}
+        <div className="space-y-2">
+          {expert.badge === 'Top Expert' && (
+            <Badge variant="outline" className="text-xs bg-gradient-to-r from-yellow-400 to-orange-500 text-white border-0 px-2 py-1 rounded-full inline-flex items-center gap-1 w-fit">
+              <Crown className="w-3 h-3" />
+              Top Expert
+            </Badge>
+          )}
+          {expert.expertise && expert.expertise.slice(0, 2).map((skill, idx) => (
+            <Badge key={idx} variant="secondary" className="text-xs mr-1">
+              {skill}
+            </Badge>
+          ))}
+        </div>
       </td>
       
       {/* Actions */}
@@ -722,6 +723,13 @@ const BrowsePage = () => {
               {viewMode === 'table' ? (
                 <div className="overflow-x-auto">
                   <table className="w-full bg-white border border-gray-200 rounded-lg">
+                    <thead>
+                      <tr className="border-b bg-gray-50">
+                        <th className="text-left p-4 font-medium text-sm text-muted-foreground">Expert</th>
+                        <th className="text-left p-4 font-medium text-sm text-muted-foreground">Expertise</th>
+                        <th className="text-left p-4 font-medium text-sm text-muted-foreground">Actions</th>
+                      </tr>
+                    </thead>
                     <tbody>
                       {filteredExperts.map((expert, index) => (
                         <ExpertTableRow key={expert.id} expert={expert} index={index} />

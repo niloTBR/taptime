@@ -74,6 +74,54 @@
         "badge": "Verified",
         "expertise": ["Marketing Strategy", "Growth Hacking"],
         "bio": "Built marketing teams that drove 10x growth at 3 startups. Expert in growth loops, conversion optimization, and paid acquisition."
+      },
+      {
+        "id": "james-peterson",
+        "name": "James Peterson",
+        "title": "CTO at FinanceStream",
+        "rate": "$600/15min",
+        "rating": 4.9,
+        "reviewCount": 174,
+        "image": "/api/placeholder/150/150",
+        "badge": "Top Expert",
+        "expertise": ["Engineering Leadership", "System Architecture"],
+        "bio": "Built scalable systems serving 100M+ users. Expert in cloud architecture, team scaling, and technical strategy."
+      },
+      {
+        "id": "maya-patel",
+        "name": "Maya Patel",
+        "title": "Head of Sales at CloudCorp",
+        "rate": "$400/15min",
+        "rating": 4.7,
+        "reviewCount": 198,
+        "image": "/api/placeholder/150/150",
+        "badge": "Verified",
+        "expertise": ["Sales Strategy", "B2B Growth"],
+        "bio": "Scaled sales teams from 5 to 50+ reps. Expert in enterprise sales, pipeline management, and revenue optimization."
+      },
+      {
+        "id": "alex-chen",
+        "name": "Alex Chen",
+        "title": "Design Director at CreativeLabs",
+        "rate": "$350/15min",
+        "rating": 4.8,
+        "reviewCount": 142,
+        "image": "/api/placeholder/150/150",
+        "badge": "Verified",
+        "expertise": ["UX Design", "Design Systems"],
+        "bio": "Led design for award-winning products used by millions. Expert in user research, design systems, and product strategy."
+      },
+      {
+        "id": "david-rodriguez",
+        "name": "David Rodriguez",
+        "title": "VP Operations at LogisticsPro",
+        "rate": "$425/15min",
+        "rating": 4.9,
+        "reviewCount": 167,
+        "image": "/api/placeholder/150/150",
+        "badge": "Top Expert",
+        "expertise": ["Operations", "Process Optimization"],
+        "bio": "Optimized operations for billion-dollar companies. Expert in lean methodology, supply chain, and operational efficiency."
       }
     ]
   },
