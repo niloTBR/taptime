@@ -23,6 +23,7 @@ const ExpertProfilePage = () => {
   const [isBookingOpen, setIsBookingOpen] = useState(false)
   const [bookingStep, setBookingStep] = useState(1)
   const [isLoggedIn, setIsLoggedIn] = useState(false) // Simulate login state
+  const [showShareTooltip, setShowShareTooltip] = useState(false)
   
   // Mock user data (would come from auth context)
   const userData = {
@@ -37,6 +38,23 @@ const ExpertProfilePage = () => {
       .join('')
       .substring(0, 2)
       .toUpperCase()
+  }
+
+  const handleShareProfile = () => {
+    const profileUrl = window.location.href
+    if (navigator.share) {
+      navigator.share({
+        title: `${expert.name} - TapTime Expert`,
+        text: `Check out ${expert.name}'s expert profile on TapTime`,
+        url: profileUrl
+      })
+    } else {
+      // Fallback - copy to clipboard
+      navigator.clipboard.writeText(profileUrl).then(() => {
+        setShowShareTooltip(true)
+        setTimeout(() => setShowShareTooltip(false), 2000)
+      })
+    }
   }
 
   // Predefined time slots for booking
@@ -170,7 +188,7 @@ const ExpertProfilePage = () => {
                   </button>
                 </div>
                 
-                {/* Book Button */}
+                {/* Action Buttons */}
                 <div className="flex gap-3">
                   {/* Demo Login Toggle */}
                   <Button 
@@ -180,6 +198,24 @@ const ExpertProfilePage = () => {
                   >
                     {isLoggedIn ? '👤 Logged In' : '🔓 Login'}
                   </Button>
+                  
+                  {/* Share Profile Button */}
+                  <div className="relative">
+                    <Button 
+                      variant="outline"
+                      onClick={handleShareProfile}
+                      className="rounded-full p-3 border-2 border-foreground"
+                      title="Share Profile"
+                    >
+                      <Share className="w-4 h-4" />
+                    </Button>
+                    
+                    {showShareTooltip && (
+                      <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-foreground text-background px-2 py-1 rounded text-xs whitespace-nowrap">
+                        Link copied!
+                      </div>
+                    )}
+                  </div>
                   
                   <Button 
                     onClick={() => {

@@ -38,32 +38,32 @@
     ]
   },
   "footer": {
-    "brand": "TapTime",
-    "description": "Your one-stop platform where experts meet with those who are looking to get ahead",
+    "brand": "taptime",
+    "description": "Time is your most valuable asset and we help you use it wisely. Get matched with experts who've done the work, and are ready to share it.",
     "sections": [
       {
         "title": "Company",
         "links": [
-          { "label": "About Us", "href": "/about" },
-          { "label": "Careers", "href": "/careers" },
-          { "label": "Blog", "href": "/blog" },
-          { "label": "Press", "href": "/press" }
+          { "label": "About", "href": "/about" },
+          { "label": "Contact", "href": "/contact" },
+          { "label": "FAQ", "href": "/faq" },
+          { "label": "Feedback", "href": "/feedback" },
+          { "label": "Blog", "href": "/blog" }
         ]
       },
       {
         "title": "Resources", 
         "links": [
-          { "label": "Help Center", "href": "/help" },
-          { "label": "Safety", "href": "/safety" },
-          { "label": "Expert Guidelines", "href": "/guidelines" },
-          { "label": "Community", "href": "/community" }
+          { "label": "How it Works", "href": "/how-it-works" },
+          { "label": "Join as Expert", "href": "/join-expert" },
+          { "label": "Browse Experts", "href": "/browse" }
         ]
       }
     ],
     "legal": [
       { "label": "Privacy Policy", "href": "/privacy" },
-      { "label": "Terms of Service", "href": "/terms" }
+      { "label": "Terms of Services", "href": "/terms" }
     ],
-    "copyright": "© 2025 TapTime. All rights reserved."
+    "copyright": "Copyright © 2025 Taptime"
   }
 }

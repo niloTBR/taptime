@@ -120,7 +120,14 @@
     "subtitle": "Join thousands of ambitious professionals who've accelerated their success with expert guidance",
     "description": "Stop wondering 'what if' and start making it happen. Your perfect expert is waiting.",
     "buttonText": "Find Your Expert Now",
-    "backgroundImage": "/api/placeholder/800/400"
+    "backgroundImage": "/api/placeholder/800/400",
+    "newsletter": {
+      "title": "Stay Ahead of the Curve",
+      "description": "Get weekly insights, expert tips, and early access to new features delivered to your inbox.",
+      "emailPlaceholder": "Enter your email address",
+      "buttonText": "Subscribe",
+      "disclaimer": "No spam, unsubscribe anytime. We respect your privacy."
+    }
   },
   "stats": {
     "experts": "1,000+",

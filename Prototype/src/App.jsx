@@ -9,6 +9,10 @@ import BookingPage from '@/pages/BookingPage'
 import LoginPage from '@/pages/LoginPage'
 import SignUpPage from '@/pages/SignUpPage'
 import AboutPage from '@/pages/AboutPage'
+import ContactPage from '@/pages/ContactPage'
+import FAQPage from '@/pages/FAQPage'
+import FeedbackPage from '@/pages/FeedbackPage'
+import HowItWorksPage from '@/pages/HowItWorksPage'
 import CareersPage from '@/pages/CareersPage'
 import BlogPage from '@/pages/BlogPage'
 import PressPage from '@/pages/PressPage'
@@ -41,6 +45,10 @@ function App() {
           <Route path="/expert/:id" element={<ExpertProfilePage />} />
           <Route path="/book/:expertId" element={<BookingPage />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/faq" element={<FAQPage />} />
+          <Route path="/feedback" element={<FeedbackPage />} />
+          <Route path="/how-it-works" element={<HowItWorksPage />} />
           <Route path="/careers" element={<CareersPage />} />
           <Route path="/blog" element={<BlogPage />} />
           <Route path="/press" element={<PressPage />} />

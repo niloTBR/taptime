@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import { Link } from 'react-router-dom'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
@@ -14,6 +15,7 @@ import homepageData from '@/data/homepage.json'
 const HomePage = () => {
   const { hero, valuePropositions, featuredSection, categories, ctaSection, stats, reviews } = homepageData
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0)
+  const [newsletterEmail, setNewsletterEmail] = useState('')
   
   const reviewsPerPage = 3
   const totalPages = Math.ceil(reviews.testimonials.length / reviewsPerPage)
@@ -44,6 +46,16 @@ const HomePage = () => {
   const handleExpertClick = (expert) => {
     console.log('Expert clicked:', expert)
     // Implementation for expert profile navigation
+  }
+
+  const handleNewsletterSubmit = (e) => {
+    e.preventDefault()
+    if (newsletterEmail.trim()) {
+      console.log('Newsletter subscription for:', newsletterEmail)
+      // Implementation for newsletter subscription
+      setNewsletterEmail('')
+      // Show success message or feedback here
+    }
   }
 
   return (
@@ -191,14 +203,14 @@ const HomePage = () => {
       {/* Reviews Section */}
       <section className="py-20 px-4">
         <div className="container mx-auto max-w-6xl">
-          <div className="flex items-center justify-between mb-12">
+          <div className="space-y-8 mb-12">
             <SectionTitle 
               miniTitle="What Our Users Say"
               title={reviews.title}
               description={reviews.subtitle}
-              className="text-left"
+              className="text-center"
             />
-            <div className="flex gap-2">
+            <div className="flex justify-center gap-2">
               <Button
                 variant="outline"
                 size="sm"
@@ -318,7 +330,7 @@ const HomePage = () => {
       <section className="py-20 px-4">
         <div className="container mx-auto max-w-4xl">
           <Card className="border-2 border-foreground">
-            <CardContent className="p-8 md:p-12 text-center space-y-6">
+            <CardContent className="p-8 md:p-12 text-center space-y-8">
               <div className="space-y-4">
                 <h2 className="text-3xl md:text-4xl font-semibold">
                   {ctaSection.title}
@@ -342,6 +354,42 @@ const HomePage = () => {
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>
+              </div>
+
+              {/* Newsletter Subscription */}
+              <div className="pt-8 border-t border-muted">
+                <div className="space-y-4">
+                  <h3 className="text-xl font-semibold">
+                    {ctaSection.newsletter.title}
+                  </h3>
+                  <p className="text-muted-foreground max-w-lg mx-auto">
+                    {ctaSection.newsletter.description}
+                  </p>
+                  
+                  <form onSubmit={handleNewsletterSubmit} className="max-w-md mx-auto">
+                    <div className="flex gap-2">
+                      <Input
+                        type="email"
+                        placeholder={ctaSection.newsletter.emailPlaceholder}
+                        value={newsletterEmail}
+                        onChange={(e) => setNewsletterEmail(e.target.value)}
+                        className="flex-1 rounded-full border-2 border-muted-foreground/20 focus:border-foreground"
+                        required
+                      />
+                      <Button 
+                        type="submit" 
+                        size="default"
+                        className="rounded-full px-6"
+                      >
+                        {ctaSection.newsletter.buttonText}
+                      </Button>
+                    </div>
+                  </form>
+                  
+                  <p className="text-xs text-muted-foreground">
+                    {ctaSection.newsletter.disclaimer}
+                  </p>
+                </div>
               </div>
             </CardContent>
           </Card>

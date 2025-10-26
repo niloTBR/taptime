@@ -18,8 +18,20 @@ const PrototypeNavigationPage = () => {
     {
       id: 'website',
       title: 'Website Prototype',
-      description: 'Main public-facing website with homepage, browse experts, expert profiles, and join expert flow.',
-      features: ['Homepage & Landing', 'Browse Experts', 'Expert Profiles', 'Join as Expert', 'Marketing Pages'],
+      description: 'Complete public-facing website with all final pages',
+      pages: [
+        { name: 'Home', url: '/' },
+        { name: 'Browse Experts', url: '/browse' },
+        { name: 'Join as Expert', url: '/join-expert' },
+        { name: 'About', url: '/about' },
+        { name: 'Contact', url: '/contact' },
+        { name: 'FAQ', url: '/faq' },
+        { name: 'Feedback', url: '/feedback' },
+        { name: 'Blog', url: '/blog' },
+        { name: 'How it Works', url: '/how-it-works' },
+        { name: 'Login', url: '/login' },
+        { name: 'Signup', url: '/signup' }
+      ],
       icon: <Globe className="w-8 h-8" />,
       url: '/',
       status: 'Live',
@@ -134,15 +146,39 @@ const PrototypeNavigationPage = () => {
                   </p>
                   
                   <div>
-                    <h4 className="font-medium mb-3">Key Features:</h4>
-                    <ul className="space-y-2">
-                      {prototype.features.map((feature, index) => (
-                        <li key={index} className="flex items-center gap-2 text-sm">
-                          <div className="w-1.5 h-1.5 bg-foreground rounded-full"></div>
-                          {feature}
-                        </li>
-                      ))}
-                    </ul>
+                    {prototype.pages ? (
+                      <>
+                        <h4 className="font-medium mb-3">Available Pages:</h4>
+                        <ul className="space-y-2">
+                          {prototype.pages.map((page, index) => (
+                            <li key={index} className="flex items-center justify-between text-sm">
+                              <div className="flex items-center gap-2">
+                                <div className="w-1.5 h-1.5 bg-foreground rounded-full"></div>
+                                {page.name}
+                              </div>
+                              <button
+                                onClick={() => window.location.href = page.url}
+                                className="text-xs text-muted-foreground hover:text-foreground underline"
+                              >
+                                Visit
+                              </button>
+                            </li>
+                          ))}
+                        </ul>
+                      </>
+                    ) : (
+                      <>
+                        <h4 className="font-medium mb-3">Key Features:</h4>
+                        <ul className="space-y-2">
+                          {prototype.features.map((feature, index) => (
+                            <li key={index} className="flex items-center gap-2 text-sm">
+                              <div className="w-1.5 h-1.5 bg-foreground rounded-full"></div>
+                              {feature}
+                            </li>
+                          ))}
+                        </ul>
+                      </>
+                    )}
                   </div>
 
                   <div className="pt-4">
