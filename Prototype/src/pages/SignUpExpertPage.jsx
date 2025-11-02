@@ -22,6 +22,10 @@ import {
   Award,
   Calendar as CalendarIcon,
   Heart,
+  Plus,
+  Trash2,
+  Clock,
+  Package,
   Zap
 } from 'lucide-react'
 
@@ -52,11 +56,18 @@ const SignUpExpertPage = () => {
     bufferTime: '',
     availableSlots: {},
     
-    // Step 4: Consultation Charges
-    individualSessionFee: '',
-    individualSessionDuration: '',
-    bundleSessionFee: '',
-    bundleSessionCount: '',
+    // Step 4: Session Types
+    structuredSessions: [],
+    flexibleConsultation: {
+      enabled: true,
+      basePrice: '',
+      durations: [
+        { duration: '15 min', price: '' },
+        { duration: '30 min', price: '' },
+        { duration: '45 min', price: '' }
+      ]
+    },
+    bundlePackages: [],
     
     // Step 5: Charity (Optional)
     charityName: '',
@@ -67,7 +78,7 @@ const SignUpExpertPage = () => {
     { step: 1, title: 'Personal Information', description: 'Tell us about yourself' },
     { step: 2, title: 'Expertise', description: 'Your areas of expertise' },
     { step: 3, title: 'Set Your Availability', description: 'When you\'re available' },
-    { step: 4, title: 'Manage Consultation Charges', description: 'Set your fees' },
+    { step: 4, title: 'Session Types & Pricing', description: 'Create your session offerings' },
     { step: 5, title: 'Donate for charity', description: 'Optional charity support' }
   ]
 
@@ -207,6 +218,86 @@ const SignUpExpertPage = () => {
     // Handle form submission
     console.log('Submitting expert application:', formData)
     setIsSubmitted(true)
+  }
+
+  // Session management functions
+  const addStructuredSession = () => {
+    setFormData(prev => ({
+      ...prev,
+      structuredSessions: [
+        ...prev.structuredSessions,
+        {
+          id: `session-${Date.now()}`,
+          title: '',
+          description: '',
+          duration: '15 min',
+          price: ''
+        }
+      ]
+    }))
+  }
+
+  const updateStructuredSession = (sessionId, field, value) => {
+    setFormData(prev => ({
+      ...prev,
+      structuredSessions: prev.structuredSessions.map(session =>
+        session.id === sessionId ? { ...session, [field]: value } : session
+      )
+    }))
+  }
+
+  const removeStructuredSession = (sessionId) => {
+    setFormData(prev => ({
+      ...prev,
+      structuredSessions: prev.structuredSessions.filter(session => session.id !== sessionId)
+    }))
+  }
+
+  const updateFlexiblePrice = (duration, price) => {
+    setFormData(prev => ({
+      ...prev,
+      flexibleConsultation: {
+        ...prev.flexibleConsultation,
+        durations: prev.flexibleConsultation.durations.map(d =>
+          d.duration === duration ? { ...d, price } : d
+        )
+      }
+    }))
+  }
+
+  const addBundlePackage = () => {
+    setFormData(prev => ({
+      ...prev,
+      bundlePackages: [
+        ...prev.bundlePackages,
+        {
+          id: `bundle-${Date.now()}`,
+          title: '',
+          description: '',
+          sessions: '3',
+          totalDuration: '',
+          originalPrice: '',
+          bundlePrice: '',
+          includes: ['', '']
+        }
+      ]
+    }))
+  }
+
+  const updateBundlePackage = (bundleId, field, value) => {
+    setFormData(prev => ({
+      ...prev,
+      bundlePackages: prev.bundlePackages.map(bundle =>
+        bundle.id === bundleId ? { ...bundle, [field]: value } : bundle
+      )
+    }))
+  }
+
+  const removeBundlePackage = (bundleId) => {
+    setFormData(prev => ({
+      ...prev,
+      bundlePackages: prev.bundlePackages.filter(bundle => bundle.id !== bundleId)
+    }))
   }
 
   return (
@@ -652,89 +743,266 @@ const SignUpExpertPage = () => {
             </Card>
           )}
 
-          {/* Step 4: Manage Consultation Charges */}
+          {/* Step 4: Session Types & Pricing */}
           {currentStep === 4 && (
             <Card className="border-2 border-foreground">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <DollarSign className="w-5 h-5" />
-                  Manage Consultation Charges
+                  Session Types & Pricing
                 </CardTitle>
+                <p className="text-sm text-gray-600 mt-2">
+                  Create the session types that clients will see when booking with you. You can always modify these later.
+                </p>
               </CardHeader>
-              <CardContent className="space-y-6">
-                {/* Individual Session */}
-                <div>
-                  <label className="block text-sm font-medium mb-3">What are your fees?*</label>
-                  <div className="flex items-center gap-4">
-                    <div className="flex items-center">
-                      <span className="text-lg font-medium mr-2">$</span>
-                      <input
-                        type="number"
-                        value={formData.individualSessionFee}
-                        onChange={(e) => handleInputChange('individualSessionFee', e.target.value)}
-                        className="w-20 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 text-center"
-                        placeholder="500"
-                      />
-                    </div>
-                    <select
-                      value={formData.individualSessionDuration}
-                      onChange={(e) => handleInputChange('individualSessionDuration', e.target.value)}
-                      className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+              <CardContent className="space-y-8">
+                
+                {/* Structured Sessions */}
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-lg font-medium">Structured Sessions</h3>
+                    <Button
+                      type="button"
+                      onClick={addStructuredSession}
+                      variant="outline"
+                      size="sm"
+                      className="border-2 border-gray-300 hover:border-gray-900"
                     >
-                      <option value="">60 min</option>
-                      {sessionDurations.map(duration => (
-                        <option key={duration.value} value={duration.value}>{duration.label}</option>
-                      ))}
-                    </select>
+                      <Plus className="w-4 h-4 mr-2" />
+                      Add Session
+                    </Button>
                   </div>
+                  <p className="text-sm text-gray-600">
+                    Pre-defined consultation types with specific topics and durations
+                  </p>
+                  
+                  {formData.structuredSessions.map((session) => (
+                    <Card key={session.id} className="border border-gray-200">
+                      <CardContent className="p-4 space-y-4">
+                        <div className="flex items-center justify-between">
+                          <h4 className="font-medium text-sm">Session Details</h4>
+                          <Button
+                            type="button"
+                            onClick={() => removeStructuredSession(session.id)}
+                            variant="ghost"
+                            size="sm"
+                            className="text-red-500 hover:text-red-700"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div>
+                            <label className="text-sm font-medium mb-2 block">Session Title*</label>
+                            <input
+                              type="text"
+                              value={session.title}
+                              onChange={(e) => updateStructuredSession(session.id, 'title', e.target.value)}
+                              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+                              placeholder="Product Strategy Review"
+                            />
+                          </div>
+                          <div className="grid grid-cols-2 gap-2">
+                            <div>
+                              <label className="text-sm font-medium mb-2 block">Duration</label>
+                              <select
+                                value={session.duration}
+                                onChange={(e) => updateStructuredSession(session.id, 'duration', e.target.value)}
+                                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+                              >
+                                <option value="15 min">15 min</option>
+                                <option value="30 min">30 min</option>
+                                <option value="45 min">45 min</option>
+                                <option value="60 min">60 min</option>
+                              </select>
+                            </div>
+                            <div>
+                              <label className="text-sm font-medium mb-2 block">Price ($)</label>
+                              <input
+                                type="number"
+                                value={session.price}
+                                onChange={(e) => updateStructuredSession(session.id, 'price', e.target.value)}
+                                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+                                placeholder="500"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div>
+                          <label className="text-sm font-medium mb-2 block">Description</label>
+                          <textarea
+                            value={session.description}
+                            onChange={(e) => updateStructuredSession(session.id, 'description', e.target.value)}
+                            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 h-20 resize-none"
+                            placeholder="Get clarity on whether you've achieved PMF and what to focus on next"
+                          />
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                  
+                  {formData.structuredSessions.length === 0 && (
+                    <div className="text-center py-8 border-2 border-dashed border-gray-300 rounded-lg">
+                      <Clock className="w-8 h-8 mx-auto text-gray-400 mb-2" />
+                      <p className="text-sm text-gray-500">No structured sessions yet</p>
+                      <p className="text-xs text-gray-400">Add pre-defined consultation types</p>
+                    </div>
+                  )}
                 </div>
 
-                {/* Bundle Sessions */}
-                <div>
-                  <label className="block text-sm font-medium mb-3">What are your fees for Bundle sessions?*</label>
-                  <div className="flex items-center gap-4">
-                    <div className="flex items-center">
-                      <span className="text-lg font-medium mr-2">$</span>
-                      <input
-                        type="number"
-                        value={formData.bundleSessionFee}
-                        onChange={(e) => handleInputChange('bundleSessionFee', e.target.value)}
-                        className="w-24 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 text-center"
-                        placeholder="2500"
-                      />
-                    </div>
-                    <select
-                      value={formData.bundleSessionCount}
-                      onChange={(e) => handleInputChange('bundleSessionCount', e.target.value)}
-                      className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
-                    >
-                      <option value="">6 sessions</option>
-                      {bundleSessionCounts.map(bundle => (
-                        <option key={bundle.value} value={bundle.value}>{bundle.label}</option>
-                      ))}
-                    </select>
-                  </div>
+                {/* Flexible Consultation */}
+                <div className="space-y-4">
+                  <h3 className="text-lg font-medium">General Consultation</h3>
+                  <p className="text-sm text-gray-600">
+                    Open-ended consultation where clients choose the duration
+                  </p>
+                  
+                  <Card className="border border-gray-200">
+                    <CardContent className="p-4 space-y-4">
+                      <div className="flex items-center gap-3">
+                        <input
+                          type="checkbox"
+                          checked={formData.flexibleConsultation.enabled}
+                          onChange={(e) => setFormData(prev => ({
+                            ...prev,
+                            flexibleConsultation: {
+                              ...prev.flexibleConsultation,
+                              enabled: e.target.checked
+                            }
+                          }))}
+                          className="w-4 h-4 text-gray-900 border-gray-300 rounded focus:ring-gray-900"
+                        />
+                        <label className="text-sm font-medium">Enable general consultation</label>
+                      </div>
+                      
+                      {formData.flexibleConsultation.enabled && (
+                        <div className="space-y-3">
+                          <label className="text-sm font-medium block">Set pricing for each duration:</label>
+                          {formData.flexibleConsultation.durations.map((duration) => (
+                            <div key={duration.duration} className="flex items-center gap-4">
+                              <span className="text-sm w-16">{duration.duration}</span>
+                              <div className="flex items-center">
+                                <span className="text-lg font-medium mr-2">$</span>
+                                <input
+                                  type="number"
+                                  value={duration.price}
+                                  onChange={(e) => updateFlexiblePrice(duration.duration, e.target.value)}
+                                  className="w-24 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 text-center"
+                                  placeholder="500"
+                                />
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
                 </div>
 
-                {/* Fee Breakdown */}
+                {/* Bundle Packages */}
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-lg font-medium">Bundle Packages</h3>
+                    <Button
+                      type="button"
+                      onClick={addBundlePackage}
+                      variant="outline"
+                      size="sm"
+                      className="border-2 border-gray-300 hover:border-gray-900"
+                    >
+                      <Package className="w-4 h-4 mr-2" />
+                      Add Bundle
+                    </Button>
+                  </div>
+                  <p className="text-sm text-gray-600">
+                    Multi-session packages with discounted pricing
+                  </p>
+                  
+                  {formData.bundlePackages.map((bundle) => (
+                    <Card key={bundle.id} className="border border-gray-200">
+                      <CardContent className="p-4 space-y-4">
+                        <div className="flex items-center justify-between">
+                          <h4 className="font-medium text-sm">Bundle Details</h4>
+                          <Button
+                            type="button"
+                            onClick={() => removeBundlePackage(bundle.id)}
+                            variant="ghost"
+                            size="sm"
+                            className="text-red-500 hover:text-red-700"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div>
+                            <label className="text-sm font-medium mb-2 block">Package Title*</label>
+                            <input
+                              type="text"
+                              value={bundle.title}
+                              onChange={(e) => updateBundlePackage(bundle.id, 'title', e.target.value)}
+                              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+                              placeholder="Startup Accelerator Package"
+                            />
+                          </div>
+                          <div className="grid grid-cols-2 gap-2">
+                            <div>
+                              <label className="text-sm font-medium mb-2 block">Sessions</label>
+                              <select
+                                value={bundle.sessions}
+                                onChange={(e) => updateBundlePackage(bundle.id, 'sessions', e.target.value)}
+                                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+                              >
+                                <option value="2">2 sessions</option>
+                                <option value="3">3 sessions</option>
+                                <option value="4">4 sessions</option>
+                                <option value="5">5 sessions</option>
+                                <option value="6">6 sessions</option>
+                              </select>
+                            </div>
+                            <div>
+                              <label className="text-sm font-medium mb-2 block">Bundle Price ($)</label>
+                              <input
+                                type="number"
+                                value={bundle.bundlePrice}
+                                onChange={(e) => updateBundlePackage(bundle.id, 'bundlePrice', e.target.value)}
+                                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+                                placeholder="2400"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div>
+                          <label className="text-sm font-medium mb-2 block">Description</label>
+                          <textarea
+                            value={bundle.description}
+                            onChange={(e) => updateBundlePackage(bundle.id, 'description', e.target.value)}
+                            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 h-20 resize-none"
+                            placeholder="Complete startup guidance: PMF validation, fundraising prep, and scaling strategy"
+                          />
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                  
+                  {formData.bundlePackages.length === 0 && (
+                    <div className="text-center py-8 border-2 border-dashed border-gray-300 rounded-lg">
+                      <Package className="w-8 h-8 mx-auto text-gray-400 mb-2" />
+                      <p className="text-sm text-gray-500">No bundle packages yet</p>
+                      <p className="text-xs text-gray-400">Add multi-session packages with discounts</p>
+                    </div>
+                  )}
+                </div>
+
+                {/* Platform Fee Info */}
                 <div className="bg-gray-50 p-4 rounded-lg">
-                  <div className="grid grid-cols-2 gap-4 text-center">
-                    <div>
-                      <div className="text-sm text-gray-600 mb-1">Client pays</div>
-                      <div className="text-xl font-semibold text-gray-900">
-                        ${formData.individualSessionFee || '500'}
-                      </div>
-                    </div>
-                    <div>
-                      <div className="text-sm text-gray-600 mb-1">What you get</div>
-                      <div className="text-xl font-semibold text-gray-900">
-                        ${formData.individualSessionFee ? (parseInt(formData.individualSessionFee) * 0.8).toFixed(0) : '400'}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="text-xs text-gray-500 text-center mt-3">
-                    Platform fee: 20% per transaction (includes support & secure payments)
-                  </div>
+                  <h4 className="font-medium text-sm mb-2">Platform Fee</h4>
+                  <p className="text-xs text-gray-600">
+                    TapTime charges a 20% platform fee on all sessions. This includes payment processing, support, and platform maintenance.
+                  </p>
                 </div>
               </CardContent>
             </Card>
