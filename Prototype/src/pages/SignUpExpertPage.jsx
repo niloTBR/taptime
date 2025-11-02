@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { Calendar } from '@/components/ui/calendar'
 import { 
   Crown, 
   User, 
@@ -19,73 +20,159 @@ import {
   ArrowLeft,
   Globe,
   Award,
-  Calendar,
+  Calendar as CalendarIcon,
+  Heart,
   Zap
 } from 'lucide-react'
 
 const SignUpExpertPage = () => {
   const [currentStep, setCurrentStep] = useState(1)
   const [formData, setFormData] = useState({
-    // Basic Info
+    // Step 1: Personal Information (includes user fields)
     firstName: '',
     lastName: '',
     email: '',
     password: '',
     confirmPassword: '',
-    phone: '',
-    
-    // Professional Info
+    title: '',
+    shortDescription: '',
     location: '',
-    currentTitle: '',
-    currentCompany: '',
-    industry: '',
-    experience: '',
-    education: '',
-    linkedinUrl: '',
+    gender: '',
+    languagePreference: '',
     
-    // Expertise & Services
-    expertiseAreas: [],
-    serviceDescription: '',
-    sessionTypes: [],
-    availabilityHours: '',
+    // Step 2: Expertise & Industries
+    expertiseCategories: [],
+    expertiseTags: [],
+    industries: [],
     
-    // Rates & Verification
-    hourlyRate: '',
-    minimumSession: '',
-    verificationDocs: [],
-    bio: '',
-    achievements: []
+    // Step 3: Availability
+    timezone: '',
+    slotDuration: '',
+    bufferTime: '',
+    availableSlots: {},
+    
+    // Step 4: Consultation Charges
+    individualSessionFee: '',
+    individualSessionDuration: '',
+    bundleSessionFee: '',
+    bundleSessionCount: '',
+    
+    // Step 5: Charity (Optional)
+    charityName: '',
+    charityWebsite: ''
   })
 
   const steps = [
-    { step: 1, title: 'Basic Information', description: 'Tell us about yourself' },
-    { step: 2, title: 'Professional Background', description: 'Your experience and credentials' },
-    { step: 3, title: 'Expertise & Services', description: 'What you can help with' },
-    { step: 4, title: 'Rates & Verification', description: 'Set your rates and verify identity' },
-    { step: 5, title: 'Application Submitted', description: 'We\'ll review your application' }
+    { step: 1, title: 'Personal Information', description: 'Tell us about yourself' },
+    { step: 2, title: 'Expertise', description: 'Your areas of expertise' },
+    { step: 3, title: 'Set Your Availability', description: 'When you\'re available' },
+    { step: 4, title: 'Manage Consultation Charges', description: 'Set your fees' },
+    { step: 5, title: 'Donate for charity', description: 'Optional charity support' },
+    { step: 6, title: 'Application Submitted', description: 'We\'ll review your application' }
+  ]
+
+  // Step 1: Personal Information options
+  const countries = [
+    'United States', 'Canada', 'United Kingdom', 'Germany', 'France', 'Australia', 
+    'Singapore', 'Japan', 'UAE', 'India', 'Other'
+  ]
+
+  const genderOptions = [
+    'Male', 'Female', 'Non-binary', 'Prefer not to say'
+  ]
+
+  const languageOptions = [
+    'English', 'Arabic', 'English & Arabic'
+  ]
+
+  // Step 2: Expertise categories and tags
+  const expertiseCategories = [
+    {
+      id: 'business-startups',
+      title: 'Business & Startups',
+      image: '/api/placeholder/150/100'
+    },
+    {
+      id: 'top-experts',
+      title: 'Top Experts',
+      image: '/api/placeholder/150/100'
+    },
+    {
+      id: 'career-professional',
+      title: 'Career & Professional',
+      image: '/api/placeholder/150/100'
+    },
+    {
+      id: 'marketing-brand',
+      title: 'Marketing & Brand',
+      image: '/api/placeholder/150/100'
+    },
+    {
+      id: 'tech-product',
+      title: 'Tech & Product',
+      image: '/api/placeholder/150/100'
+    },
+    {
+      id: 'wellness-mental',
+      title: 'Wellness & Mental Clarity',
+      image: '/api/placeholder/150/100'
+    }
+  ]
+
+  const expertiseTags = [
+    'Leadership & Team Building',
+    'Scaling Startups',
+    'Fundraising & Pitching',
+    'Exit Strategy & M&A'
   ]
 
   const industries = [
-    'Technology', 'Finance', 'Healthcare', 'Marketing', 'Design', 'Business',
-    'Consulting', 'Real Estate', 'Legal', 'Media', 'Education', 'Other'
+    'Fundraising & Pitching',
+    'Leadership & Team Building',
+    'Exit Strategy & M&A',
+    'Music Production',
+    'Blockchain Development',
+    'Product Engineering',
+    'SaaS Growth Strategy',
+    'Artificial Intelligence & Machine Learning',
+    'Human-Centered Design',
+    'SEO & Performance Marketing',
+    'Social Media Growth',
+    'Content Creation & Monetization'
   ]
 
-  const expertiseAreas = [
-    'Business Strategy', 'Marketing & Growth', 'Product Management', 'Fundraising',
-    'Sales & BD', 'Leadership & Management', 'Technology & Engineering', 'UX/UI Design',
-    'Finance & Accounting', 'Operations', 'Legal & Compliance', 'HR & Recruiting'
+  // Step 3: Availability options
+  const timezones = [
+    'America/Los_Angeles (PST)',
+    'America/New_York (EST)',
+    'Europe/London (GMT)',
+    'Europe/Berlin (CET)',
+    'Asia/Dubai (GST)',
+    'Asia/Singapore (SGT)',
+    'Other'
   ]
 
-  const sessionTypes = [
-    'Strategy Sessions', 'Mentorship Calls', 'Portfolio Reviews', 'Mock Interviews',
-    'Pitch Practice', 'Technical Reviews', 'Career Guidance', 'Problem Solving'
+  const durationOptions = [
+    '15 min', '30 min', '45 min', '60 min'
   ]
 
-  const availabilityOptions = [
-    'Weekdays only (9 AM - 5 PM)',
-    'Evenings & weekends',
-    'Flexible schedule',
-    'International time zones available'
+  const bufferOptions = [
+    '5 min', '10 min', '15 min', '30 min'
+  ]
+
+  // Step 4: Session options
+  const sessionDurations = [
+    { label: '15 min', value: '15' },
+    { label: '30 min', value: '30' },
+    { label: '45 min', value: '45' },
+    { label: '60 min', value: '60' }
+  ]
+
+  const bundleSessionCounts = [
+    { label: '3 sessions', value: '3' },
+    { label: '5 sessions', value: '5' },
+    { label: '8 sessions', value: '8' },
+    { label: '10 sessions', value: '10' }
   ]
 
   const handleInputChange = (field, value) => {
@@ -105,7 +192,7 @@ const SignUpExpertPage = () => {
   }
 
   const nextStep = () => {
-    if (currentStep < 5) {
+    if (currentStep < 6) {
       setCurrentStep(currentStep + 1)
     }
   }
@@ -187,16 +274,17 @@ const SignUpExpertPage = () => {
       <section className="py-12 px-4">
         <div className="container mx-auto max-w-2xl">
           
-          {/* Step 1: Basic Information */}
+          {/* Step 1: Personal Information */}
           {currentStep === 1 && (
             <Card className="border-2 border-foreground">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <User className="w-5 h-5" />
-                  Basic Information
+                  Personal Information
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
+                {/* Basic Account Info */}
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium mb-2">First Name</label>
@@ -204,7 +292,7 @@ const SignUpExpertPage = () => {
                       type="text"
                       value={formData.firstName}
                       onChange={(e) => handleInputChange('firstName', e.target.value)}
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
                       placeholder="Sarah"
                     />
                   </div>
@@ -214,7 +302,7 @@ const SignUpExpertPage = () => {
                       type="text"
                       value={formData.lastName}
                       onChange={(e) => handleInputChange('lastName', e.target.value)}
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
                       placeholder="Johnson"
                     />
                   </div>
@@ -226,7 +314,7 @@ const SignUpExpertPage = () => {
                     type="email"
                     value={formData.email}
                     onChange={(e) => handleInputChange('email', e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
                     placeholder="sarah.johnson@example.com"
                   />
                 </div>
@@ -238,7 +326,7 @@ const SignUpExpertPage = () => {
                       type="password"
                       value={formData.password}
                       onChange={(e) => handleInputChange('password', e.target.value)}
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
                       placeholder="••••••••"
                     />
                   </div>
@@ -248,285 +336,449 @@ const SignUpExpertPage = () => {
                       type="password"
                       value={formData.confirmPassword}
                       onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
                       placeholder="••••••••"
                     />
                   </div>
                 </div>
 
+                {/* Expert-specific fields */}
                 <div>
-                  <label className="block text-sm font-medium mb-2">Phone Number</label>
-                  <input
-                    type="tel"
-                    value={formData.phone}
-                    onChange={(e) => handleInputChange('phone', e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                    placeholder="+1 (555) 123-4567"
-                  />
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
-          {/* Step 2: Professional Background */}
-          {currentStep === 2 && (
-            <Card className="border-2 border-foreground">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Briefcase className="w-5 h-5" />
-                  Professional Background
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div>
-                  <label className="block text-sm font-medium mb-2">Location</label>
+                  <label className="block text-sm font-medium mb-2">Title*</label>
                   <input
                     type="text"
-                    value={formData.location}
-                    onChange={(e) => handleInputChange('location', e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                    placeholder="San Francisco, CA"
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Current Title</label>
-                    <input
-                      type="text"
-                      value={formData.currentTitle}
-                      onChange={(e) => handleInputChange('currentTitle', e.target.value)}
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                      placeholder="VP of Product"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Current Company</label>
-                    <input
-                      type="text"
-                      value={formData.currentCompany}
-                      onChange={(e) => handleInputChange('currentCompany', e.target.value)}
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                      placeholder="TechCorp Inc"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-2">Industry</label>
-                  <select
-                    value={formData.industry}
-                    onChange={(e) => handleInputChange('industry', e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  >
-                    <option value="">Select your industry</option>
-                    {industries.map(industry => (
-                      <option key={industry} value={industry}>{industry}</option>
-                    ))}
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-2">Years of Experience</label>
-                  <select
-                    value={formData.experience}
-                    onChange={(e) => handleInputChange('experience', e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  >
-                    <option value="">Select experience level</option>
-                    <option value="3-5">3-5 years</option>
-                    <option value="6-10">6-10 years</option>
-                    <option value="10-15">10-15 years</option>
-                    <option value="15+">15+ years</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-2">Education</label>
-                  <input
-                    type="text"
-                    value={formData.education}
-                    onChange={(e) => handleInputChange('education', e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                    placeholder="MBA from Stanford University"
+                    value={formData.title}
+                    onChange={(e) => handleInputChange('title', e.target.value)}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+                    placeholder="Type Here..."
+                    required
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2">LinkedIn Profile</label>
-                  <input
-                    type="url"
-                    value={formData.linkedinUrl}
-                    onChange={(e) => handleInputChange('linkedinUrl', e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                    placeholder="https://linkedin.com/in/yourprofile"
-                  />
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
-          {/* Step 3: Expertise & Services */}
-          {currentStep === 3 && (
-            <Card className="border-2 border-foreground">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Award className="w-5 h-5" />
-                  Expertise & Services
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div>
-                  <label className="block text-sm font-medium mb-3">
-                    What areas can you provide expertise in? (Select all that apply)
+                  <label className="block text-sm font-medium mb-2">
+                    Short Description*
+                    <span className="text-xs text-gray-500 ml-2">100 characters</span>
                   </label>
-                  <div className="grid grid-cols-2 gap-2">
-                    {expertiseAreas.map(area => (
-                      <button
-                        key={area}
-                        onClick={() => handleArrayToggle('expertiseAreas', area)}
-                        className={`p-3 text-sm text-left border rounded-lg transition-colors ${
-                          formData.expertiseAreas.includes(area)
-                            ? 'border-purple-500 bg-purple-50 text-purple-700'
-                            : 'border-gray-300 hover:border-gray-400'
-                        }`}
-                      >
-                        {area}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-2">Service Description</label>
                   <textarea
-                    value={formData.serviceDescription}
-                    onChange={(e) => handleInputChange('serviceDescription', e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-lg h-24 resize-none focus:outline-none focus:ring-2 focus:ring-purple-500"
-                    placeholder="Describe what you can help with and your unique approach..."
+                    value={formData.shortDescription}
+                    onChange={(e) => handleInputChange('shortDescription', e.target.value)}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 h-24 resize-none"
+                    placeholder="Type Here..."
+                    maxLength={100}
+                    required
                   />
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium mb-3">
-                    What types of sessions do you offer? (Select all that apply)
-                  </label>
-                  <div className="grid grid-cols-2 gap-2">
-                    {sessionTypes.map(type => (
-                      <button
-                        key={type}
-                        onClick={() => handleArrayToggle('sessionTypes', type)}
-                        className={`p-3 text-sm text-left border rounded-lg transition-colors ${
-                          formData.sessionTypes.includes(type)
-                            ? 'border-purple-500 bg-purple-50 text-purple-700'
-                            : 'border-gray-300 hover:border-gray-400'
-                        }`}
-                      >
-                        {type}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-3">Availability</label>
-                  <div className="space-y-2">
-                    {availabilityOptions.map(option => (
-                      <button
-                        key={option}
-                        onClick={() => handleInputChange('availabilityHours', option)}
-                        className={`w-full p-3 text-left border rounded-lg transition-colors ${
-                          formData.availabilityHours === option
-                            ? 'border-purple-500 bg-purple-50 text-purple-700'
-                            : 'border-gray-300 hover:border-gray-400'
-                        }`}
-                      >
-                        {option}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
-          {/* Step 4: Rates & Verification */}
-          {currentStep === 4 && (
-            <Card className="border-2 border-foreground">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <DollarSign className="w-5 h-5" />
-                  Rates & Verification
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium mb-2">Hourly Rate (USD)</label>
-                    <input
-                      type="number"
-                      value={formData.hourlyRate}
-                      onChange={(e) => handleInputChange('hourlyRate', e.target.value)}
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                      placeholder="500"
-                    />
+                    <label className="block text-sm font-medium mb-2">Location*</label>
+                    <select
+                      value={formData.location}
+                      onChange={(e) => handleInputChange('location', e.target.value)}
+                      className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+                      required
+                    >
+                      <option value="">Country name</option>
+                      {countries.map(country => (
+                        <option key={country} value={country}>{country}</option>
+                      ))}
+                    </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-2">Minimum Session</label>
+                    <label className="block text-sm font-medium mb-2">Gender*</label>
                     <select
-                      value={formData.minimumSession}
-                      onChange={(e) => handleInputChange('minimumSession', e.target.value)}
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      value={formData.gender}
+                      onChange={(e) => handleInputChange('gender', e.target.value)}
+                      className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+                      required
                     >
-                      <option value="">Select minimum</option>
-                      <option value="15min">15 minutes</option>
-                      <option value="30min">30 minutes</option>
-                      <option value="60min">60 minutes</option>
+                      <option value="">Gender</option>
+                      {genderOptions.map(gender => (
+                        <option key={gender} value={gender}>{gender}</option>
+                      ))}
                     </select>
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2">Professional Bio</label>
-                  <textarea
-                    value={formData.bio}
-                    onChange={(e) => handleInputChange('bio', e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-lg h-32 resize-none focus:outline-none focus:ring-2 focus:ring-purple-500"
-                    placeholder="Write a compelling bio that highlights your expertise, achievements, and what makes you unique..."
-                  />
+                  <label className="block text-sm font-medium mb-2">Language Preference*</label>
+                  <select
+                    value={formData.languagePreference}
+                    onChange={(e) => handleInputChange('languagePreference', e.target.value)}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+                    required
+                  >
+                    <option value="">Type here...</option>
+                    {languageOptions.map(language => (
+                      <option key={language} value={language}>{language}</option>
+                    ))}
+                  </select>
                 </div>
+              </CardContent>
+            </Card>
+          )}
 
-                <div>
-                  <label className="block text-sm font-medium mb-3">Verification Documents</label>
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-                    <Upload className="w-8 h-8 mx-auto mb-2 text-gray-400" />
-                    <p className="text-sm text-gray-600 mb-2">
-                      Upload documents to verify your identity and credentials
-                    </p>
-                    <p className="text-xs text-gray-400">
-                      Accepted: Government ID, Professional Certificates, LinkedIn verification
-                    </p>
-                    <Button variant="outline" className="mt-4">
-                      <Upload className="w-4 h-4 mr-2" />
-                      Upload Documents
-                    </Button>
+          {/* Step 2: Expertise */}
+          {currentStep === 2 && (
+            <Card className="border-2 border-foreground">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Award className="w-5 h-5" />
+                  Expertise
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-8">
+                {/* Expertise Categories - Visual Cards */}
+                <div className="space-y-4">
+                  <div className="grid grid-cols-3 gap-4">
+                    {expertiseCategories.map(category => (
+                      <button
+                        key={category.id}
+                        onClick={() => handleArrayToggle('expertiseCategories', category.id)}
+                        className={`flex flex-col items-center p-4 border-2 rounded-lg transition-all hover:border-gray-400 ${
+                          formData.expertiseCategories.includes(category.id)
+                            ? 'border-gray-900 bg-gray-50'
+                            : 'border-gray-200'
+                        }`}
+                      >
+                        <div className="w-full h-20 bg-gray-200 rounded-lg mb-3 flex items-center justify-center">
+                          <span className="text-gray-500 text-xs">📊</span>
+                        </div>
+                        <span className="text-sm font-medium text-center">{category.title}</span>
+                      </button>
+                    ))}
                   </div>
                 </div>
 
-                <div className="bg-blue-50 p-4 rounded-lg">
-                  <h4 className="font-medium text-blue-900 mb-2">Application Review Process</h4>
-                  <div className="text-sm text-blue-800 space-y-1">
-                    <p>• We review all expert applications within 2-3 business days</p>
-                    <p>• Our team verifies credentials and professional background</p>
-                    <p>• You'll receive an email with next steps once approved</p>
+                {/* Expertise Tags */}
+                <div className="space-y-4">
+                  <div className="flex flex-wrap gap-3">
+                    {expertiseTags.map(tag => (
+                      <button
+                        key={tag}
+                        onClick={() => handleArrayToggle('expertiseTags', tag)}
+                        className={`px-4 py-2 border-2 rounded-full text-sm font-medium transition-all ${
+                          formData.expertiseTags.includes(tag)
+                            ? 'border-gray-900 bg-gray-50 text-gray-900'
+                            : 'border-gray-200 text-gray-600 hover:border-gray-400'
+                        }`}
+                      >
+                        {tag}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Industries */}
+                <div className="space-y-4">
+                  <h4 className="font-medium text-lg">Industries <span className="text-sm text-gray-500">(3)</span></h4>
+                  <div className="grid grid-cols-2 gap-3">
+                    {industries.map(industry => (
+                      <label
+                        key={industry}
+                        className={`flex items-center gap-3 p-3 border rounded-lg cursor-pointer transition-all ${
+                          formData.industries.includes(industry)
+                            ? 'border-gray-900 bg-gray-50'
+                            : 'border-gray-200 hover:border-gray-400'
+                        }`}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={formData.industries.includes(industry)}
+                          onChange={() => handleArrayToggle('industries', industry)}
+                          className="w-4 h-4 text-gray-900 border-gray-300 rounded focus:ring-gray-900"
+                        />
+                        <span className="text-sm">{industry}</span>
+                        <span className="ml-auto text-xs">📊</span>
+                      </label>
+                    ))}
                   </div>
                 </div>
               </CardContent>
             </Card>
           )}
 
-          {/* Step 5: Application Submitted */}
+          {/* Step 3: Set Your Availability */}
+          {currentStep === 3 && (
+            <Card className="border-2 border-foreground">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <CalendarIcon className="w-5 h-5" />
+                  Set Your Availability
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                {/* Left Panel - Settings */}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                  <div className="space-y-4">
+                    {/* Time Zone */}
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Time Zone</label>
+                      <select
+                        value={formData.timezone}
+                        onChange={(e) => handleInputChange('timezone', e.target.value)}
+                        className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+                      >
+                        <option value="">Also timing</option>
+                        {timezones.map(timezone => (
+                          <option key={timezone} value={timezone}>{timezone}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {/* Slot Duration */}
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Slot Duration</label>
+                      <select
+                        value={formData.slotDuration}
+                        onChange={(e) => handleInputChange('slotDuration', e.target.value)}
+                        className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+                      >
+                        <option value="">30 min</option>
+                        {durationOptions.map(duration => (
+                          <option key={duration} value={duration}>{duration}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {/* Buffer */}
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Buffer</label>
+                      <select
+                        value={formData.bufferTime}
+                        onChange={(e) => handleInputChange('bufferTime', e.target.value)}
+                        className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+                      >
+                        <option value="">15 min</option>
+                        {bufferOptions.map(buffer => (
+                          <option key={buffer} value={buffer}>{buffer}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {/* Connect Calendly */}
+                    <Button 
+                      variant="outline" 
+                      className="w-full border-2 border-gray-300 hover:border-gray-900"
+                    >
+                      <CalendarIcon className="w-4 h-4 mr-2" />
+                      Connect Calendly
+                    </Button>
+
+                    {/* Mini Calendar */}
+                    <div className="bg-gray-50 p-4 rounded-lg">
+                      <Calendar 
+                        mode="single"
+                        className="w-full"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Right Panel - Weekly Schedule */}
+                  <div className="lg:col-span-2">
+                    <div className="space-y-4">
+                      {/* Week Header */}
+                      <div className="flex items-center justify-between">
+                        <h3 className="text-lg font-medium">Week of Sept 15-21, 2025</h3>
+                        <div className="flex items-center gap-2">
+                          <Button variant="ghost" size="sm">❮ Today ❯</Button>
+                        </div>
+                      </div>
+
+                      {/* Schedule Controls */}
+                      <div className="flex gap-4 mb-4">
+                        <select className="px-3 py-2 border border-gray-300 rounded-lg text-sm">
+                          <option>Daily</option>
+                          <option>Weekly</option>
+                          <option>Monthly</option>
+                        </select>
+                        <select className="px-3 py-2 border border-gray-300 rounded-lg text-sm">
+                          <option>Ends on</option>
+                          <option>Never</option>
+                          <option>After</option>
+                        </select>
+                      </div>
+
+                      {/* Weekly Calendar Grid */}
+                      <div className="border border-gray-200 rounded-lg overflow-hidden">
+                        {/* Day Headers */}
+                        <div className="grid grid-cols-7 bg-gray-50">
+                          {['Mon 15', 'Tue 16', 'Wed 17', 'Thu 18', 'Fri 19', 'Sat 20', 'Sun 21'].map(day => (
+                            <div key={day} className="p-3 text-center text-sm font-medium border-r border-gray-200 last:border-r-0">
+                              {day}
+                            </div>
+                          ))}
+                        </div>
+
+                        {/* Time Slots */}
+                        <div className="grid grid-cols-8">
+                          {/* Time Labels */}
+                          <div className="bg-gray-50 border-r border-gray-200">
+                            {['8:00 AM', '9:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM', '2:00 PM'].map(time => (
+                              <div key={time} className="p-3 text-xs text-gray-600 border-b border-gray-200 h-12 flex items-center">
+                                {time}
+                              </div>
+                            ))}
+                          </div>
+
+                          {/* Calendar Grid */}
+                          {Array.from({ length: 7 }).map((_, dayIndex) => (
+                            <div key={dayIndex} className="border-r border-gray-200 last:border-r-0">
+                              {Array.from({ length: 7 }).map((_, timeIndex) => (
+                                <div 
+                                  key={timeIndex} 
+                                  className="h-12 border-b border-gray-200 cursor-pointer hover:bg-blue-50 transition-colors"
+                                  onClick={() => {
+                                    // Handle time slot selection
+                                    console.log(`Selected: Day ${dayIndex}, Time ${timeIndex}`)
+                                  }}
+                                />
+                              ))}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Step 4: Manage Consultation Charges */}
+          {currentStep === 4 && (
+            <Card className="border-2 border-foreground">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <DollarSign className="w-5 h-5" />
+                  Manage Consultation Charges
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                {/* Individual Session */}
+                <div>
+                  <label className="block text-sm font-medium mb-3">What are your fees?*</label>
+                  <div className="flex items-center gap-4">
+                    <div className="flex items-center">
+                      <span className="text-lg font-medium mr-2">$</span>
+                      <input
+                        type="number"
+                        value={formData.individualSessionFee}
+                        onChange={(e) => handleInputChange('individualSessionFee', e.target.value)}
+                        className="w-20 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 text-center"
+                        placeholder="500"
+                      />
+                    </div>
+                    <select
+                      value={formData.individualSessionDuration}
+                      onChange={(e) => handleInputChange('individualSessionDuration', e.target.value)}
+                      className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+                    >
+                      <option value="">60 min</option>
+                      {sessionDurations.map(duration => (
+                        <option key={duration.value} value={duration.value}>{duration.label}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                {/* Bundle Sessions */}
+                <div>
+                  <label className="block text-sm font-medium mb-3">What are your fees for Bundle sessions?*</label>
+                  <div className="flex items-center gap-4">
+                    <div className="flex items-center">
+                      <span className="text-lg font-medium mr-2">$</span>
+                      <input
+                        type="number"
+                        value={formData.bundleSessionFee}
+                        onChange={(e) => handleInputChange('bundleSessionFee', e.target.value)}
+                        className="w-24 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 text-center"
+                        placeholder="2500"
+                      />
+                    </div>
+                    <select
+                      value={formData.bundleSessionCount}
+                      onChange={(e) => handleInputChange('bundleSessionCount', e.target.value)}
+                      className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+                    >
+                      <option value="">6 sessions</option>
+                      {bundleSessionCounts.map(bundle => (
+                        <option key={bundle.value} value={bundle.value}>{bundle.label}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                {/* Fee Breakdown */}
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <div className="grid grid-cols-2 gap-4 text-center">
+                    <div>
+                      <div className="text-sm text-gray-600 mb-1">Client pays</div>
+                      <div className="text-xl font-semibold text-gray-900">
+                        ${formData.individualSessionFee || '500'}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-sm text-gray-600 mb-1">What you get</div>
+                      <div className="text-xl font-semibold text-gray-900">
+                        ${formData.individualSessionFee ? (parseInt(formData.individualSessionFee) * 0.8).toFixed(0) : '400'}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="text-xs text-gray-500 text-center mt-3">
+                    Platform fee: 20% per transaction (includes support & secure payments)
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Step 5: Donate for charity (Optional) */}
           {currentStep === 5 && (
+            <Card className="border-2 border-foreground">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Heart className="w-5 h-5" />
+                  Donate for charity (Optional)
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="text-center space-y-4">
+                  <p className="text-gray-600">
+                    Inspire others by supporting a cause you love (You'll manage donations directly — TapTime doesn't handle transactions.)
+                  </p>
+                </div>
+
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Charity Name</label>
+                    <input
+                      type="text"
+                      value={formData.charityName}
+                      onChange={(e) => handleInputChange('charityName', e.target.value)}
+                      className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+                      placeholder="Charity Name"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Charity Website URL</label>
+                    <input
+                      type="url"
+                      value={formData.charityWebsite}
+                      onChange={(e) => handleInputChange('charityWebsite', e.target.value)}
+                      className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+                      placeholder="Charity Website URL"
+                    />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Step 6: Application Submitted */}
+          {currentStep === 6 && (
             <Card className="border-2 border-green-500">
               <CardContent className="p-12 text-center space-y-6">
                 <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto">
@@ -544,20 +796,20 @@ const SignUpExpertPage = () => {
                   <h3 className="font-medium mb-4">What happens next?</h3>
                   <div className="space-y-3 text-sm text-left">
                     <div className="flex items-center gap-3">
-                      <div className="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center">
-                        <span className="text-xs font-medium text-purple-600">1</span>
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
+                        <span className="text-xs font-medium text-green-600">1</span>
                       </div>
                       <span>Our team reviews your application and credentials (2-3 days)</span>
                     </div>
                     <div className="flex items-center gap-3">
-                      <div className="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center">
-                        <span className="text-xs font-medium text-purple-600">2</span>
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
+                        <span className="text-xs font-medium text-green-600">2</span>
                       </div>
                       <span>We may schedule a brief interview call</span>
                     </div>
                     <div className="flex items-center gap-3">
-                      <div className="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center">
-                        <span className="text-xs font-medium text-purple-600">3</span>
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
+                        <span className="text-xs font-medium text-green-600">3</span>
                       </div>
                       <span>Once approved, you'll get access to your expert dashboard</span>
                     </div>
@@ -574,7 +826,7 @@ const SignUpExpertPage = () => {
                     Learn More About Experts
                   </Button>
                   <Button 
-                    className="flex-1 rounded-full bg-purple-600 hover:bg-purple-700"
+                    className="flex-1 rounded-full bg-green-600 hover:bg-green-700"
                     onClick={() => window.location.href = '/'}
                   >
                     <Globe className="w-4 h-4 mr-2" />
@@ -586,7 +838,7 @@ const SignUpExpertPage = () => {
           )}
 
           {/* Navigation Buttons */}
-          {currentStep < 5 && (
+          {currentStep < 6 && (
             <div className="flex justify-between pt-6">
               <Button
                 variant="outline"
@@ -595,14 +847,18 @@ const SignUpExpertPage = () => {
                 className="rounded-full px-6 border-2 border-foreground"
               >
                 <ArrowLeft className="w-4 h-4 mr-2" />
-                Previous
+                {currentStep === 1 ? 'Back' : 'Back'}
               </Button>
               
               <Button
                 onClick={nextStep}
-                className="rounded-full px-6 bg-purple-600 hover:bg-purple-700"
+                className={`rounded-full px-6 ${
+                  currentStep === 5 
+                    ? 'bg-green-600 hover:bg-green-700' 
+                    : 'bg-gray-900 hover:bg-gray-800'
+                }`}
               >
-                {currentStep === 4 ? 'Submit Application' : 'Continue'}
+                {currentStep === 5 ? 'Submit' : 'Next'}
                 <ChevronRight className="w-4 h-4 ml-2" />
               </Button>
             </div>
