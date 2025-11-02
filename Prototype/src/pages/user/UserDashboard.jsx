@@ -52,16 +52,16 @@ const UserDashboard = () => {
 
   // Mock user data from onboarding
   const user = {
-    name: 'Sarah Johnson',
-    email: 'sarah.j@email.com',
+    firstName: 'John',
+    lastName: 'Smith',
+    email: 'john.smith@example.com',
     phone: '+1 (555) 123-4567',
-    location: 'San Francisco, CA',
-    company: 'TechCorp Inc.',
-    role: 'Product Manager',
+    bio: 'Product manager passionate about building scalable solutions and leading high-performing teams.',
+    country: 'United States',
     avatar: '/api/placeholder/40/40',
     memberSince: 'January 2024',
-    interests: ['Product Strategy', 'Team Leadership', 'Growth Marketing'],
-    goals: 'Build better products and lead high-performing teams'
+    primaryGoals: 'Start a new business, Improve leadership skills, Learn new technologies',
+    expertiseNeeded: 'Product Strategy, Team Leadership, Technology Innovation'
   }
 
   const sessionData = [
@@ -310,7 +310,10 @@ const UserDashboard = () => {
   ]
 
   const getInitials = (name) => {
-    return name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()
+    if (typeof name === 'string') {
+      return name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()
+    }
+    return (user.firstName[0] + user.lastName[0]).toUpperCase()
   }
 
   const tabs = [
@@ -349,7 +352,7 @@ const UserDashboard = () => {
       <section className="bg-gray-50 border-b px-6 py-6">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-lg font-semibold mb-4">Your Learning Progress</h2>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Total Sessions */}
             <Card className="border-2">
               <CardContent className="p-4">
@@ -392,31 +395,6 @@ const UserDashboard = () => {
               </CardContent>
             </Card>
             
-            {/* Top Categories */}
-            <Card className="border-2">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-2">
-                    <Star className="w-4 h-4 text-muted-foreground" />
-                    <span className="text-sm text-muted-foreground">Top Categories</span>
-                  </div>
-                  <span className="text-xs text-muted-foreground">3 areas</span>
-                </div>
-                <p className="text-2xl font-bold mb-3">Product</p>
-                <div className="flex flex-wrap gap-1">
-                  <Badge variant="secondary" className="bg-purple-100 text-purple-700 text-xs px-2 py-1">
-                    Product Strategy
-                  </Badge>
-                  <Badge variant="secondary" className="bg-blue-100 text-blue-700 text-xs px-2 py-1">
-                    Team Leadership
-                  </Badge>
-                  <Badge variant="secondary" className="bg-green-100 text-green-700 text-xs px-2 py-1">
-                    UX Design
-                  </Badge>
-                </div>
-              </CardContent>
-            </Card>
-            
             {/* Completion Rate */}
             <Card className="border-2">
               <CardContent className="p-4">
@@ -449,137 +427,68 @@ const UserDashboard = () => {
         <div className="w-80">
           {/* User Profile Card */}
           <Card className="border-2 border-foreground">
-            <CardContent className="p-6">
-              <div className="text-center mb-6">
-                <div className="relative inline-block mb-4">
-                  <Avatar className="w-24 h-24">
-                    <AvatarImage src={user.avatar} alt={user.name} />
-                    <AvatarFallback className="text-xl">{getInitials(user.name)}</AvatarFallback>
+            <CardContent className="p-4">
+              <div className="flex gap-4 mb-4">
+                <div className="relative">
+                  <Avatar className="w-16 h-16">
+                    <AvatarImage src={user.avatar} alt={`${user.firstName} ${user.lastName}`} />
+                    <AvatarFallback className="text-lg">{getInitials()}</AvatarFallback>
                   </Avatar>
                   <Button 
                     size="sm" 
                     variant="outline" 
-                    className="absolute -bottom-1 -right-1 rounded-full w-8 h-8 p-0 bg-white shadow-md"
+                    className="absolute -bottom-1 -right-1 rounded-full w-6 h-6 p-0 bg-white shadow-md"
                   >
-                    <Edit className="w-3 h-3" />
+                    <Edit className="w-2 h-2" />
                   </Button>
                 </div>
-                <h3 className="font-bold text-2xl mb-2">{user.name}</h3>
-                <p className="text-foreground text-lg font-medium mb-1">{user.role}</p>
-                <p className="text-muted-foreground text-base mb-3">{user.company}</p>
-                
-                <div className="p-3 bg-blue-50 rounded-lg">
-                  <div className="flex items-center justify-center gap-2 text-sm text-blue-700">
-                    <Eye className="w-4 h-4" />
-                    <span>Profile visible to experts</span>
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-semibold text-lg mb-1">{user.firstName} {user.lastName}</h3>
+                  <div className="space-y-1 text-xs">
+                    <div className="flex items-center gap-2">
+                      <Mail className="w-3 h-3 text-muted-foreground" />
+                      <span className="text-muted-foreground truncate">{user.email}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Phone className="w-3 h-3 text-muted-foreground" />
+                      <span className="text-muted-foreground">{user.phone}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <MapPin className="w-3 h-3 text-muted-foreground" />
+                      <span className="text-muted-foreground">{user.country}</span>
+                    </div>
                   </div>
                 </div>
               </div>
               
-              <div className="space-y-3 text-sm">
-                <div className="flex items-center gap-3">
-                  <Mail className="w-4 h-4 text-muted-foreground" />
-                  <span className="text-muted-foreground">{user.email}</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Phone className="w-4 h-4 text-muted-foreground" />
-                  <span className="text-muted-foreground">{user.phone}</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <MapPin className="w-4 h-4 text-muted-foreground" />
-                  <span className="text-muted-foreground">{user.location}</span>
+              <div className="p-2 bg-blue-50 rounded-lg mb-4">
+                <div className="flex items-center justify-center gap-2 text-xs text-blue-700">
+                  <Eye className="w-3 h-3" />
+                  <span>Profile visible to experts</span>
                 </div>
               </div>
               
-              <div className="mt-6">
-                <h4 className="font-medium mb-3">Interests</h4>
-                <div className="flex flex-wrap gap-2">
-                  {user.interests.map((interest, index) => (
-                    <Badge key={index} variant="secondary" className="bg-gray-100 text-gray-700 hover:bg-gray-200 rounded-full px-3 py-1">
-                      {interest}
-                    </Badge>
-                  ))}
+              <div className="space-y-3 text-xs">
+                <div>
+                  <h4 className="font-medium mb-1 text-sm">Bio</h4>
+                  <p className="text-muted-foreground">{user.bio}</p>
+                </div>
+                
+                <div>
+                  <h4 className="font-medium mb-1 text-sm">Goals</h4>
+                  <p className="text-muted-foreground">{user.primaryGoals}</p>
+                </div>
+                
+                <div>
+                  <h4 className="font-medium mb-1 text-sm">Interests</h4>
+                  <p className="text-muted-foreground">{user.expertiseNeeded}</p>
                 </div>
               </div>
               
-              <div className="mt-6">
-                <h4 className="font-medium mb-2">Goals</h4>
-                <p className="text-sm text-muted-foreground">{user.goals}</p>
-              </div>
-              
-              <Button className="w-full mt-6 rounded-full">
-                <Edit className="w-4 h-4 mr-2" />
+              <Button className="w-full mt-4 rounded-full text-sm">
+                <Edit className="w-3 h-3 mr-2" />
                 Edit Profile
               </Button>
-            </CardContent>
-          </Card>
-          
-          {/* Billing Section */}
-          <Card className="border-2">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <CreditCard className="w-4 h-4" />
-                Billing & Invoices
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-6 pt-0">
-              <div className="space-y-4">
-                {/* Payment Methods */}
-                <div>
-                  <h4 className="font-medium mb-2">Payment Methods</h4>
-                  <div className="p-3 border rounded-lg">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-5 bg-gradient-to-r from-blue-600 to-purple-600 rounded text-white text-xs flex items-center justify-center font-bold">
-                          VISA
-                        </div>
-                        <div>
-                          <p className="font-medium text-sm">•••• 4242</p>
-                          <p className="text-xs text-muted-foreground">Expires 12/25</p>
-                        </div>
-                      </div>
-                      <Button variant="outline" size="sm" className="text-xs">
-                        Edit
-                      </Button>
-                    </div>
-                  </div>
-                  <Button variant="outline" className="w-full mt-2 text-sm">
-                    <Plus className="w-4 h-4 mr-2" />
-                    Add Payment Method
-                  </Button>
-                </div>
-                
-                {/* Recent Invoices */}
-                <div>
-                  <h4 className="font-medium mb-2">Recent Invoices</h4>
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between p-2 hover:bg-gray-50 rounded">
-                      <div>
-                        <p className="font-medium text-sm">Invoice #INV-001</p>
-                        <p className="text-xs text-muted-foreground">Mar 18, 2024 • $180</p>
-                      </div>
-                      <Button variant="outline" size="sm" className="text-xs">
-                        <Download className="w-3 h-3 mr-1" />
-                        PDF
-                      </Button>
-                    </div>
-                    <div className="flex items-center justify-between p-2 hover:bg-gray-50 rounded">
-                      <div>
-                        <p className="font-medium text-sm">Invoice #INV-002</p>
-                        <p className="text-xs text-muted-foreground">Mar 10, 2024 • $200</p>
-                      </div>
-                      <Button variant="outline" size="sm" className="text-xs">
-                        <Download className="w-3 h-3 mr-1" />
-                        PDF
-                      </Button>
-                    </div>
-                  </div>
-                  <Button variant="outline" className="w-full mt-2 text-sm">
-                    <Receipt className="w-4 h-4 mr-2" />
-                    View All Invoices
-                  </Button>
-                </div>
-              </div>
             </CardContent>
           </Card>
         </div>
