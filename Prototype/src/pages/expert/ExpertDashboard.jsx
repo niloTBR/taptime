@@ -40,7 +40,12 @@ import {
   Share2,
   Check,
   Globe,
-  ChevronDown
+  ChevronDown,
+  X,
+  Crown,
+  Package,
+  Trash2,
+  CalendarDays
 } from 'lucide-react'
 
 const ExpertDashboard = () => {
@@ -48,6 +53,9 @@ const ExpertDashboard = () => {
   const [showSessionDetail, setShowSessionDetail] = useState(false)
   const [selectedSession, setSelectedSession] = useState(null)
   const [showVerificationModal, setShowVerificationModal] = useState(false)
+  const [showSettings, setShowSettings] = useState(false)
+  const [settingsTab, setSettingsTab] = useState('basic')
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('card')
 
   // Mock expert data from onboarding
   const expert = {
@@ -190,19 +198,9 @@ const ExpertDashboard = () => {
       ]
     },
     {
-      title: 'Profile',
+      title: 'Analytics',
       items: [
-        { id: 'profile', label: 'My Profile', icon: User },
-        { id: 'availability', label: 'Availability', icon: Calendar },
-        { id: 'fees', label: 'My Fees', icon: DollarSign },
-        { id: 'expertise', label: 'Expertise & Industries', icon: Target },
-        { id: 'charity', label: 'Charity', icon: Heart },
-        { id: 'socials', label: 'Socials', icon: Share2 }
-      ]
-    },
-    {
-      title: 'Billing',
-      items: [
+        { id: 'analytics', label: 'Analytics', icon: TrendingUp },
         { id: 'billing', label: 'Billing & Payouts', icon: CreditCard }
       ]
     }
@@ -213,337 +211,6 @@ const ExpertDashboard = () => {
     <Icon className={`w-4 h-4 ${isActive ? 'text-foreground' : 'text-muted-foreground'}`} />
   )
 
-  const ProfileSettings = () => (
-    <Card className="border-2">
-      <CardContent className="p-8">
-        <>
-          {/* My Profile Tab */}
-          {activeTab === 'profile' && (
-              <div>
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-xl font-semibold">Personal Information</h2>
-                  <Button 
-                    variant="outline" 
-                    className="border-2 border-foreground"
-                    onClick={() => setShowVerificationModal(true)}
-                  >
-                    <Shield className="w-4 h-4 mr-2" />
-                    Get Verified
-                  </Button>
-                </div>
-
-                <div className="grid grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Full Name*</label>
-                    <input 
-                      type="text" 
-                      defaultValue={expert.name}
-                      className="w-full p-3 border-2 border-gray-200 rounded-lg" 
-                      placeholder="Full Name"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Email*</label>
-                    <input 
-                      type="email" 
-                      defaultValue={expert.email}
-                      className="w-full p-3 border-2 border-gray-200 rounded-lg" 
-                      placeholder="Email Address"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Phone Number*</label>
-                    <input 
-                      type="tel" 
-                      defaultValue={expert.phone}
-                      className="w-full p-3 border-2 border-gray-200 rounded-lg" 
-                      placeholder="Phone Number"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Company*</label>
-                    <input 
-                      type="text" 
-                      defaultValue={expert.company}
-                      className="w-full p-3 border-2 border-gray-200 rounded-lg" 
-                      placeholder="Company name"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Short Description*</label>
-                    <textarea 
-                      defaultValue={expert.title}
-                      className="w-full p-3 border-2 border-gray-200 rounded-lg h-20" 
-                      placeholder="Position..."
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Timezone*</label>
-                    <select className="w-full p-3 border-2 border-gray-200 rounded-lg">
-                      <option>GMT+4 (UAE)</option>
-                      <option>GMT+0 (London)</option>
-                      <option>GMT-5 (New York)</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Gender*</label>
-                    <select className="w-full p-3 border-2 border-gray-200 rounded-lg">
-                      <option>Male</option>
-                      <option>Female</option>
-                      <option>Other</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Language Preference*</label>
-                    <input 
-                      type="text" 
-                      defaultValue="English"
-                      className="w-full p-3 border-2 border-gray-200 rounded-lg" 
-                      placeholder="Type here..."
-                    />
-                  </div>
-                </div>
-
-                <div className="mt-6">
-                  <label className="block text-sm font-medium mb-2">Bio*</label>
-                  <textarea 
-                    defaultValue={expert.bio}
-                    className="w-full p-3 border-2 border-gray-200 rounded-lg h-32" 
-                    placeholder="Enter your bio"
-                  />
-                </div>
-
-                <div className="flex gap-4 mt-8">
-                  <Button variant="outline" className="border-2 border-foreground">
-                    Discard changes
-                  </Button>
-                  <Button className="bg-green-500 hover:bg-green-600 text-white">
-                    Save
-                  </Button>
-                </div>
-              </div>
-            )}
-
-            {/* Availability Tab */}
-            {activeTab === 'availability' && (
-              <div>
-                <h2 className="text-xl font-semibold mb-6">Set Your Availability</h2>
-                <div className="text-center py-12">
-                  <Calendar className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-500">Availability calendar coming soon...</p>
-                  <p className="text-sm text-gray-400 mt-2">Set your working hours, time slots, and buffer time</p>
-                </div>
-              </div>
-            )}
-
-            {/* My Fees Tab */}
-            {activeTab === 'fees' && (
-              <div>
-                <h2 className="text-xl font-semibold mb-2">Manage Consultation Charges</h2>
-                <p className="text-sm text-muted-foreground mb-6">Platform fee: 20% per transaction (includes support & secure payments).</p>
-                
-                <div className="space-y-6">
-                  <div className="grid grid-cols-3 gap-6">
-                    <div>
-                      <label className="block text-sm font-medium mb-2">What are your fees ?</label>
-                      <div className="flex gap-2">
-                        <input 
-                          type="number" 
-                          defaultValue="500"
-                          className="flex-1 p-3 border-2 border-gray-200 rounded-lg" 
-                          placeholder="$ 500"
-                        />
-                        <select className="p-3 border-2 border-gray-200 rounded-lg">
-                          <option>60 min</option>
-                          <option>30 min</option>
-                          <option>90 min</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div className="text-center">
-                      <label className="block text-sm font-medium mb-2">Client pays</label>
-                      <div className="text-2xl font-bold">$ 500</div>
-                    </div>
-                    <div className="text-center">
-                      <label className="block text-sm font-medium mb-2">What you get</label>
-                      <div className="text-2xl font-bold">$ 400</div>
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium mb-2">What are your fees for bundle session ?</label>
-                    <div className="flex gap-2">
-                      <input 
-                        type="number" 
-                        defaultValue="2500"
-                        className="flex-1 p-3 border-2 border-gray-200 rounded-lg" 
-                        placeholder="$ 2500"
-                      />
-                      <select className="p-3 border-2 border-gray-200 rounded-lg">
-                        <option>6 Sessions</option>
-                        <option>3 Sessions</option>
-                        <option>10 Sessions</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  <Card className="p-4 bg-gray-50">
-                    <h3 className="font-medium mb-2">Bundle Details</h3>
-                    <p className="text-sm text-muted-foreground mb-4">
-                      This package includes multiple consultation sessions at a discounted rate. Each session is scheduled for a fixed duration, and the bundle must be used within the validity period.
-                    </p>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium mb-2">Number of Sessions</label>
-                        <select className="w-full p-3 border-2 border-gray-200 rounded-lg">
-                          <option>6 Sessions</option>
-                          <option>3 Sessions</option>
-                          <option>10 Sessions</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium mb-2">Duration of Each Session</label>
-                        <select className="w-full p-3 border-2 border-gray-200 rounded-lg">
-                          <option>60 minutes</option>
-                          <option>30 minutes</option>
-                          <option>90 minutes</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium mb-2">Validity Period</label>
-                        <select className="w-full p-3 border-2 border-gray-200 rounded-lg">
-                          <option>3 months</option>
-                          <option>6 months</option>
-                          <option>1 year</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium mb-2">Mode of Session</label>
-                        <select className="w-full p-3 border-2 border-gray-200 rounded-lg">
-                          <option>Zoom/Google Meet</option>
-                          <option>In-person</option>
-                          <option>Phone Call</option>
-                        </select>
-                      </div>
-                    </div>
-                  </Card>
-                </div>
-
-                <div className="flex gap-4 mt-8">
-                  <Button variant="outline" className="border-2 border-foreground">
-                    Discard changes
-                  </Button>
-                  <Button className="bg-green-500 hover:bg-green-600 text-white">
-                    Save
-                  </Button>
-                </div>
-              </div>
-            )}
-
-            {/* Expertise & Industries Tab */}
-            {activeTab === 'expertise' && (
-              <div>
-                <h2 className="text-xl font-semibold mb-6">Expertise & Industries</h2>
-                <div className="text-center py-12">
-                  <Target className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-500">Expertise selection coming soon...</p>
-                  <p className="text-sm text-gray-400 mt-2">Select your areas of expertise and industries</p>
-                </div>
-              </div>
-            )}
-
-            {/* Charity Tab */}
-            {activeTab === 'charity' && (
-              <div>
-                <h2 className="text-xl font-semibold mb-2">Donate for charity (Optional)</h2>
-                <p className="text-sm text-muted-foreground mb-6">
-                  Inspire others by supporting a cause you love. (You'll manage donations directly — Taptime doesn't handle transactions)
-                </p>
-
-                <div className="grid grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Charity Name</label>
-                    <input 
-                      type="text" 
-                      className="w-full p-3 border-2 border-gray-200 rounded-lg" 
-                      placeholder="Type here..."
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Charity Website URL</label>
-                    <input 
-                      type="url" 
-                      className="w-full p-3 border-2 border-gray-200 rounded-lg" 
-                      placeholder="Type here..."
-                    />
-                  </div>
-                </div>
-
-                <div className="flex gap-4 mt-8">
-                  <Button variant="outline" className="border-2 border-foreground">
-                    Discard changes
-                  </Button>
-                  <Button className="bg-green-500 hover:bg-green-600 text-white">
-                    Save
-                  </Button>
-                </div>
-              </div>
-            )}
-
-            {/* Socials Tab */}
-            {activeTab === 'socials' && (
-              <div>
-                <h2 className="text-xl font-semibold mb-6">Socials</h2>
-
-                <div className="grid grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium mb-2">LinkedIn Profile</label>
-                    <input 
-                      type="url" 
-                      className="w-full p-3 border-2 border-gray-200 rounded-lg" 
-                      placeholder="Type here..."
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-2">X Profile</label>
-                    <input 
-                      type="url" 
-                      className="w-full p-3 border-2 border-gray-200 rounded-lg" 
-                      placeholder="Type here..."
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Reddit</label>
-                    <input 
-                      type="url" 
-                      className="w-full p-3 border-2 border-gray-200 rounded-lg" 
-                      placeholder="Type here..."
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Threads</label>
-                    <input 
-                      type="url" 
-                      className="w-full p-3 border-2 border-gray-200 rounded-lg" 
-                      placeholder="Type here..."
-                    />
-                  </div>
-                </div>
-
-                <div className="flex gap-4 mt-8">
-                  <Button variant="outline" className="border-2 border-foreground">
-                    Discard changes
-                  </Button>
-                  <Button className="bg-green-500 hover:bg-green-600 text-white">
-                    Save
-                  </Button>
-                </div>
-              </div>
-          )}
-        </>
-      </CardContent>
-    </Card>
-  )
 
   return (
     <div className="min-h-screen bg-white">
@@ -673,8 +340,98 @@ const ExpertDashboard = () => {
 
       {/* Main Content with Sidebar */}
       <div className="max-w-7xl mx-auto flex gap-6 p-6">
-        {/* Unified Navigation Sidebar */}
-        <div className="w-80">
+        {/* Sidebar */}
+        <div className="w-80 space-y-6">
+          {/* Expert Profile Card */}
+          <Card className="border-2 border-foreground">
+            <CardContent className="p-4">
+              <div className="flex gap-4 mb-4">
+                <div className="relative">
+                  <Avatar className="w-16 h-16">
+                    <AvatarImage src={expert.avatar} alt={expert.name} />
+                    <AvatarFallback className="text-lg">{getInitials(expert.name)}</AvatarFallback>
+                  </Avatar>
+                  <Button 
+                    size="sm" 
+                    variant="outline" 
+                    className="absolute -bottom-1 -right-1 rounded-full w-6 h-6 p-0 bg-white shadow-md"
+                  >
+                    <Edit className="w-2 h-2" />
+                  </Button>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-1">
+                    <h3 className="font-semibold text-lg">{expert.name}</h3>
+                    {expert.verified && <Crown className="w-4 h-4 text-yellow-500" />}
+                  </div>
+                  <div className="space-y-1 text-xs">
+                    <div className="flex items-center gap-2">
+                      <Mail className="w-3 h-3 text-muted-foreground" />
+                      <span className="text-muted-foreground truncate">{expert.email}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Phone className="w-3 h-3 text-muted-foreground" />
+                      <span className="text-muted-foreground">{expert.phone}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <MapPin className="w-3 h-3 text-muted-foreground" />
+                      <span className="text-muted-foreground">{expert.location}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                  <span className="font-medium">{stats.thisMonth.rating}</span>
+                  <span className="text-xs text-muted-foreground">({stats.thisMonth.sessions} sessions)</span>
+                </div>
+                <Badge variant="secondary" className="bg-green-100 text-green-700">
+                  {expert.verified ? 'Verified Expert' : 'Pending'}
+                </Badge>
+              </div>
+              
+              <div className="p-2 bg-green-50 rounded-lg mb-4">
+                <div className="flex items-center justify-center gap-2 text-xs text-green-700">
+                  <Eye className="w-3 h-3" />
+                  <span>Profile visible to clients</span>
+                </div>
+              </div>
+              
+              <div className="space-y-3 text-xs">
+                <div>
+                  <h4 className="font-medium mb-1 text-sm">Professional Title</h4>
+                  <p className="text-muted-foreground">{expert.title}</p>
+                </div>
+                
+                <div>
+                  <h4 className="font-medium mb-1 text-sm">Bio</h4>
+                  <p className="text-muted-foreground">{expert.bio}</p>
+                </div>
+                
+                <div>
+                  <h4 className="font-medium mb-1 text-sm">Expertise</h4>
+                  <p className="text-muted-foreground">{expert.specialization}</p>
+                </div>
+                
+                <div>
+                  <h4 className="font-medium mb-1 text-sm">Hourly Rate</h4>
+                  <p className="text-muted-foreground font-medium">${expert.hourlyRate}/hour</p>
+                </div>
+              </div>
+              
+              <Button 
+                className="w-full mt-4 rounded-full text-sm"
+                onClick={() => setShowSettings(true)}
+              >
+                <Settings className="w-3 h-3 mr-2" />
+                Expert Settings
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Navigation Sidebar */}
           <Card className="border-2">
             <CardContent className="p-0">
               {sidebarSections.map((section, sectionIndex) => (
@@ -1216,6 +973,55 @@ const ExpertDashboard = () => {
             </div>
           )}
 
+          {activeTab === 'analytics' && (
+            <div className="space-y-6">
+              <h2 className="text-xl font-semibold">Analytics</h2>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <Card className="border-2">
+                  <CardHeader>
+                    <CardTitle className="text-lg">Revenue Trend</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <ChartContainer config={{ earnings: { color: '#10b981' } }} className="h-48">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <LineChart data={earningsData}>
+                          <XAxis dataKey="month" />
+                          <YAxis />
+                          <ChartTooltip content={<ChartTooltipContent />} />
+                          <Line 
+                            type="monotone" 
+                            dataKey="earnings" 
+                            stroke="#10b981" 
+                            strokeWidth={3}
+                          />
+                        </LineChart>
+                      </ResponsiveContainer>
+                    </ChartContainer>
+                  </CardContent>
+                </Card>
+                
+                <Card className="border-2">
+                  <CardHeader>
+                    <CardTitle className="text-lg">Session Volume</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <ChartContainer config={{ sessions: { color: '#3b82f6' } }} className="h-48">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={sessionsData}>
+                          <XAxis dataKey="month" />
+                          <YAxis />
+                          <ChartTooltip content={<ChartTooltipContent />} />
+                          <Bar dataKey="sessions" fill="#3b82f6" radius={4} />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </ChartContainer>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          )}
+
           {activeTab === 'billing' && (
             <div className="space-y-6">
               <h2 className="text-xl font-semibold">Billing & Payouts</h2>
@@ -1320,11 +1126,462 @@ const ExpertDashboard = () => {
             </div>
           )}
           
-          {(activeTab === 'profile' || activeTab === 'availability' || activeTab === 'fees' || activeTab === 'expertise' || activeTab === 'charity' || activeTab === 'socials') && (
-            <ProfileSettings />
-          )}
         </div>
       </div>
+
+      {/* Expert Settings Modal */}
+      {showSettings && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg w-full max-w-6xl max-h-[90vh] overflow-hidden">
+            <div className="flex">
+              {/* Settings Sidebar */}
+              <div className="w-64 bg-gray-50 p-6 border-r">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-lg font-semibold">Expert Settings</h2>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setShowSettings(false)}
+                    className="rounded-full w-8 h-8 p-0"
+                  >
+                    <X className="w-4 h-4" />
+                  </Button>
+                </div>
+                
+                <nav className="space-y-2">
+                  {[
+                    { id: 'basic', label: 'Basic Information', icon: User },
+                    { id: 'professional', label: 'Professional Profile', icon: Award },
+                    { id: 'sessions', label: 'Session Types', icon: Package },
+                    { id: 'availability', label: 'Availability', icon: CalendarDays },
+                    { id: 'billing', label: 'Billing & Payments', icon: CreditCard },
+                    { id: 'charity', label: 'Charity', icon: Heart }
+                  ].map(tab => {
+                    const Icon = tab.icon
+                    return (
+                      <button
+                        key={tab.id}
+                        onClick={() => setSettingsTab(tab.id)}
+                        className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-colors ${
+                          settingsTab === tab.id
+                            ? 'bg-white shadow-sm font-medium'
+                            : 'hover:bg-gray-100 text-gray-600'
+                        }`}
+                      >
+                        <Icon className="w-4 h-4" />
+                        <span className="text-sm">{tab.label}</span>
+                      </button>
+                    )
+                  })}
+                </nav>
+              </div>
+              
+              {/* Settings Content */}
+              <div className="flex-1 p-6 overflow-y-auto max-h-[90vh]">
+                {settingsTab === 'basic' && (
+                  <div className="space-y-6">
+                    <h3 className="text-xl font-semibold">Basic Information</h3>
+                    
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-sm font-medium mb-2 block">First Name</label>
+                        <input 
+                          type="text" 
+                          defaultValue="Isabella"
+                          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium mb-2 block">Last Name</label>
+                        <input 
+                          type="text" 
+                          defaultValue="Grace"
+                          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+                        />
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <label className="text-sm font-medium mb-2 block">Email</label>
+                      <input 
+                        type="email" 
+                        defaultValue={expert.email}
+                        className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="text-sm font-medium mb-2 block">Phone</label>
+                      <input 
+                        type="tel" 
+                        defaultValue={expert.phone}
+                        className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="text-sm font-medium mb-2 block">Title*</label>
+                      <input 
+                        type="text" 
+                        defaultValue={expert.title}
+                        className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+                        placeholder="Founder & CEO of TechNova"
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="text-sm font-medium mb-2 block">
+                        Short Description*
+                        <span className="text-xs text-gray-500 ml-2">100 characters</span>
+                      </label>
+                      <textarea
+                        defaultValue={expert.bio}
+                        className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 h-24 resize-none"
+                        placeholder="Brief description of expertise..."
+                        maxLength={100}
+                      />
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-sm font-medium mb-2 block">Location*</label>
+                        <select className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900">
+                          <option value="US">United States</option>
+                          <option value="CA">Canada</option>
+                          <option value="GB">United Kingdom</option>
+                          <option value="DE">Germany</option>
+                          <option value="FR">France</option>
+                          <option value="AU">Australia</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium mb-2 block">Gender*</label>
+                        <select className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900">
+                          <option value="">Select gender</option>
+                          <option value="male">Male</option>
+                          <option value="female">Female</option>
+                          <option value="non-binary">Non-binary</option>
+                          <option value="prefer-not-say">Prefer not to say</option>
+                        </select>
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <label className="text-sm font-medium mb-2 block">Language Preference*</label>
+                      <select className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900">
+                        <option value="">Select language</option>
+                        <option value="english">English</option>
+                        <option value="arabic">Arabic</option>
+                        <option value="both">English & Arabic</option>
+                      </select>
+                    </div>
+                  </div>
+                )}
+
+                {settingsTab === 'professional' && (
+                  <div className="space-y-6">
+                    <h3 className="text-xl font-semibold">Professional Profile</h3>
+                    
+                    {/* Expertise Categories */}
+                    <div className="space-y-4">
+                      <h4 className="font-medium">Expertise Categories</h4>
+                      <div className="grid grid-cols-3 gap-4">
+                        {['Business & Startups', 'Career & Professional', 'Marketing & Brand', 'Tech & Product', 'Wellness & Mental', 'Finance & Investment'].map(category => (
+                          <button
+                            key={category}
+                            className="flex flex-col items-center p-4 border-2 rounded-lg transition-all hover:border-gray-400 border-gray-200"
+                          >
+                            <div className="w-full h-16 bg-gray-200 rounded-lg mb-3 flex items-center justify-center">
+                              <span className="text-gray-500 text-xs">📊</span>
+                            </div>
+                            <span className="text-sm font-medium text-center">{category}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Expertise Tags */}
+                    <div className="space-y-4">
+                      <h4 className="font-medium">Expertise Tags</h4>
+                      <div className="flex flex-wrap gap-3">
+                        {['Leadership & Team Building', 'Scaling Startups', 'Fundraising & Pitching', 'Exit Strategy & M&A', 'Product Strategy', 'Market Analysis'].map(tag => (
+                          <button
+                            key={tag}
+                            className="px-4 py-2 border-2 rounded-full text-sm font-medium transition-all border-gray-200 text-gray-600 hover:border-gray-400"
+                          >
+                            {tag}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Industries */}
+                    <div className="space-y-4">
+                      <h4 className="font-medium">Industries</h4>
+                      <div className="grid grid-cols-2 gap-3">
+                        {['Technology', 'Finance', 'Healthcare', 'Marketing', 'Consulting', 'Real Estate', 'Legal', 'Education'].map(industry => (
+                          <label
+                            key={industry}
+                            className="flex items-center gap-3 p-3 border rounded-lg cursor-pointer transition-all border-gray-200 hover:border-gray-400"
+                          >
+                            <input
+                              type="checkbox"
+                              className="w-4 h-4 text-gray-900 border-gray-300 rounded focus:ring-gray-900"
+                            />
+                            <span className="text-sm">{industry}</span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {settingsTab === 'sessions' && (
+                  <div className="space-y-6">
+                    <h3 className="text-xl font-semibold">Session Types & Pricing</h3>
+                    <p className="text-sm text-gray-600">
+                      Manage the session types that clients will see when booking with you.
+                    </p>
+                    
+                    {/* Platform Fee Info */}
+                    <div className="bg-gray-50 p-4 rounded-lg">
+                      <h4 className="font-medium text-sm mb-2">Platform Fee</h4>
+                      <p className="text-xs text-gray-600">
+                        TapTime charges a 20% platform fee on all sessions. This includes payment processing, support, and platform maintenance.
+                      </p>
+                    </div>
+
+                    {/* Quick Pricing Setup */}
+                    <div className="space-y-4">
+                      <h4 className="font-medium">Quick Setup</h4>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="text-sm font-medium mb-2 block">Base Hourly Rate</label>
+                          <div className="flex items-center">
+                            <span className="text-lg font-medium mr-2">$</span>
+                            <input 
+                              type="number" 
+                              defaultValue="500"
+                              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+                              placeholder="500"
+                            />
+                          </div>
+                        </div>
+                        <div>
+                          <label className="text-sm font-medium mb-2 block">Default Duration</label>
+                          <select className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900">
+                            <option value="15">15 min</option>
+                            <option value="30">30 min</option>
+                            <option value="45">45 min</option>
+                            <option value="60">60 min</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Session Types Summary */}
+                    <div className="space-y-3">
+                      <h4 className="font-medium">Current Session Types</h4>
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between p-3 border rounded-lg">
+                          <div>
+                            <span className="font-medium text-sm">General Consultation</span>
+                            <p className="text-xs text-gray-600">15/30/45 min options</p>
+                          </div>
+                          <span className="text-sm font-medium">$500-1500</span>
+                        </div>
+                        <Button variant="outline" className="w-full border-2 border-gray-300 hover:border-gray-900">
+                          <Package className="w-4 h-4 mr-2" />
+                          Manage Advanced Session Types
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {settingsTab === 'availability' && (
+                  <div className="space-y-6">
+                    <h3 className="text-xl font-semibold">Availability Settings</h3>
+                    
+                    <div className="grid grid-cols-2 gap-6">
+                      <div>
+                        <label className="text-sm font-medium mb-2 block">Timezone</label>
+                        <select className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900">
+                          <option value="">Select timezone</option>
+                          <option value="PST">America/Los_Angeles (PST)</option>
+                          <option value="EST">America/New_York (EST)</option>
+                          <option value="GMT">Europe/London (GMT)</option>
+                          <option value="CET">Europe/Berlin (CET)</option>
+                          <option value="GST">Asia/Dubai (GST)</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium mb-2 block">Default Slot Duration</label>
+                        <select className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900">
+                          <option value="30">30 min</option>
+                          <option value="15">15 min</option>
+                          <option value="45">45 min</option>
+                          <option value="60">60 min</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="text-sm font-medium mb-2 block">Buffer Time</label>
+                      <select className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900">
+                        <option value="15">15 min</option>
+                        <option value="5">5 min</option>
+                        <option value="10">10 min</option>
+                        <option value="30">30 min</option>
+                      </select>
+                    </div>
+
+                    <Button className="w-full border-2 border-gray-300 hover:border-gray-900" variant="outline">
+                      <CalendarDays className="w-4 h-4 mr-2" />
+                      Manage Calendar & Time Slots
+                    </Button>
+                  </div>
+                )}
+
+                {settingsTab === 'billing' && (
+                  <div className="space-y-6">
+                    <h3 className="text-xl font-semibold">Billing & Payments</h3>
+                    
+                    {/* Payment Method Selection */}
+                    <div className="space-y-4">
+                      <h4 className="font-medium">How would you like to receive payments?</h4>
+                      <div className="space-y-3">
+                        {[
+                          { id: 'card', label: 'Credit/Debit Card', icon: '💳' },
+                          { id: 'bank', label: 'Bank Transfer', icon: '🏦' },
+                          { id: 'paypal', label: 'PayPal', icon: '💰' }
+                        ].map(method => (
+                          <label
+                            key={method.id}
+                            className={`flex items-center p-3 border rounded-lg cursor-pointer transition-all ${
+                              selectedPaymentMethod === method.id 
+                                ? 'border-gray-900 bg-gray-50' 
+                                : 'border-gray-200 hover:border-gray-400'
+                            }`}
+                          >
+                            <input
+                              type="radio"
+                              name="paymentMethod"
+                              value={method.id}
+                              checked={selectedPaymentMethod === method.id}
+                              onChange={(e) => setSelectedPaymentMethod(e.target.value)}
+                              className="w-4 h-4 text-gray-900 border-gray-300 focus:ring-gray-900"
+                            />
+                            <span className="text-lg mr-3 ml-3">{method.icon}</span>
+                            <span className="font-medium">{method.label}</span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Conditional Payment Forms */}
+                    {selectedPaymentMethod === 'card' && (
+                      <div className="space-y-4">
+                        <h4 className="font-medium">Card Details</h4>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <label className="text-sm font-medium mb-2 block">Card Number</label>
+                            <input 
+                              type="text" 
+                              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+                              placeholder="1234 5678 9012 3456"
+                            />
+                          </div>
+                          <div>
+                            <label className="text-sm font-medium mb-2 block">Expiry Date</label>
+                            <input 
+                              type="text" 
+                              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+                              placeholder="MM/YY"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {selectedPaymentMethod === 'bank' && (
+                      <div className="space-y-4">
+                        <h4 className="font-medium">Bank Account Details</h4>
+                        <div className="space-y-4">
+                          <div>
+                            <label className="text-sm font-medium mb-2 block">Account Holder Name</label>
+                            <input 
+                              type="text" 
+                              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+                              placeholder="John Smith"
+                            />
+                          </div>
+                          <div className="grid grid-cols-2 gap-4">
+                            <div>
+                              <label className="text-sm font-medium mb-2 block">Routing Number</label>
+                              <input 
+                                type="text" 
+                                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+                                placeholder="123456789"
+                              />
+                            </div>
+                            <div>
+                              <label className="text-sm font-medium mb-2 block">Account Number</label>
+                              <input 
+                                type="text" 
+                                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+                                placeholder="1234567890"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {settingsTab === 'charity' && (
+                  <div className="space-y-6">
+                    <h3 className="text-xl font-semibold">Charity Support</h3>
+                    <p className="text-sm text-gray-600">
+                      Inspire others by supporting a cause you love (You'll manage donations directly — TapTime doesn't handle transactions.)
+                    </p>
+                    
+                    <div className="space-y-4">
+                      <div>
+                        <label className="text-sm font-medium mb-2 block">Charity Name</label>
+                        <input 
+                          type="text" 
+                          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+                          placeholder="Enter charity name"
+                        />
+                      </div>
+                      
+                      <div>
+                        <label className="text-sm font-medium mb-2 block">Charity Website URL</label>
+                        <input 
+                          type="url" 
+                          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+                          placeholder="https://charity-website.org"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+                
+                <div className="flex justify-end gap-3 mt-8 pt-6 border-t">
+                  <Button variant="outline" onClick={() => setShowSettings(false)}>
+                    Cancel
+                  </Button>
+                  <Button>
+                    Save Changes
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Verification Modal */}
       {showVerificationModal && (
