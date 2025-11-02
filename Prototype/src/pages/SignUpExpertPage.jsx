@@ -27,6 +27,7 @@ import {
 
 const SignUpExpertPage = () => {
   const [currentStep, setCurrentStep] = useState(1)
+  const [isSubmitted, setIsSubmitted] = useState(false)
   const [formData, setFormData] = useState({
     // Step 1: Personal Information (includes user fields)
     firstName: '',
@@ -67,8 +68,7 @@ const SignUpExpertPage = () => {
     { step: 2, title: 'Expertise', description: 'Your areas of expertise' },
     { step: 3, title: 'Set Your Availability', description: 'When you\'re available' },
     { step: 4, title: 'Manage Consultation Charges', description: 'Set your fees' },
-    { step: 5, title: 'Donate for charity', description: 'Optional charity support' },
-    { step: 6, title: 'Application Submitted', description: 'We\'ll review your application' }
+    { step: 5, title: 'Donate for charity', description: 'Optional charity support' }
   ]
 
   // Step 1: Personal Information options
@@ -192,7 +192,7 @@ const SignUpExpertPage = () => {
   }
 
   const nextStep = () => {
-    if (currentStep < 6) {
+    if (currentStep < 5) {
       setCurrentStep(currentStep + 1)
     }
   }
@@ -201,6 +201,12 @@ const SignUpExpertPage = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1)
     }
+  }
+
+  const handleSubmit = () => {
+    // Handle form submission
+    console.log('Submitting expert application:', formData)
+    setIsSubmitted(true)
   }
 
   return (
@@ -777,68 +783,9 @@ const SignUpExpertPage = () => {
             </Card>
           )}
 
-          {/* Step 6: Application Submitted */}
-          {currentStep === 6 && (
-            <Card className="border-2 border-green-500">
-              <CardContent className="p-12 text-center space-y-6">
-                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto">
-                  <Check className="w-8 h-8 text-green-600" />
-                </div>
-                
-                <div>
-                  <h2 className="text-2xl font-semibold mb-2">Application Submitted!</h2>
-                  <p className="text-muted-foreground">
-                    Thank you for applying to become a TapTime expert. We're reviewing your application and will get back to you soon.
-                  </p>
-                </div>
-
-                <div className="bg-gray-50 p-6 rounded-lg">
-                  <h3 className="font-medium mb-4">What happens next?</h3>
-                  <div className="space-y-3 text-sm text-left">
-                    <div className="flex items-center gap-3">
-                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
-                        <span className="text-xs font-medium text-green-600">1</span>
-                      </div>
-                      <span>Our team reviews your application and credentials (2-3 days)</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
-                        <span className="text-xs font-medium text-green-600">2</span>
-                      </div>
-                      <span>We may schedule a brief interview call</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
-                        <span className="text-xs font-medium text-green-600">3</span>
-                      </div>
-                      <span>Once approved, you'll get access to your expert dashboard</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <Button 
-                    variant="outline"
-                    className="flex-1 rounded-full border-2 border-foreground"
-                    onClick={() => window.location.href = '/join-expert'}
-                  >
-                    <Award className="w-4 h-4 mr-2" />
-                    Learn More About Experts
-                  </Button>
-                  <Button 
-                    className="flex-1 rounded-full bg-green-600 hover:bg-green-700"
-                    onClick={() => window.location.href = '/'}
-                  >
-                    <Globe className="w-4 h-4 mr-2" />
-                    Back to Homepage
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          )}
 
           {/* Navigation Buttons */}
-          {currentStep < 6 && (
+          {!isSubmitted && (
             <div className="flex justify-between pt-6">
               <Button
                 variant="outline"
@@ -847,20 +794,82 @@ const SignUpExpertPage = () => {
                 className="rounded-full px-6 border-2 border-foreground"
               >
                 <ArrowLeft className="w-4 h-4 mr-2" />
-                {currentStep === 1 ? 'Back' : 'Back'}
+                Back
               </Button>
               
               <Button
-                onClick={nextStep}
+                onClick={currentStep === 5 ? handleSubmit : nextStep}
                 className={`rounded-full px-6 ${
                   currentStep === 5 
                     ? 'bg-green-600 hover:bg-green-700' 
                     : 'bg-gray-900 hover:bg-gray-800'
                 }`}
               >
-                {currentStep === 5 ? 'Submit' : 'Next'}
+                {currentStep === 5 ? 'Submit Application' : 'Next'}
                 <ChevronRight className="w-4 h-4 ml-2" />
               </Button>
+            </div>
+          )}
+
+          {/* Success Message Overlay */}
+          {isSubmitted && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+              <Card className="max-w-md w-full mx-4 border-2 border-green-500">
+                <CardContent className="p-8 text-center space-y-6">
+                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto">
+                    <Check className="w-8 h-8 text-green-600" />
+                  </div>
+                  
+                  <div>
+                    <h2 className="text-2xl font-semibold mb-2">Application Submitted!</h2>
+                    <p className="text-muted-foreground">
+                      Thank you for applying to become a TapTime expert. We're reviewing your application and will get back to you soon.
+                    </p>
+                  </div>
+
+                  <div className="bg-gray-50 p-4 rounded-lg">
+                    <h3 className="font-medium mb-3">What happens next?</h3>
+                    <div className="space-y-2 text-sm text-left">
+                      <div className="flex items-center gap-3">
+                        <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center">
+                          <span className="text-xs font-medium text-green-600">1</span>
+                        </div>
+                        <span>Our team reviews your application (2-3 days)</span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center">
+                          <span className="text-xs font-medium text-green-600">2</span>
+                        </div>
+                        <span>We may schedule a brief interview call</span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center">
+                          <span className="text-xs font-medium text-green-600">3</span>
+                        </div>
+                        <span>Once approved, you'll get access to your dashboard</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col gap-3">
+                    <Button 
+                      className="w-full rounded-full bg-green-600 hover:bg-green-700"
+                      onClick={() => window.location.href = '/'}
+                    >
+                      <Globe className="w-4 h-4 mr-2" />
+                      Back to Homepage
+                    </Button>
+                    <Button 
+                      variant="outline"
+                      className="w-full rounded-full border-2 border-foreground"
+                      onClick={() => window.location.href = '/join-expert'}
+                    >
+                      <Award className="w-4 h-4 mr-2" />
+                      Learn More About Experts
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
           )}
         </div>
