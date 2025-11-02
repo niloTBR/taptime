@@ -1,0 +1,28 @@
+{
+  "testimonials": [
+    {
+      "id": 1,
+      "name": "Alex Chen",
+      "title": "Product Manager at Stripe",
+      "rating": 5,
+      "text": "One 15-minute session gave me the exact framework I needed. Landed my dream PM role at Stripe within 2 months.",
+      "image": "/api/placeholder/60/60"
+    },
+    {
+      "id": 2,
+      "name": "Sarah Williams",
+      "title": "Startup Founder",
+      "rating": 5,
+      "text": "My expert walked me through their actual pitch deck. We closed our $2M Series A using their exact strategy.",
+      "image": "/api/placeholder/60/60"
+    },
+    {
+      "id": 3,
+      "name": "Michael Rodriguez",
+      "title": "UX Designer",
+      "rating": 5,
+      "text": "They showed me what top-tier portfolios really look like. Got callbacks from Google, Apple, and Figma in one week.",
+      "image": "/api/placeholder/60/60"
+    }
+  ]
+}

@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
@@ -11,25 +12,17 @@ import {
   ChevronDown,
   X,
   Calendar,
-  Clock
+  Clock,
+  HeartHandshake,
+  ExternalLink
 } from 'lucide-react'
 import expertProfileData from '@/data/expert-profile.json'
 
 const ExpertProfilePage = () => {
   const { expert, about, sessions, reviews, calendar } = expertProfileData
-  const [selectedSlot, setSelectedSlot] = useState(null)
-  const [selectedSession, setSelectedSession] = useState(sessions.topics[0])
   const [activeTab, setActiveTab] = useState('about')
-  const [isBookingOpen, setIsBookingOpen] = useState(false)
-  const [bookingStep, setBookingStep] = useState(1)
-  const [isLoggedIn, setIsLoggedIn] = useState(false) // Simulate login state
   const [showShareTooltip, setShowShareTooltip] = useState(false)
-  
-  // Mock user data (would come from auth context)
-  const userData = {
-    name: "John Smith",
-    email: "john.smith@example.com"
-  }
+  const [showFloatingButton, setShowFloatingButton] = useState(false)
 
   const getInitials = (name) => {
     return name
@@ -38,6 +31,41 @@ const ExpertProfilePage = () => {
       .join('')
       .substring(0, 2)
       .toUpperCase()
+  }
+
+  const getCategoryFromExpertise = (expertise) => {
+    const categoryMap = {
+      'Tech Strategy': 'Technology & Innovation',
+      'Startup Scaling': 'Business & Startups',
+      'E-commerce': 'Business & Startups',
+      'Brand Building': 'Marketing & Growth',
+      'Product Strategy': 'Technology & Innovation',
+      'Tech Leadership': 'Technology & Innovation',
+      'Marketing Strategy': 'Marketing & Growth',
+      'Growth Hacking': 'Marketing & Growth',
+      'UX Design': 'Design & Creativity',
+      'Design Systems': 'Design & Creativity',
+      'Financial Planning': 'Finance & Economics',
+      'Fundraising': 'Finance & Economics',
+      'Startup Strategy & Scaling': 'Business & Startups',
+      'Product-Market Fit': 'Business & Startups',
+      'Fundraising (Seed to Series C)': 'Finance & Economics',
+      'Team Building & Hiring': 'Business & Startups',
+      'Go-to-Market Strategy': 'Marketing & Growth',
+      'SaaS Business Models': 'Business & Startups',
+      'Product Development': 'Technology & Innovation',
+      'Investor Relations': 'Finance & Economics'
+    }
+    return categoryMap[expertise] || 'Business & Startups'
+  }
+
+  // Show floating button always on expert page
+  useEffect(() => {
+    setShowFloatingButton(true)
+  }, [])
+
+  const handleBookSession = () => {
+    window.location.href = `/book/${expert.id}`
   }
 
   const handleShareProfile = () => {
@@ -57,15 +85,6 @@ const ExpertProfilePage = () => {
     }
   }
 
-  // Predefined time slots for booking
-  const predefinedSlots = [
-    { date: 'Today', time: '2:00 PM', available: true },
-    { date: 'Today', time: '4:00 PM', available: false },
-    { date: 'Tomorrow', time: '10:00 AM', available: true },
-    { date: 'Tomorrow', time: '2:00 PM', available: true },
-    { date: 'Wed, Sep 4', time: '11:00 AM', available: true },
-    { date: 'Wed, Sep 4', time: '3:00 PM', available: true },
-  ]
 
   return (
     <div className="min-h-screen bg-background">
@@ -101,7 +120,7 @@ const ExpertProfilePage = () => {
               {/* Name with Verified Badge and Wishlist */}
               <div>
                 <div className="flex items-center gap-2 mb-1">
-                  <h1 className="text-3xl md:text-4xl font-medium tracking-tight">{expert.name}</h1>
+                  <h1 className="text-2xl md:text-3xl font-medium tracking-tight">{expert.name}</h1>
                   {expert.badges.includes('Verified') && (
                     <div className="w-6 h-6 flex items-center justify-center">
                       <svg viewBox="0 0 24 24" className="w-6 h-6">
@@ -112,16 +131,30 @@ const ExpertProfilePage = () => {
                       </svg>
                     </div>
                   )}
-                  {/* Wishlist in Grey Circle */}
-                  <div className="ml-auto">
-                    <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                  {/* Wishlist and Share in Grey Circles */}
+                  <div className="ml-auto flex gap-2">
+                    <div className="relative">
+                      <div 
+                        className="w-8 h-8 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center cursor-pointer transition-colors"
+                        onClick={handleShareProfile}
+                        title="Share Profile"
+                      >
+                        <Share className="w-4 h-4" />
+                      </div>
+                      {showShareTooltip && (
+                        <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-foreground text-background px-2 py-1 rounded text-xs whitespace-nowrap">
+                          Link copied!
+                        </div>
+                      )}
+                    </div>
+                    <div className="w-8 h-8 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center cursor-pointer transition-colors">
                       <Heart className="w-4 h-4" />
                     </div>
                   </div>
                 </div>
                 
                 {/* Title */}
-                <h2 className="text-xl text-muted-foreground font-normal mt-3">{expert.title}</h2>
+                <h2 className="text-lg text-muted-foreground font-normal mt-1">{expert.title}</h2>
               </div>
 
               {/* Rating with Top Expert Badge */}
@@ -147,8 +180,18 @@ const ExpertProfilePage = () => {
               {/* Details Table */}
               <div className="space-y-3">
                 <div className="grid grid-cols-2 gap-y-3 text-sm">
-                  <div className="text-muted-foreground">Industry</div>
-                  <div>{about.expertise.slice(0, 2).join(', ')}</div>
+                  <div className="text-muted-foreground">Category</div>
+                  <div>
+                    <Link to={`/browse?category=${encodeURIComponent(getCategoryFromExpertise(about.expertise[0]))}`}>
+                      <Badge 
+                        variant="secondary" 
+                        className="bg-gray-100 hover:bg-gray-200 text-black cursor-pointer transition-colors"
+                      >
+                        {getCategoryFromExpertise(about.expertise[0])}
+                      </Badge>
+                    </Link>
+                  </div>
+                  
                   
                   <div className="text-muted-foreground">Location</div>
                   <div>{expert.location}</div>
@@ -158,6 +201,69 @@ const ExpertProfilePage = () => {
                   
                   <div className="text-muted-foreground">Sessions Completed</div>
                   <div>{expert.totalSessions}</div>
+                  
+                  {expert.charity && (
+                    <>
+                      <div className="text-muted-foreground">Donating To Charity</div>
+                      <div className="flex items-center gap-2">
+                        <HeartHandshake className="w-4 h-4 text-green-600" />
+                        <a 
+                          href={expert.charity.website}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-green-600 hover:text-green-700 font-medium flex items-center gap-1 hover:underline"
+                        >
+                          {expert.charity.name}
+                          <ExternalLink className="w-3 h-3" />
+                        </a>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </div>
+
+              {/* Industries and Expertise Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Industries Card */}
+                <div className="bg-white border-2 border-gray-200 rounded-2xl p-6">
+                  <div className="mb-4">
+                    <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-4m-5 0H3m2 0h4M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                      </svg>
+                    </div>
+                  </div>
+                  <h3 className="text-sm font-medium mb-2">Industries</h3>
+                  <div className="text-xs text-muted-foreground leading-relaxed">
+                    {getCategoryFromExpertise(about.expertise[0])}, SaaS & Cloud Computing, Entrepreneurship
+                  </div>
+                </div>
+
+                {/* Expertise Card */}
+                <div className="bg-white border-2 border-gray-200 rounded-2xl p-6">
+                  <div className="mb-4">
+                    <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                      </svg>
+                    </div>
+                  </div>
+                  <h3 className="text-sm font-medium mb-2">Expertise</h3>
+                  <div className="text-xs text-muted-foreground leading-relaxed">
+                    {about.expertise.map((skill, index) => (
+                      <span key={index}>
+                        <span 
+                          className="hover:text-blue-600 cursor-pointer transition-colors"
+                          onClick={() => {
+                            console.log('Search for:', skill)
+                          }}
+                        >
+                          {skill}
+                        </span>
+                        {index < about.expertise.length - 1 && ', '}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
 
@@ -190,45 +296,6 @@ const ExpertProfilePage = () => {
                 
                 {/* Action Buttons */}
                 <div className="flex gap-3">
-                  {/* Demo Login Toggle */}
-                  <Button 
-                    variant="outline"
-                    onClick={() => setIsLoggedIn(!isLoggedIn)}
-                    className="rounded-full px-4 text-xs"
-                  >
-                    {isLoggedIn ? '👤 Logged In' : '🔓 Login'}
-                  </Button>
-                  
-                  {/* Share Profile Button */}
-                  <div className="relative">
-                    <Button 
-                      variant="outline"
-                      onClick={handleShareProfile}
-                      className="rounded-full p-3 border-2 border-foreground"
-                      title="Share Profile"
-                    >
-                      <Share className="w-4 h-4" />
-                    </Button>
-                    
-                    {showShareTooltip && (
-                      <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-foreground text-background px-2 py-1 rounded text-xs whitespace-nowrap">
-                        Link copied!
-                      </div>
-                    )}
-                  </div>
-                  
-                  <Button 
-                    onClick={() => {
-                      if (!isLoggedIn) {
-                        alert('Please log in to book a session')
-                        return
-                      }
-                      setIsBookingOpen(true)
-                    }}
-                    className="rounded-full px-6 bg-black hover:bg-gray-800 text-white"
-                  >
-                    Book Session
-                  </Button>
                 </div>
               </div>
 
@@ -238,22 +305,11 @@ const ExpertProfilePage = () => {
                   <>
                     {/* Bio */}
                     <div>
-                      <p className="text-muted-foreground leading-relaxed text-lg">
+                      <p className="text-xs text-muted-foreground leading-relaxed">
                         {about.bio}
                       </p>
                     </div>
 
-                    {/* Expertise */}
-                    <div>
-                      <h4 className="text-lg font-medium mb-4">Expertise</h4>
-                      <div className="flex flex-wrap gap-2">
-                        {about.expertise.map((skill, index) => (
-                          <Badge key={index} variant="secondary" className="bg-gray-100 text-sm px-3 py-2 cursor-pointer hover:bg-gray-200">
-                            {skill}
-                          </Badge>
-                        ))}
-                      </div>
-                    </div>
                   </>
                 )}
 
@@ -283,9 +339,6 @@ const ExpertProfilePage = () => {
                         </p>
                         
                         <div className="flex items-center justify-between">
-                          <Badge variant="secondary" className="bg-gray-100 text-xs">
-                            {review.sessionTopic}
-                          </Badge>
                           <span className="text-xs text-muted-foreground">{review.date}</span>
                         </div>
                       </div>
@@ -298,143 +351,40 @@ const ExpertProfilePage = () => {
         </div>
       </section>
 
-      
-      {/* Slide-out Booking Panel */}
-      {isBookingOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50">
-          <div className="absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-xl">
-            <div className="p-6 border-b">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h2 className="text-xl font-semibold">Book with {expert.name}</h2>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    Step {bookingStep} of 2: {bookingStep === 1 ? 'Select Time' : 'Project Details'}
-                  </p>
+      {/* Sticky Bottom Book Bar */}
+      {showFloatingButton && (
+        <div className="fixed bottom-0 left-0 right-0 bg-black border-t border-gray-800 shadow-lg z-50">
+          <div className="container mx-auto max-w-6xl px-4 py-4">
+            <div className="flex items-center justify-between">
+              <div className="text-left">
+                <div className="font-medium text-sm text-white">Book {expert.name.split(' ')[0]}</div>
+                <div className="text-xs text-gray-400">
+                  Next available: {calendar.availableSlots[0].date} at {calendar.availableSlots[0].slots[0]}
                 </div>
-                <button 
-                  onClick={() => {
-                    setIsBookingOpen(false)
-                    setBookingStep(1)
-                    setSelectedSlot(null)
-                  }}
-                  className="p-2 hover:bg-gray-100 rounded-full"
-                >
-                  <X className="w-5 h-5" />
-                </button>
               </div>
-            </div>
-            
-            <div className="p-6 space-y-6 overflow-y-auto h-full pb-32">
-              {/* Step 1: Select Time */}
-              {bookingStep === 1 && (
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="font-semibold">Available Times</h3>
-                    <span className="text-sm font-semibold">{selectedSession.price}</span>
-                  </div>
-                  
-                  <div className="space-y-3 max-h-96 overflow-y-auto pr-2">
-                    {predefinedSlots.map((slot, index) => (
-                      <button
-                        key={index}
-                        onClick={() => setSelectedSlot(index)}
-                        disabled={!slot.available}
-                        className={`w-full p-4 text-left border rounded-lg transition-colors ${
-                          !slot.available 
-                            ? 'border-gray-200 bg-gray-50 text-gray-400 cursor-not-allowed'
-                            : selectedSlot === index
-                            ? 'border-black bg-black text-white'
-                            : 'border-gray-300 hover:border-gray-400'
-                        }`}
-                      >
-                        <div className="flex justify-between items-center">
-                          <div>
-                            <div className="font-medium">{slot.date}</div>
-                            <div className="text-sm opacity-75">{slot.time}</div>
-                          </div>
-                          {!slot.available && (
-                            <span className="text-xs">Unavailable</span>
-                          )}
-                        </div>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-              
-              {/* Step 2: Project Details */}
-              {bookingStep === 2 && (
-                <div className="space-y-6">
-                  {/* Selected Time Summary */}
-                  {selectedSlot !== null && (
-                    <div className="bg-gray-50 p-4 rounded-lg">
-                      <h4 className="font-medium mb-2">Selected Time</h4>
-                      <div className="flex items-center gap-2 text-sm">
-                        <Calendar className="w-4 h-4" />
-                        <span>{predefinedSlots[selectedSlot].date}</span>
-                        <Clock className="w-4 h-4 ml-2" />
-                        <span>{predefinedSlots[selectedSlot].time}</span>
-                      </div>
-                      <div className="mt-2 text-sm font-medium">{selectedSession.price}</div>
-                    </div>
-                  )}
-                  
-                  {/* Pre-populated User Details */}
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <h4 className="font-medium mb-2">Your Details</h4>
-                    <div className="text-sm space-y-1">
-                      <div><strong>Name:</strong> {userData.name}</div>
-                      <div><strong>Email:</strong> {userData.email}</div>
-                    </div>
-                  </div>
-                  
-                  {/* Project Description */}
-                  <div>
-                    <label className="block text-sm font-medium mb-2">
-                      What would you like to discuss with {expert.name}?
-                    </label>
-                    <textarea 
-                      placeholder="Describe your project, challenges, or what you're hoping to achieve in this session..."
-                      className="w-full p-3 border border-gray-300 rounded-lg h-32 resize-none focus:outline-none focus:ring-2 focus:ring-black focus:border-black"
-                    />
-                    <p className="text-xs text-muted-foreground mt-2">
-                      This helps {expert.name} prepare for your session and provide more targeted advice.
-                    </p>
-                  </div>
-                </div>
-              )}
-            </div>
-            
-            {/* Fixed Bottom Button */}
-            <div className="absolute bottom-0 left-0 right-0 p-6 bg-white border-t">
-              {bookingStep === 1 ? (
-                <Button 
-                  className="w-full rounded-full px-4 bg-black hover:bg-gray-800 text-white"
-                  disabled={selectedSlot === null}
-                  onClick={() => setBookingStep(2)}
-                >
-                  <span className="text-sm font-medium">{selectedSession.price}</span>
-                  <span className="ms-1">Continue</span>
-                </Button>
-              ) : (
-                <div className="flex gap-3">
-                  <Button 
-                    variant="outline"
-                    className="rounded-full px-4 border-2 border-foreground"
-                    onClick={() => setBookingStep(1)}
-                  >
-                    Back
-                  </Button>
-                  <Button 
-                    className="flex-1 rounded-full px-4 bg-black hover:bg-gray-800 text-white"
-                  >
-                    <span className="text-sm font-medium">{selectedSession.price}</span>
-                    <span className="ms-1">Book</span>
-                  </Button>
-                </div>
-              )}
+              <Button 
+                onClick={handleBookSession}
+                className="rounded-full px-6 py-3 text-white flex items-center gap-2 shadow-lg transition-all duration-300 transform hover:scale-105"
+                style={{
+                  background: 'linear-gradient(-45deg, #10b981, #059669, #047857, #10b981)',
+                  backgroundSize: '400% 400%',
+                  animation: 'gradient 3s ease infinite'
+                }}
+              >
+                <span className="text-sm font-medium">{expert.rate.split('/')[0]}</span>
+                <span className="text-xs opacity-90">/{expert.rate.split('/')[1]}</span>
+                <span className="ms-1 font-medium">Book</span>
+              </Button>
             </div>
           </div>
+          
+          <style jsx>{`
+            @keyframes gradient {
+              0% { background-position: 0% 50%; }
+              50% { background-position: 100% 50%; }
+              100% { background-position: 0% 50%; }
+            }
+          `}</style>
         </div>
       )}
     </div>

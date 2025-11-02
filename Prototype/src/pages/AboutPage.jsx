@@ -22,8 +22,8 @@ const AboutPage = () => {
       description: "Industry professionals have incredible insights, but there's no easy way to access them when you need guidance."
     },
     {
-      title: "Traditional mentorship is broken",
-      description: "Finding the right mentor is nearly impossible, takes months, and often doesn't match your specific needs."
+      title: "Real Guidance Comes from Many Voices",
+      description: "One mentor can't solve everything - TapTime matches you with multiple experts so you can get diverse perspectives and faster breakthroughs."
     },
     {
       title: "Learning is inefficient and expensive",
@@ -44,7 +44,7 @@ const AboutPage = () => {
     },
     {
       icon: <Clock className="w-6 h-6" />,
-      title: "15-Minute Sessions",
+      title: "15-60 Minute Sessions",
       description: "Get focused, high-impact advice in bite-sized sessions that fit your schedule and deliver immediate value."
     }
   ]
@@ -69,7 +69,7 @@ const AboutPage = () => {
 
   const testimonials = [
     {
-      quote: "One 15-minute session gave me the exact framework I needed. Landed my dream PM role at Stripe within 2 months.",
+      quote: "One 15-60 minute session gave me the exact framework I needed. Landed my dream PM role at Stripe within 2 months.",
       author: "Alex Chen",
       role: "Product Manager at Stripe"
     },
@@ -108,7 +108,7 @@ const AboutPage = () => {
   return (
     <StandardPage
       title="Expert guidance, when you need it most"
-      description="Connect with industry professionals who've already solved your exact challenges. Get personalized advice in focused 15-minute sessions that deliver real results."
+      description="Connect with industry professionals who've already solved your exact challenges. Get personalized advice in focused 15-60 minute sessions that deliver real results."
       breadcrumbs={breadcrumbs}
       actions={headerActions}
       headerSize="large"
@@ -139,7 +139,7 @@ const AboutPage = () => {
         <PageContainer size="wide">
           <SectionTitle 
             miniTitle="The Challenge"
-            title="Traditional mentorship is broken"
+            title="Real Guidance Comes from Many Voices"
             description="We identified three major problems that keep professionals from getting the guidance they need"
             className="mb-16"
           />

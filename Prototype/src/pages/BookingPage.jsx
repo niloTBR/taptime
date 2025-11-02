@@ -4,11 +4,12 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import { Separator } from '@/components/ui/separator'
+import { Calendar } from '@/components/ui/calendar'
 import SectionTitle from '@/components/common/SectionTitle'
 import { 
   Star, 
   Clock, 
-  Calendar,
+  CalendarIcon,
   ArrowLeft,
   ArrowRight,
   CheckCircle,
@@ -16,7 +17,10 @@ import {
   FileText,
   Upload,
   Shield,
-  MessageSquare
+  MessageSquare,
+  Crown,
+  Package,
+  Zap
 } from 'lucide-react'
 import bookingData from '@/data/booking.json'
 
@@ -25,8 +29,10 @@ const BookingPage = () => {
   
   const [currentStep, setCurrentStep] = useState(1)
   const [selectedSession, setSelectedSession] = useState(null)
+  const [selectedDuration, setSelectedDuration] = useState(null)
   const [selectedDate, setSelectedDate] = useState(null)
   const [selectedTime, setSelectedTime] = useState(null)
+  const [calendarDate, setCalendarDate] = useState(new Date())
   const [formData, setFormData] = useState({})
 
   const getInitials = (name) => {
@@ -60,7 +66,9 @@ const BookingPage = () => {
   const canProceed = () => {
     switch (currentStep) {
       case 1:
-        return selectedSession !== null
+        if (!selectedSession) return false
+        if (selectedSession.type === 'flexible' && !selectedDuration) return false
+        return true
       case 2:
         return selectedDate !== null && selectedTime !== null
       case 3:
@@ -72,33 +80,53 @@ const BookingPage = () => {
     }
   }
 
+  const getCurrentPrice = () => {
+    if (!selectedSession) return 0
+    if (selectedSession.type === 'flexible' && selectedDuration) {
+      return selectedDuration.price
+    }
+    if (selectedSession.type === 'bundle') {
+      return selectedSession.bundlePrice
+    }
+    return selectedSession.price || 0
+  }
+
   return (
     <div className="min-h-screen bg-background">
-      {/* Minimal Header */}
-      <section className="py-6 px-4">
-        <div className="container mx-auto max-w-6xl">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Button variant="ghost" size="sm" className="rounded-full">
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Back
-              </Button>
-              <div>
-                <h1 className="text-xl font-semibold">Book with {expert.name}</h1>
-                <div className="flex items-center gap-2 mt-1">
-                  <Star className="w-4 h-4 fill-black text-black" />
-                  <span className="text-sm">{expert.rating} ({expert.reviewCount})</span>
-                  <span className="text-sm text-muted-foreground">•</span>
-                  <span className="text-sm text-muted-foreground">{expert.title}</span>
-                </div>
-              </div>
+      {/* White Top Bar */}
+      <div className="bg-white border-b shadow-sm">
+        <div className="container mx-auto max-w-6xl px-4 py-4">
+          <div className="flex items-center gap-4">
+            <div 
+              className="w-8 h-8 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center cursor-pointer transition-colors"
+              onClick={() => window.history.back()}
+            >
+              <ArrowLeft className="w-4 h-4" />
             </div>
-            <Button variant="ghost" size="sm" className="rounded-full">
-              Share
-            </Button>
+            <div>
+              <div className="flex items-center gap-2">
+                <h3 className="font-semibold text-base leading-tight">
+                  {expert.name}
+                </h3>
+                {expert.badges && expert.badges.includes('Verified') && (
+                  <div className="w-5 h-5 flex items-center justify-center flex-shrink-0">
+                    <svg viewBox="0 0 24 24" className="w-5 h-5">
+                      <g>
+                        <path d="M12 1.5c-.5 0-1 .2-1.4.6L9.2 3.5c-.3.3-.7.4-1.1.4H6.5c-.8 0-1.5.7-1.5 1.5v1.6c0 .4-.1.8-.4 1.1L3.2 9.5c-.8.8-.8 2 0 2.8l1.4 1.4c.3.3.4.7.4 1.1V16.5c0 .8.7 1.5 1.5 1.5h1.6c.4 0 .8.1 1.1.4l1.4 1.4c.8.8 2 .8 2.8 0l1.4-1.4c.3-.3.7-.4 1.1-.4h1.6c.8 0 1.5-.7 1.5-1.5v-1.6c0-.4.1-.8.4-1.1l1.4-1.4c.8-.8.8-2 0-2.8l-1.4-1.4c-.3-.3-.4-.7-.4-1.1V5.5c0-.8-.7-1.5-1.5-1.5h-1.6c-.4 0-.8-.1-1.1-.4L13.4 2.1c-.4-.4-.9-.6-1.4-.6z" fill="#1d9bf0"/>
+                        <path d="M9 12l2 2 4-4" stroke="white" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                      </g>
+                    </svg>
+                  </div>
+                )}
+              </div>
+              <p className="text-xs text-muted-foreground mt-2">
+                {expert.title}
+              </p>
+            </div>
           </div>
         </div>
-      </section>
+      </div>
+
 
       {/* Minimal Progress */}
       <section className="py-4 px-4 border-b">
@@ -141,27 +169,79 @@ const BookingPage = () => {
                   <CardHeader>
                     <CardTitle>Choose Session Type</CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-4">
-                    {sessionTypes.map((session) => (
-                      <button
+                  <CardContent className="space-y-3">
+                    {/* Expert's structured sessions */}
+                    {sessionTypes.structured.map((session) => (
+                      <div
                         key={session.id}
-                        onClick={() => setSelectedSession(session)}
-                        className={`w-full p-6 rounded-lg border-2 text-left transition-colors ${
+                        onClick={() => setSelectedSession({...session, type: 'structured'})}
+                        className={`p-4 rounded-lg border-2 cursor-pointer transition-all hover:shadow-md ${
                           selectedSession?.id === session.id
-                            ? 'border-foreground bg-foreground text-background'
-                            : 'border-gray-200 hover:border-gray-300'
+                            ? 'border-foreground bg-white text-foreground shadow-md'
+                            : 'border-gray-200 hover:border-gray-300 bg-gray-50 text-gray-600'
                         }`}
                       >
-                        <div className="flex justify-between items-start mb-2">
-                          <h3 className="font-semibold">{session.title}</h3>
-                          <div className="text-right">
-                            <div className="font-semibold">${session.price}</div>
-                            <div className="text-sm opacity-75">{session.duration}</div>
+                        <div className="flex items-center justify-between">
+                          <div className="flex-1">
+                            <h3 className="font-medium text-sm mb-1">{session.title}</h3>
+                            <p className="text-xs opacity-75 line-clamp-2">{session.description}</p>
+                          </div>
+                          <div className="ml-4 text-right">
+                            <div className="font-semibold text-sm">${session.price}</div>
+                            <div className="text-xs opacity-75">{session.duration}</div>
                           </div>
                         </div>
-                        <p className="text-sm opacity-90">{session.description}</p>
-                      </button>
+                      </div>
                     ))}
+
+                    {/* Flexible duration option */}
+                    <div
+                      onClick={() => {
+                        setSelectedSession({...sessionTypes.flexible, type: 'flexible'})
+                        if (!selectedDuration) setSelectedDuration(sessionTypes.flexible.durations[0])
+                      }}
+                      className={`p-4 rounded-lg border-2 cursor-pointer transition-all hover:shadow-md ${
+                        selectedSession?.id === sessionTypes.flexible.id
+                          ? 'border-foreground bg-white text-foreground shadow-md'
+                          : 'border-gray-200 hover:border-gray-300 bg-gray-50 text-gray-600'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex-1">
+                          <h3 className="font-medium text-sm mb-1">General Consultation</h3>
+                          <p className="text-xs opacity-75 line-clamp-2">Open discussion about your business challenges</p>
+                        </div>
+                        <div className="ml-4 text-right">
+                          <div className="font-semibold text-sm">
+                            {selectedDuration ? `$${selectedDuration.price}` : 'From $500'}
+                          </div>
+                          {selectedSession?.id === sessionTypes.flexible.id ? (
+                            <select
+                              value={selectedDuration?.duration || ''}
+                              onChange={(e) => {
+                                const duration = sessionTypes.flexible.durations.find(d => d.duration === e.target.value)
+                                setSelectedDuration(duration)
+                              }}
+                              onClick={(e) => e.stopPropagation()}
+                              className={`text-xs mt-1 px-2 py-1 border rounded ${
+                                selectedSession?.id === sessionTypes.flexible.id
+                                  ? 'border-gray-300 bg-gray-50 text-foreground'
+                                  : 'border-gray-300 bg-white'
+                              }`}
+                            >
+                              <option value="">Choose duration</option>
+                              {sessionTypes.flexible.durations.map((duration) => (
+                                <option key={duration.duration} value={duration.duration}>
+                                  {duration.duration}
+                                </option>
+                              ))}
+                            </select>
+                          ) : (
+                            <div className="text-xs opacity-75">Choose duration</div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
                   </CardContent>
                 </Card>
               )}
@@ -173,32 +253,68 @@ const BookingPage = () => {
                     <CardTitle>Pick Date & Time</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-6">
-                    {calendar.availableSlots.map((day) => (
-                      <div key={day.date}>
-                        <h4 className="font-medium mb-3">{day.displayDate}</h4>
-                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                          {day.slots.map((slot) => (
-                            <button
-                              key={`${day.date}-${slot.time}`}
-                              onClick={() => {
-                                setSelectedDate(day)
-                                setSelectedTime(slot)
-                              }}
-                              disabled={!slot.available}
-                              className={`p-3 text-sm rounded border-2 transition-colors ${
-                                selectedDate?.date === day.date && selectedTime?.time === slot.time
-                                  ? 'border-foreground bg-foreground text-background'
-                                  : slot.available
-                                  ? 'border-gray-200 hover:border-gray-300'
-                                  : 'border-gray-100 bg-gray-50 text-gray-400 cursor-not-allowed'
-                              }`}
-                            >
-                              {slot.display}
-                            </button>
-                          ))}
-                        </div>
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                      {/* Calendar */}
+                      <div>
+                        <h4 className="font-medium mb-3">Select Date</h4>
+                        <Calendar
+                          mode="single"
+                          selected={calendarDate}
+                          onSelect={(date) => {
+                            setCalendarDate(date)
+                            // Find corresponding slot data
+                            const dateStr = date?.toISOString().split('T')[0]
+                            const availableDay = calendar.availableSlots.find(day => day.date === dateStr)
+                            setSelectedDate(availableDay || null)
+                            setSelectedTime(null) // Reset time when date changes
+                          }}
+                          disabled={(date) => {
+                            // Disable past dates and dates without availability
+                            const today = new Date()
+                            today.setHours(0, 0, 0, 0)
+                            if (date < today) return true
+                            
+                            const dateStr = date.toISOString().split('T')[0]
+                            const hasAvailability = calendar.availableSlots.some(day => day.date === dateStr)
+                            return !hasAvailability
+                          }}
+                          className="rounded-md border"
+                        />
                       </div>
-                    ))}
+
+                      {/* Time Slots */}
+                      <div>
+                        <h4 className="font-medium mb-3">
+                          {selectedDate ? `Available Times - ${selectedDate.displayDate}` : 'Select a date first'}
+                        </h4>
+                        {selectedDate && selectedDate.slots && (
+                          <div className="grid grid-cols-2 gap-2">
+                            {selectedDate.slots.map((slot) => (
+                              <button
+                                key={`${selectedDate.date}-${slot.time}`}
+                                onClick={() => setSelectedTime(slot)}
+                                disabled={!slot.available}
+                                className={`p-3 text-sm rounded border-2 transition-colors ${
+                                  selectedTime?.time === slot.time
+                                    ? 'border-foreground bg-white text-foreground shadow-md'
+                                    : slot.available
+                                    ? 'border-gray-200 hover:border-gray-300 bg-gray-50'
+                                    : 'border-gray-100 bg-gray-50 text-gray-400 cursor-not-allowed'
+                                }`}
+                              >
+                                {slot.display}
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                        {!selectedDate && (
+                          <div className="text-center py-8 text-gray-400">
+                            <CalendarIcon className="w-12 h-12 mx-auto mb-2 opacity-50" />
+                            <p className="text-sm">Please select a date to see available times</p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
                   </CardContent>
                 </Card>
               )}
@@ -359,19 +475,9 @@ const BookingPage = () => {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {/* Expert Info */}
-                  <div className="flex items-center gap-3">
-                    <Avatar className="w-12 h-12">
-                      <AvatarImage src={expert.image} alt={expert.name} />
-                      <AvatarFallback>{getInitials(expert.name)}</AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <h4 className="font-semibold text-sm">{expert.name}</h4>
-                      <p className="text-xs text-muted-foreground">{expert.title}</p>
-                      <div className="flex items-center gap-1 mt-1">
-                        <Star className="w-3 h-3 fill-black text-black" />
-                        <span className="text-xs">{expert.rating} ({expert.reviewCount} reviews)</span>
-                      </div>
-                    </div>
+                  <div>
+                    <h4 className="font-semibold text-sm">{expert.name}</h4>
+                    <p className="text-xs text-muted-foreground">{expert.title}</p>
                   </div>
 
                   <div className="border-t my-3" />
@@ -379,11 +485,19 @@ const BookingPage = () => {
                   {/* Session Details */}
                   {selectedSession && (
                     <div>
-                      <h5 className="font-medium text-sm mb-2">Session Type</h5>
-                      <p className="text-sm">{selectedSession.title}</p>
-                      <div className="flex justify-between items-center mt-2">
-                        <span className="text-sm text-muted-foreground">{selectedSession.duration}</span>
-                        <span className="font-semibold">${selectedSession.price}</span>
+                      <h5 className="font-medium text-sm mb-3">Session Details</h5>
+                      <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                        <div>
+                          <div className="font-medium text-sm">{selectedSession.title}</div>
+                          <div className="text-xs text-muted-foreground mt-1">
+                            {selectedSession.type === 'flexible' && selectedDuration 
+                              ? selectedDuration.duration
+                              : selectedSession.type === 'bundle' 
+                              ? selectedSession.totalDuration
+                              : selectedSession.duration}
+                          </div>
+                        </div>
+                        <div className="font-semibold text-sm">${getCurrentPrice()}</div>
                       </div>
                     </div>
                   )}
@@ -394,7 +508,7 @@ const BookingPage = () => {
                       <div>
                         <h5 className="font-medium text-sm mb-2">Date & Time</h5>
                         <div className="flex items-center gap-2 text-sm">
-                          <Calendar className="w-4 h-4" />
+                          <CalendarIcon className="w-4 h-4" />
                           <span>{selectedDate.displayDate}</span>
                         </div>
                         <div className="flex items-center gap-2 text-sm mt-1">
@@ -411,16 +525,24 @@ const BookingPage = () => {
                       <div className="bg-gray-50 p-3 rounded-lg">
                         <div className="flex justify-between items-center mb-1">
                           <span className="text-sm">Session fee</span>
-                          <span className="text-sm">${selectedSession.price}</span>
+                          <span className="text-sm">${getCurrentPrice()}</span>
                         </div>
-                        <div className="flex justify-between items-center mb-1">
-                          <span className="text-sm">Platform fee</span>
-                          <span className="text-sm">$5</span>
-                        </div>
+                        {selectedSession.type !== 'bundle' && (
+                          <div className="flex justify-between items-center mb-1">
+                            <span className="text-sm">Platform fee</span>
+                            <span className="text-sm">$5</span>
+                          </div>
+                        )}
+                        {selectedSession.type === 'bundle' && (
+                          <div className="flex justify-between items-center mb-1 text-green-600">
+                            <span className="text-sm">Bundle discount</span>
+                            <span className="text-sm">-${selectedSession.savings}</span>
+                          </div>
+                        )}
                         <Separator className="my-2" />
                         <div className="flex justify-between items-center font-semibold">
                           <span>Total</span>
-                          <span>${selectedSession.price + 5}</span>
+                          <span>${selectedSession.type === 'bundle' ? getCurrentPrice() : getCurrentPrice() + 5}</span>
                         </div>
                       </div>
                     </>
@@ -431,10 +553,13 @@ const BookingPage = () => {
                   {/* Policies */}
                   <div className="space-y-2">
                     <h5 className="font-medium text-sm">Booking Policies</h5>
-                    <div className="space-y-1 text-xs text-muted-foreground">
+                    <div className="space-y-0.5 text-xs text-muted-foreground" style={{ fontSize: '10px' }}>
                       <p>• {policies.cancellation}</p>
                       <p>• {policies.rescheduling}</p>
                       <p>• {policies.preparation}</p>
+                      <button className="text-blue-600 hover:text-blue-700 underline block mt-1">
+                        View Full Policy
+                      </button>
                     </div>
                   </div>
                 </CardContent>

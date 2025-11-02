@@ -1,0 +1,263 @@
+{
+  "componentName": "ExpertCard",
+  "description": "Displays expert profile information with interactive features",
+  "variants": {
+    "standard": {
+      "name": "Standard",
+      "description": "Default expert card layout",
+      "class": "expert-card--standard"
+    },
+    "featured": {
+      "name": "Featured",
+      "description": "Highlighted expert card with premium styling",
+      "class": "expert-card--featured"
+    },
+    "compact": {
+      "name": "Compact",
+      "description": "Smaller card for dense layouts",
+      "class": "expert-card--compact"
+    },
+    "horizontal": {
+      "name": "Horizontal",
+      "description": "Side-by-side layout for list views",
+      "class": "expert-card--horizontal"
+    }
+  },
+  "states": {
+    "default": {
+      "name": "Default",
+      "description": "Normal interactive state",
+      "class": "",
+      "interactive": true
+    },
+    "loading": {
+      "name": "Loading",
+      "description": "Fetching expert data",
+      "class": "expert-card--loading",
+      "interactive": false,
+      "showSkeleton": true
+    },
+    "error": {
+      "name": "Error",
+      "description": "Failed to load expert data",
+      "class": "expert-card--error",
+      "interactive": false,
+      "showError": true
+    },
+    "unavailable": {
+      "name": "Unavailable",
+      "description": "Expert is not taking bookings",
+      "class": "expert-card--unavailable",
+      "interactive": true
+    },
+    "selected": {
+      "name": "Selected",
+      "description": "Card is currently selected",
+      "class": "expert-card--selected",
+      "interactive": true
+    }
+  },
+  "dataStructure": {
+    "required": {
+      "id": "string - Unique expert identifier",
+      "name": "string - Expert's full name",
+      "title": "string - Professional title",
+      "rating": "number - Rating out of 5",
+      "reviewCount": "number - Number of reviews",
+      "price": "number - Session price",
+      "currency": "string - Price currency symbol",
+      "duration": "string - Session duration (e.g., 'hour')",
+      "available": "boolean - Whether expert is taking bookings"
+    },
+    "optional": {
+      "avatar": "string - Profile image URL",
+      "company": "string - Current company",
+      "bio": "string - Short biography",
+      "specialties": "array - List of expertise areas",
+      "featured": "boolean - Whether expert is featured",
+      "online": "boolean - Current online status",
+      "initials": "string - Fallback for missing avatar"
+    }
+  },
+  "actions": {
+    "favorite": {
+      "name": "Add to Favorites",
+      "description": "Toggle expert in user's favorites",
+      "icon": "heart",
+      "toggleable": true
+    },
+    "share": {
+      "name": "Share Profile",
+      "description": "Share expert's profile",
+      "icon": "share",
+      "toggleable": false
+    },
+    "book": {
+      "name": "Book Session",
+      "description": "Start booking process",
+      "primary": true,
+      "requiresAuth": true
+    },
+    "notify": {
+      "name": "Get Notified",
+      "description": "Notify when expert becomes available",
+      "showWhenUnavailable": true
+    },
+    "view": {
+      "name": "View Profile",
+      "description": "Go to expert's full profile",
+      "navigation": true
+    },
+    "retry": {
+      "name": "Retry",
+      "description": "Retry loading expert data",
+      "showOnError": true
+    }
+  },
+  "accessibility": {
+    "aria": {
+      "role": "article",
+      "label": "Expert profile card for {{name}}",
+      "describedby": "expert-{{id}}-description"
+    },
+    "keyboard": {
+      "tab": "Focus on interactive elements",
+      "enter": "Activate focused button",
+      "space": "Activate focused button"
+    },
+    "screenReader": {
+      "ratingAnnouncement": "{{rating}} out of 5 stars, {{reviewCount}} reviews",
+      "availabilityAnnouncement": "{{#if available}}Available for booking{{else}}Currently unavailable{{/if}}",
+      "priceAnnouncement": "{{currency}}{{price}} per {{duration}}"
+    }
+  },
+  "responsiveBreakpoints": {
+    "mobile": {
+      "maxWidth": "640px",
+      "changes": [
+        "Smaller avatar size",
+        "Stack footer buttons vertically",
+        "Reduced padding"
+      ]
+    },
+    "tablet": {
+      "minWidth": "641px",
+      "maxWidth": "1024px",
+      "changes": [
+        "Standard layout",
+        "Full button width"
+      ]
+    },
+    "desktop": {
+      "minWidth": "1025px",
+      "changes": [
+        "Optimized hover effects",
+        "Side-by-side buttons"
+      ]
+    }
+  },
+  "rtlSupport": {
+    "enabled": true,
+    "description": "Full right-to-left language support",
+    "changes": {
+      "badge": "Positioned on left side",
+      "status": "Flipped to left side",
+      "actions": "Reordered appropriately"
+    }
+  },
+  "animations": {
+    "entrance": {
+      "name": "fadeIn",
+      "duration": "0.3s",
+      "easing": "ease-out"
+    },
+    "hover": {
+      "name": "liftUp",
+      "transform": "translateY(-2px)",
+      "shadow": "0 10px 25px rgba(0, 0, 0, 0.1)"
+    },
+    "loading": {
+      "name": "pulse",
+      "duration": "2s",
+      "infinite": true
+    },
+    "favorite": {
+      "name": "heartBeat",
+      "duration": "0.5s",
+      "trigger": "onClick"
+    }
+  },
+  "content": {
+    "defaults": {
+      "featuredText": "Featured",
+      "bookText": "Book Now",
+      "notifyText": "Notify Me",
+      "viewProfileText": "View Profile",
+      "errorMessage": "Failed to load expert",
+      "retryText": "Try Again",
+      "favoriteIcon": "♡",
+      "shareIcon": "↗",
+      "errorIcon": "⚠"
+    },
+    "placeholders": {
+      "name": "Expert Name",
+      "title": "Professional Title",
+      "company": "Company Name",
+      "bio": "Expert biography...",
+      "specialty": "Expertise Area"
+    }
+  },
+  "performance": {
+    "lazyLoad": {
+      "avatar": true,
+      "description": "Load avatar images when card enters viewport"
+    },
+    "skeleton": {
+      "enabled": true,
+      "description": "Show skeleton while loading"
+    },
+    "debounce": {
+      "actions": 300,
+      "description": "Debounce rapid action clicks"
+    }
+  },
+  "testing": {
+    "dataTestIds": {
+      "card": "expert-card-{{id}}",
+      "favoriteButton": "expert-favorite-{{id}}",
+      "shareButton": "expert-share-{{id}}",
+      "bookButton": "expert-book-{{id}}",
+      "viewButton": "expert-view-{{id}}"
+    },
+    "scenarios": [
+      "Default state with all data",
+      "Loading state with skeleton",
+      "Error state with retry option",
+      "Unavailable expert with notify button",
+      "Featured expert with badge",
+      "Compact variant in mobile view",
+      "Horizontal variant in list view",
+      "RTL language support",
+      "Keyboard navigation",
+      "Screen reader accessibility"
+    ]
+  },
+  "implementation": {
+    "files": {
+      "html": "./ExpertCard.html",
+      "scss": "./ExpertCard.scss",
+      "typescript": "./ExpertCard.ts",
+      "config": "./ExpertCard.json"
+    },
+    "dependencies": [],
+    "browserSupport": "Modern browsers (ES6+)",
+    "dataAttributes": {
+      "data-expert-card": "Initializes card component",
+      "data-expert-id": "Expert unique identifier",
+      "data-variant": "Card variant type",
+      "data-state": "Current card state",
+      "data-featured": "Whether expert is featured",
+      "data-available": "Expert availability status"
+    }
+  }
+}

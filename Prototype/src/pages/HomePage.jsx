@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { Link } from 'react-router-dom'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
@@ -15,13 +14,12 @@ import homepageData from '@/data/homepage.json'
 const HomePage = () => {
   const { hero, valuePropositions, featuredSection, categories, ctaSection, stats, reviews } = homepageData
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0)
-  const [newsletterEmail, setNewsletterEmail] = useState('')
   const [currentExpertPage, setCurrentExpertPage] = useState(0)
   
   const reviewsPerPage = 3
   const totalPages = Math.ceil(reviews.testimonials.length / reviewsPerPage)
   
-  const expertsPerPage = 4
+  const expertsPerPage = 12
   const expertTotalPages = Math.ceil(featuredSection.experts.length / expertsPerPage)
   
   const nextReviews = () => {
@@ -63,16 +61,6 @@ const HomePage = () => {
   const handleExpertClick = (expert) => {
     console.log('Expert clicked:', expert)
     // Implementation for expert profile navigation
-  }
-
-  const handleNewsletterSubmit = (e) => {
-    e.preventDefault()
-    if (newsletterEmail.trim()) {
-      console.log('Newsletter subscription for:', newsletterEmail)
-      // Implementation for newsletter subscription
-      setNewsletterEmail('')
-      // Show success message or feedback here
-    }
   }
 
   return (
@@ -140,38 +128,42 @@ const HomePage = () => {
       {/* Featured Experts */}
       <section className="py-20 px-4">
         <div className="container mx-auto max-w-6xl">
-          <div className="text-center space-y-12">
-            <SectionTitle 
-              miniTitle="Featured Experts"
-              title={featuredSection.title}
-              description={featuredSection.subtitle}
-            />
-
-            {/* Pagination Controls */}
-            <div className="flex justify-center gap-2 mb-8">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={prevExperts}
-                className="rounded-full p-2 border-2 border-foreground"
-                disabled={expertTotalPages <= 1}
-              >
-                <ChevronLeft className="w-4 h-4" />
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={nextExperts}
-                className="rounded-full p-2 border-2 border-foreground"
-                disabled={expertTotalPages <= 1}
-              >
-                <ChevronRight className="w-4 h-4" />
-              </Button>
+          <div className="space-y-12">
+            {/* Header with navigation aligned to subtitle */}
+            <div className="flex justify-between items-end gap-4">
+              <SectionTitle 
+                miniTitle="Featured Experts"
+                title={featuredSection.title}
+                description={featuredSection.subtitle}
+                className="text-left flex-1"
+              />
+              
+              {/* Pagination Controls aligned to subtitle */}
+              <div className="flex gap-2 flex-shrink-0">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={prevExperts}
+                  className="rounded-full p-2 border-2 border-foreground"
+                  disabled={expertTotalPages <= 1}
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={nextExperts}
+                  className="rounded-full p-2 border-2 border-foreground"
+                  disabled={expertTotalPages <= 1}
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </Button>
+              </div>
             </div>
 
-            {/* Mobile Carousel */}
-            <div className="block md:hidden">
-              <div className="flex overflow-x-auto gap-6 pb-4 px-4 -mx-4 scrollbar-hide">
+            {/* Scrollable Expert Grid */}
+            <div className="overflow-x-auto">
+              <div className="flex gap-6 pb-4 min-w-max">
                 {getCurrentExperts().map((expert, index) => (
                   <div key={expert.id} className="flex-shrink-0 w-80">
                     <ExpertCard
@@ -183,19 +175,6 @@ const HomePage = () => {
                   </div>
                 ))}
               </div>
-            </div>
-
-            {/* Desktop Grid */}
-            <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {getCurrentExperts().map((expert, index) => (
-                <ExpertCard
-                  key={expert.id}
-                  expert={expert}
-                  showActions={true}
-                  showCrown={index === 0}
-                  showCharity={index === 1}
-                />
-              ))}
             </div>
 
             {/* Expert Pagination Dots */}
@@ -211,15 +190,6 @@ const HomePage = () => {
                   />
                 ))}
               </div>
-            </div>
-
-            <div className="pt-8">
-              <Button size="lg" variant="outline" className="rounded-full px-8 border-2 border-foreground" asChild>
-                <Link to="/browse">
-                  View All Experts
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
             </div>
           </div>
         </div>
@@ -257,30 +227,35 @@ const HomePage = () => {
       {/* Reviews Section */}
       <section className="py-20 px-4">
         <div className="container mx-auto max-w-6xl">
-          <div className="space-y-8 mb-12">
-            <SectionTitle 
-              miniTitle="What Our Users Say"
-              title={reviews.title}
-              description={reviews.subtitle}
-              className="text-center"
-            />
-            <div className="flex justify-center gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={prevReviews}
-                className="rounded-full p-2 border-2 border-foreground"
-              >
-                <ChevronLeft className="w-4 h-4" />
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={nextReviews}
-                className="rounded-full p-2 border-2 border-foreground"
-              >
-                <ChevronRight className="w-4 h-4" />
-              </Button>
+          <div className="mb-12">
+            {/* Header with pagination controls */}
+            <div className="flex justify-between items-start mb-8">
+              <SectionTitle 
+                miniTitle="What Our Users Say"
+                title={reviews.title}
+                description={reviews.subtitle}
+                className="text-left flex-1"
+              />
+              
+              {/* Pagination Controls */}
+              <div className="flex gap-2 ms-4">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={prevReviews}
+                  className="rounded-full p-2 border-2 border-foreground"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={nextReviews}
+                  className="rounded-full p-2 border-2 border-foreground"
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </Button>
+              </div>
             </div>
           </div>
           
@@ -408,42 +383,6 @@ const HomePage = () => {
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>
-              </div>
-
-              {/* Newsletter Subscription */}
-              <div className="pt-8 border-t border-muted">
-                <div className="space-y-4">
-                  <h3 className="text-xl font-semibold">
-                    {ctaSection.newsletter.title}
-                  </h3>
-                  <p className="text-muted-foreground max-w-lg mx-auto">
-                    {ctaSection.newsletter.description}
-                  </p>
-                  
-                  <form onSubmit={handleNewsletterSubmit} className="max-w-md mx-auto">
-                    <div className="flex gap-2">
-                      <Input
-                        type="email"
-                        placeholder={ctaSection.newsletter.emailPlaceholder}
-                        value={newsletterEmail}
-                        onChange={(e) => setNewsletterEmail(e.target.value)}
-                        className="flex-1 rounded-full border-2 border-muted-foreground/20 focus:border-foreground"
-                        required
-                      />
-                      <Button 
-                        type="submit" 
-                        size="default"
-                        className="rounded-full px-6"
-                      >
-                        {ctaSection.newsletter.buttonText}
-                      </Button>
-                    </div>
-                  </form>
-                  
-                  <p className="text-xs text-muted-foreground">
-                    {ctaSection.newsletter.disclaimer}
-                  </p>
-                </div>
               </div>
             </CardContent>
           </Card>

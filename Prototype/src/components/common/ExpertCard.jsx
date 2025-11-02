@@ -38,7 +38,7 @@ const ExpertCard = ({ expert, showActions = true, className = '', showCrown = fa
 
   return (
     <Link to={`/expert/${id}`} className="block h-full">
-      <Card className={`group hover:shadow-xl hover:scale-105 transition-all duration-300 border-2 hover:border-foreground ${className} h-full cursor-pointer relative`}>
+      <Card className={`group hover:shadow-xl transition-all duration-300 border-2 hover:border-foreground ${className} h-full cursor-pointer relative`}>
         {/* Photo Header - Full Width */}
         <div className="relative h-32 overflow-hidden rounded-t-lg bg-gray-100">
           {image ? (

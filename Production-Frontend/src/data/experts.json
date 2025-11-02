@@ -1,0 +1,52 @@
+{
+  "featured": [
+    {
+      "id": "isabella-grace",
+      "name": "Isabella Grace Harrington",
+      "title": "Founder of TechNova",
+      "rate": "$500/15min",
+      "rating": 5.0,
+      "reviewCount": 127,
+      "image": "/api/placeholder/150/150",
+      "badge": "Top Expert",
+      "expertise": ["Tech Strategy", "Startup Scaling"],
+      "bio": "Built and scaled TechNova from idea to $100M valuation. Expert in product-market fit and raising Series A-C funding."
+    },
+    {
+      "id": "sophia-martinez",
+      "name": "Sophia Martinez", 
+      "title": "Founder of BloomWell Skincare",
+      "rate": "$500/15min",
+      "rating": 4.9,
+      "reviewCount": 203,
+      "image": "/api/placeholder/150/150", 
+      "badge": "Top Expert",
+      "expertise": ["E-commerce", "Brand Building"],
+      "bio": "Bootstrapped BloomWell to $50M revenue. Expert in DTC marketing, brand strategy, and scaling operations."
+    },
+    {
+      "id": "robin-grace",
+      "name": "Robin Grace Harrington",
+      "title": "VP Product at Microsoft",
+      "rate": "$750/15min",
+      "rating": 5.0,
+      "reviewCount": 89,
+      "image": "/api/placeholder/150/150",
+      "badge": "Top Expert", 
+      "expertise": ["Product Strategy", "Tech Leadership"],
+      "bio": "Led product teams at Microsoft for 8+ years. Expert in product roadmaps, team management, and enterprise software."
+    },
+    {
+      "id": "emily-carter",
+      "name": "Emily Carter",
+      "title": "CMO at DataFlow Inc",
+      "rate": "$450/15min",
+      "rating": 4.8,
+      "reviewCount": 156,
+      "image": "/api/placeholder/150/150",
+      "badge": "Verified",
+      "expertise": ["Marketing Strategy", "Growth Hacking"],
+      "bio": "Built marketing teams that drove 10x growth at 3 startups. Expert in growth loops, conversion optimization, and paid acquisition."
+    }
+  ]
+}

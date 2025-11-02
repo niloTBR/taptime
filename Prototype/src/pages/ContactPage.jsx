@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
+import { Link } from 'react-router-dom'
 import { Mail, MapPin, Phone, Clock } from 'lucide-react'
 import StandardPage from '@/components/layout/StandardPage'
 import Section from '@/components/common/Section'
@@ -23,18 +24,6 @@ const ContactPage = () => {
       title: "Call Us",
       details: "+1 (555) 123-4567",
       description: "Monday to Friday, 9AM to 6PM PST"
-    },
-    {
-      icon: <MapPin className="w-6 h-6" />,
-      title: "Visit Us",
-      details: "San Francisco, CA",
-      description: "Schedule a meeting at our headquarters"
-    },
-    {
-      icon: <Clock className="w-6 h-6" />,
-      title: "Response Time",
-      details: "Within 24 hours",
-      description: "We aim to respond to all inquiries quickly"
     }
   ]
 
@@ -169,8 +158,10 @@ const ContactPage = () => {
           <p className="text-muted-foreground mb-8 text-lg">
             Check out our FAQ section for answers to common questions
           </p>
-          <Button size="lg" variant="outline" className="rounded-full px-8 border-2 border-foreground">
-            View FAQ
+          <Button size="lg" variant="outline" className="rounded-full px-8 border-2 border-foreground" asChild>
+            <Link to="/faq">
+              View FAQ
+            </Link>
           </Button>
         </div>
       </section>

@@ -1,7 +1,8 @@
 import { useEffect, useRef } from 'react'
+import { Link } from 'react-router-dom'
 import { Briefcase, Laptop, Palette, TrendingUp, DollarSign, Heart, ArrowRight } from 'lucide-react'
 
-const ScrollingTicker = ({ items, className = '' }) => {
+const ScrollingTicker = ({ items, className = '', onCategoryClick }) => {
   const tickerRef = useRef(null)
 
   // Icon mapping for categories
@@ -46,7 +47,17 @@ const ScrollingTicker = ({ items, className = '' }) => {
       >
         <div className="ticker-content flex items-center min-w-max">
           {items.map((item, index) => (
-            <div key={index} className="flex items-center gap-3 px-8 py-4 whitespace-nowrap">
+            <Link 
+              key={index} 
+              to={`/browse?category=${encodeURIComponent(item.category)}`}
+              className="flex items-center gap-3 px-8 py-4 whitespace-nowrap hover:bg-gray-100 transition-colors duration-200 cursor-pointer"
+              onClick={(e) => {
+                if (onCategoryClick) {
+                  e.preventDefault()
+                  onCategoryClick(item.category)
+                }
+              }}
+            >
               <div className="w-6 h-6 rounded-full border-2 border-foreground flex items-center justify-center flex-shrink-0">
                 {getIcon(item.category)}
               </div>
@@ -54,7 +65,7 @@ const ScrollingTicker = ({ items, className = '' }) => {
                 {item.category}
               </span>
               <ArrowRight className="w-4 h-4 text-muted-foreground flex-shrink-0 ms-2" />
-            </div>
+            </Link>
           ))}
         </div>
       </div>

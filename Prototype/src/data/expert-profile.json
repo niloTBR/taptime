@@ -13,7 +13,12 @@
     "location": "San Francisco, CA",
     "languages": ["English", "Spanish"],
     "rate": "$500/15min",
-    "availability": "Available Today"
+    "availability": "Available Today",
+    "charity": {
+      "name": "Code for Education",
+      "description": "Supporting STEM education for underrepresented communities",
+      "website": "https://codeforeducation.org"
+    }
   },
   "about": {
     "bio": "Isabella is the Founder and CEO of TechNova, a B2B SaaS platform that she built from idea to $100M valuation in 4 years. She's raised over $50M in funding from top-tier VCs including Sequoia and a16z.\n\nWith 12+ years in the startup ecosystem, Isabella has deep expertise in product-market fit, scaling teams, fundraising, and building sustainable growth engines. She's passionate about helping early-stage founders avoid common pitfalls and accelerate their path to success.\n\nBefore TechNova, Isabella was VP of Product at DataSync (acquired by Salesforce) and started her career as a software engineer at Google.",

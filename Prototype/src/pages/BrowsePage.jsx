@@ -1,4 +1,5 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -31,13 +32,15 @@ import {
   HeartHandshake,
   Heart,
   DollarSign,
-  Shield
+  Shield,
+  X
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import browseData from '@/data/browse.json'
 
 const BrowsePage = () => {
   const { hero, filters, sortOptions, experts, stats } = browseData
+  const [searchParams, setSearchParams] = useSearchParams()
   
   // State management
   const [selectedCategory, setSelectedCategory] = useState('All Categories')
@@ -54,9 +57,17 @@ const BrowsePage = () => {
   const [selectedIndustries, setSelectedIndustries] = useState([])
   const [selectedLanguages, setSelectedLanguages] = useState([])
   const [selectedPriceRanges, setSelectedPriceRanges] = useState([])
-  const [showTopExpertsOnly, setShowTopExpertsOnly] = useState(false)
-  const [showVerifiedOnly, setShowVerifiedOnly] = useState(false)
+  const [selectedExpertLevels, setSelectedExpertLevels] = useState([])
+  const [selectedExpertise, setSelectedExpertise] = useState([])
   const [openSection, setOpenSection] = useState('price')
+
+  // Handle URL parameters
+  useEffect(() => {
+    const categoryParam = searchParams.get('category')
+    if (categoryParam) {
+      setSelectedCategory(categoryParam)
+    }
+  }, [searchParams])
 
   // Filter functions
   const filteredExperts = useMemo(() => {
@@ -73,9 +84,27 @@ const BrowsePage = () => {
 
     // Category filter
     if (selectedCategory !== 'All Categories') {
-      filtered = filtered.filter(expert => 
-        expert.category === selectedCategory
-      )
+      filtered = filtered.filter(expert => {
+        // Map expertise to categories
+        const categoryMap = {
+          'Tech Strategy': 'Technology & Innovation',
+          'Startup Scaling': 'Business & Startups',
+          'E-commerce': 'Business & Startups',
+          'Brand Building': 'Marketing & Growth',
+          'Product Strategy': 'Technology & Innovation',
+          'Tech Leadership': 'Technology & Innovation',
+          'Marketing Strategy': 'Marketing & Growth',
+          'Growth Hacking': 'Marketing & Growth',
+          'UX Design': 'Design & Creativity',
+          'Design Systems': 'Design & Creativity',
+          'Financial Planning': 'Finance & Economics',
+          'Fundraising': 'Finance & Economics'
+        }
+        
+        return expert.expertise && expert.expertise.some(skill => 
+          categoryMap[skill] === selectedCategory
+        )
+      })
     }
 
     // Price range filter
@@ -120,10 +149,27 @@ const BrowsePage = () => {
       )
     }
 
-    // Verified only filter
-    if (showVerifiedOnly) {
-      filtered = filtered.filter(expert => expert.badge === 'Verified')
+    // Gender filter
+    if (selectedGenders.length > 0) {
+      filtered = filtered.filter(expert => 
+        expert.gender && selectedGenders.includes(expert.gender)
+      )
     }
+
+    // Expert Level filter
+    if (selectedExpertLevels.length > 0) {
+      filtered = filtered.filter(expert => 
+        expert.expertLevel && selectedExpertLevels.includes(expert.expertLevel)
+      )
+    }
+
+    // Expertise filter
+    if (selectedExpertise.length > 0) {
+      filtered = filtered.filter(expert => 
+        expert.expertise && expert.expertise.some(skill => selectedExpertise.includes(skill))
+      )
+    }
+
 
     // Top rated filter
     if (showTopRated) {
@@ -165,11 +211,22 @@ const BrowsePage = () => {
     }
 
     return filtered
-  }, [experts, searchQuery, selectedCategory, selectedPriceRange, selectedSort, showTopRated, availabilityFilters, selectedPriceRanges, selectedCountries, selectedIndustries, selectedLanguages, showTopExpertsOnly, showVerifiedOnly])
+  }, [experts, searchQuery, selectedCategory, selectedPriceRange, selectedSort, showTopRated, availabilityFilters, selectedPriceRanges, selectedCountries, selectedIndustries, selectedLanguages, selectedExpertLevels, selectedExpertise])
 
   const handleSearch = (query) => {
     setSearchQuery(query)
   }
+
+  // Get all unique expertise values
+  const allExpertise = useMemo(() => {
+    const expertiseSet = new Set()
+    experts.forEach(expert => {
+      if (expert.expertise) {
+        expert.expertise.forEach(skill => expertiseSet.add(skill))
+      }
+    })
+    return Array.from(expertiseSet).sort()
+  }, [experts])
 
   const toggleSection = (section) => {
     setCollapsedSections(prev => ({
@@ -210,92 +267,108 @@ const BrowsePage = () => {
 
   const ExpertTableRow = ({ expert, index }) => (
     <tr className="border-b hover:bg-gray-50 cursor-pointer" onClick={() => window.location.href = `/expert/${expert.id}`}>
+      {/* Photo with Category Overlay */}
       <td className="p-4">
-        <div className="flex items-center gap-4">
-          {/* Square Photo */}
-          <div className="relative">
-            <Avatar className="w-16 h-16 rounded-lg">
-              <AvatarImage src={expert.image} alt={expert.name} className="object-cover" />
-              <AvatarFallback className="text-lg font-medium rounded-lg">{getInitials(expert.name)}</AvatarFallback>
-            </Avatar>
-            {/* Category Badge - Top Right */}
-            {expert.expertise && expert.expertise.length > 0 && (
-              <div className="absolute top-0 right-0 transform translate-x-2 -translate-y-2">
-                <Badge variant="secondary" className="bg-white text-black text-xs px-2 py-1 shadow-sm">
-                  {getCategoryFromExpertise(expert.expertise[0])}
-                </Badge>
-              </div>
-            )}
-            {/* Verified Badge on Photo */}
-            {expert.badge === 'Verified' && (
-              <div className="absolute -bottom-1 -right-1 w-5 h-5 flex items-center justify-center">
-                <svg viewBox="0 0 24 24" className="w-5 h-5">
-                  <g>
-                    <path d="M12 1.5c-.5 0-1 .2-1.4.6L9.2 3.5c-.3.3-.7.4-1.1.4H6.5c-.8 0-1.5.7-1.5 1.5v1.6c0 .4-.1.8-.4 1.1L3.2 9.5c-.8.8-.8 2 0 2.8l1.4 1.4c.3.3.4.7.4 1.1V16.5c0 .8.7 1.5 1.5 1.5h1.6c.4 0 .8.1 1.1.4l1.4 1.4c.8.8 2 .8 2.8 0l1.4-1.4c.3-.3.7-.4 1.1-.4h1.6c.8 0 1.5-.7 1.5-1.5v-1.6c0-.4.1-.8.4-1.1l1.4-1.4c.8-.8.8-2 0-2.8l-1.4-1.4c-.3-.3-.4-.7-.4-1.1V5.5c0-.8-.7-1.5-1.5-1.5h-1.6c-.4 0-.8-.1-1.1-.4L13.4 2.1c-.4-.4-.9-.6-1.4-.6z" fill="#1d9bf0"/>
-                    <path d="M9 12l2 2 4-4" stroke="white" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
-                  </g>
-                </svg>
+        <div className="relative">
+          <div className="w-40 h-32 rounded-lg overflow-hidden bg-gray-100 border"
+               style={{ borderRadius: '0.5rem' }}>
+            {expert.image ? (
+              <>
+                <img 
+                  src={expert.image} 
+                  alt={expert.name}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+              </>
+            ) : (
+              <div className="w-full h-full flex items-center justify-center bg-gray-200">
+                <span className="text-xl font-medium text-gray-600">
+                  {getInitials(expert.name)}
+                </span>
               </div>
             )}
           </div>
           
-          {/* Name and Title */}
-          <div className="flex-1 space-y-3">
-            {/* Rating and Badge Row - First */}
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="flex items-center gap-1">
-                  <Star className="w-4 h-4 fill-black text-black" />
-                  <span className="text-sm font-medium">{expert.rating}</span>
-                </div>
-                <span className="text-xs text-muted-foreground">
-                  ({expert.reviewCount})
-                </span>
-              </div>
+          {/* Category Badge - Top Left */}
+          {expert.expertise && expert.expertise.length > 0 && (
+            <div className="absolute top-2 left-2">
+              <Badge variant="secondary" className="bg-white/90 backdrop-blur-sm text-black text-xs px-2 py-1 shadow-sm">
+                {getCategoryFromExpertise(expert.expertise[0])}
+              </Badge>
             </div>
-            
-            {/* Name and Title */}
-            <div>
-              <h3 className="font-semibold text-base leading-tight">{expert.name}</h3>
-              <p className="text-xs text-muted-foreground mt-2">{expert.title}</p>
-            </div>
-            
-            {/* Bio Description */}
-            {expert.bio && (
-              <div>
-                <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">
-                  {expert.bio}
-                </p>
+          )}
+        </div>
+      </td>
+      
+      {/* Rating, Name, Title & Badges */}
+      <td className="p-4">
+        <div className="space-y-3">
+          {/* Rating and Top Expert Badge - First Row */}
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1">
+                <Star className="w-4 h-4 fill-black text-black" />
+                <span className="text-sm font-medium">{expert.rating}</span>
               </div>
+              <span className="text-xs text-muted-foreground">
+                ({expert.reviewCount})
+              </span>
+            </div>
+            {expert.badge === 'Top Expert' && (
+              <Badge variant="outline" className="border-yellow-500 text-yellow-600 bg-yellow-50 px-2 py-1 rounded-full inline-flex items-center gap-1 text-xs">
+                <Crown className="w-3 h-3" />
+                <span className="text-xs">Top Expert</span>
+              </Badge>
             )}
+          </div>
+          
+          {/* Name and Title */}
+          <div>
+            <div className="flex items-center gap-2">
+              <h3 className="font-semibold text-sm leading-tight">{expert.name}</h3>
+              {expert.badge === 'Verified' && (
+                <div className="w-5 h-5 flex items-center justify-center">
+                  <svg viewBox="0 0 24 24" className="w-5 h-5">
+                    <g>
+                      <path d="M12 1.5c-.5 0-1 .2-1.4.6L9.2 3.5c-.3.3-.7.4-1.1.4H6.5c-.8 0-1.5.7-1.5 1.5v1.6c0 .4-.1.8-.4 1.1L3.2 9.5c-.8.8-.8 2 0 2.8l1.4 1.4c.3.3.4.7.4 1.1V16.5c0 .8.7 1.5 1.5 1.5h1.6c.4 0 .8.1 1.1.4l1.4 1.4c.8.8 2 .8 2.8 0l1.4-1.4c.3-.3.7-.4 1.1-.4h1.6c.8 0 1.5-.7 1.5-1.5v-1.6c0-.4.1-.8.4-1.1l1.4-1.4c.8-.8.8-2 0-2.8l-1.4-1.4c-.3-.3-.4-.7-.4-1.1V5.5c0-.8-.7-1.5-1.5-1.5h-1.6c-.4 0-.8-.1-1.1-.4L13.4 2.1c-.4-.4-.9-.6-1.4-.6z" fill="#1d9bf0"/>
+                      <path d="M9 12l2 2 4-4" stroke="white" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                    </g>
+                  </svg>
+                </div>
+              )}
+            </div>
+            <p className="text-xs text-muted-foreground mt-1">{expert.title}</p>
           </div>
         </div>
       </td>
       
-      {/* Expert Level */}
+      {/* Bio Description */}
       <td className="p-4">
-        <div className="space-y-2">
-          {expert.badge === 'Top Expert' && (
-            <Badge variant="outline" className="text-xs bg-gradient-to-r from-yellow-400 to-orange-500 text-white border-0 px-2 py-1 rounded-full inline-flex items-center gap-1 w-fit">
-              <Crown className="w-3 h-3" />
-              Top Expert
-            </Badge>
+        <div className="max-w-xs space-y-2">
+          {/* Charity Donation Indicator */}
+          {index === 1 && (
+            <div className="flex items-center gap-1">
+              <HeartHandshake className="w-4 h-4 text-green-600" />
+              <span className="text-xs text-green-600 font-medium">Donating To Charity</span>
+            </div>
           )}
-          {expert.expertise && expert.expertise.slice(0, 2).map((skill, idx) => (
-            <Badge key={idx} variant="secondary" className="text-xs mr-1">
-              {skill}
-            </Badge>
-          ))}
+          
+          {expert.bio && (
+            <p className="text-xs text-muted-foreground leading-relaxed line-clamp-3">
+              {expert.bio}
+            </p>
+          )}
         </div>
       </td>
       
-      {/* Actions */}
+      {/* Actions & Price */}
       <td className="p-4">
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col items-end gap-3">
           <div className="flex gap-2">
             <Button 
               size="sm" 
-              className="rounded-full px-4"
+              className="rounded-full px-4 flex items-center gap-2"
               onClick={(e) => {
                 e.stopPropagation()
                 window.location.href = `/book/${expert.id}`
@@ -317,14 +390,6 @@ const BrowsePage = () => {
               <Heart className="w-4 h-4" />
             </Button>
           </div>
-          
-          {/* Charity Donation Indicator */}
-          {index === 1 && (
-            <div className="flex items-center gap-1">
-              <HeartHandshake className="w-4 h-4 text-green-600" />
-              <span className="text-xs text-green-600 font-medium">Donating To Charity</span>
-            </div>
-          )}
         </div>
       </td>
     </tr>
@@ -386,6 +451,20 @@ const BrowsePage = () => {
             <div className="flex items-center gap-1">
               <HeartHandshake className="w-4 h-4 text-green-600" />
               <span className="text-xs text-green-600 font-medium">Donating To Charity</span>
+            </div>
+          )}
+
+          {/* Expertise Tags */}
+          {expert.expertise && expert.expertise.length > 0 && (
+            <div className="flex flex-wrap gap-1">
+              {expert.expertise.map((skill, skillIndex) => (
+                <span 
+                  key={skillIndex}
+                  className="px-2 py-1 bg-gray-100 text-xs font-medium rounded-full text-gray-700"
+                >
+                  {skill}
+                </span>
+              ))}
             </div>
           )}
         </div>
@@ -456,34 +535,44 @@ const BrowsePage = () => {
             {/* Clean Collapsible Sidebar */}
             <div className={`lg:block ${showFilters ? 'block' : 'hidden'} w-full lg:w-80`}>
               <div className="bg-white rounded-lg border p-4 space-y-4">
-                <div className="flex items-center justify-between">
+                <div>
                   <h3 className="text-lg font-semibold">Filters</h3>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => {
-                      setSelectedCategory('All Categories')
-                      setSelectedPriceRange('All Prices')
-                      setShowTopRated(false)
-                      setAvailabilityFilters([])
-                      setSearchQuery('')
-                      setSelectedGenders([])
-                      setSelectedCountries([])
-                      setSelectedIndustries([])
-                      setSelectedLanguages([])
-                      setSelectedPriceRanges([])
-                      setShowTopExpertsOnly(false)
-                      setShowVerifiedOnly(false)
-                      setSelectedSort('Recommended')
-                      setOpenSection('price')
-                    }}
-                    className="text-xs"
-                  >
-                    Clear all
-                  </Button>
                 </div>
 
                 <div className="space-y-2">
+                  {/* Category */}
+                  <Collapsible open={openSection === 'category'} onOpenChange={() => setOpenSection(openSection === 'category' ? '' : 'category')}>
+                    <CollapsibleTrigger className="flex w-full items-center justify-between py-2 font-medium text-sm hover:underline [&[data-state=open]>svg]:rotate-180">
+                      <div className="flex items-center gap-2">
+                        <Briefcase className="w-4 h-4" />
+                        Category
+                      </div>
+                      <ChevronDown className="h-4 w-4 shrink-0 transition-transform duration-200" />
+                    </CollapsibleTrigger>
+                    <CollapsibleContent className="space-y-2 pt-1 pb-2">
+                      {['All Categories', 'Business & Startups', 'Technology & Innovation', 'Design & Creativity', 'Marketing & Growth', 'Finance & Economics', 'Health & Wellness'].map((category) => (
+                        <div key={category} className="flex items-center space-x-2 pl-6">
+                          <Checkbox 
+                            id={category}
+                            checked={selectedCategory === category}
+                            onCheckedChange={(checked) => {
+                              if (checked) {
+                                setSelectedCategory(category)
+                              } else {
+                                setSelectedCategory('All Categories')
+                              }
+                            }}
+                          />
+                          <Label htmlFor={category} className="text-sm font-normal cursor-pointer">
+                            {category}
+                          </Label>
+                        </div>
+                      ))}
+                    </CollapsibleContent>
+                  </Collapsible>
+
+                  <Separator />
+
                   {/* Price Range */}
                   <Collapsible open={openSection === 'price'} onOpenChange={() => setOpenSection(openSection === 'price' ? '' : 'price')}>
                     <CollapsibleTrigger className="flex w-full items-center justify-between py-2 font-medium text-sm hover:underline [&[data-state=open]>svg]:rotate-180">
@@ -517,38 +606,68 @@ const BrowsePage = () => {
 
                   <Separator />
 
+
                   {/* Expert Level */}
-                  <Collapsible open={openSection === 'expert'} onOpenChange={() => setOpenSection(openSection === 'expert' ? '' : 'expert')}>
+                  <Collapsible open={openSection === 'expertLevel'} onOpenChange={() => setOpenSection(openSection === 'expertLevel' ? '' : 'expertLevel')}>
                     <CollapsibleTrigger className="flex w-full items-center justify-between py-2 font-medium text-sm hover:underline [&[data-state=open]>svg]:rotate-180">
                       <div className="flex items-center gap-2">
-                        <Shield className="w-4 h-4" />
+                        <Award className="w-4 h-4" />
                         Expert Level
                       </div>
                       <ChevronDown className="h-4 w-4 shrink-0 transition-transform duration-200" />
                     </CollapsibleTrigger>
                     <CollapsibleContent className="space-y-2 pt-1 pb-2">
-                      <div className="flex items-center space-x-2 pl-6">
-                        <Checkbox 
-                          id="topExperts"
-                          checked={showTopExpertsOnly}
-                          onCheckedChange={setShowTopExpertsOnly}
-                        />
-                        <Label htmlFor="topExperts" className="text-sm font-normal cursor-pointer flex items-center gap-1">
-                          <Crown className="w-3 h-3" />
-                          Top Experts Only
-                        </Label>
+                      {filters.expertLevel.filter(level => level !== 'All Levels').map((level) => (
+                        <div key={level} className="flex items-center space-x-2 pl-6">
+                          <Checkbox 
+                            id={level}
+                            checked={selectedExpertLevels.includes(level)}
+                            onCheckedChange={(checked) => {
+                              if (checked) {
+                                setSelectedExpertLevels([...selectedExpertLevels, level])
+                              } else {
+                                setSelectedExpertLevels(selectedExpertLevels.filter(l => l !== level))
+                              }
+                            }}
+                          />
+                          <Label htmlFor={level} className="text-sm font-normal cursor-pointer">
+                            {level}
+                          </Label>
+                        </div>
+                      ))}
+                    </CollapsibleContent>
+                  </Collapsible>
+
+                  <Separator />
+
+                  {/* Gender */}
+                  <Collapsible open={openSection === 'gender'} onOpenChange={() => setOpenSection(openSection === 'gender' ? '' : 'gender')}>
+                    <CollapsibleTrigger className="flex w-full items-center justify-between py-2 font-medium text-sm hover:underline [&[data-state=open]>svg]:rotate-180">
+                      <div className="flex items-center gap-2">
+                        <Users className="w-4 h-4" />
+                        Gender
                       </div>
-                      <div className="flex items-center space-x-2 pl-6">
-                        <Checkbox 
-                          id="verifiedExperts"
-                          checked={showVerifiedOnly}
-                          onCheckedChange={setShowVerifiedOnly}
-                        />
-                        <Label htmlFor="verifiedExperts" className="text-sm font-normal cursor-pointer flex items-center gap-1">
-                          <Award className="w-3 h-3" />
-                          Verified Only
-                        </Label>
-                      </div>
+                      <ChevronDown className="h-4 w-4 shrink-0 transition-transform duration-200" />
+                    </CollapsibleTrigger>
+                    <CollapsibleContent className="space-y-2 pt-1 pb-2">
+                      {['Male', 'Female'].map((gender) => (
+                        <div key={gender} className="flex items-center space-x-2 pl-6">
+                          <Checkbox 
+                            id={gender}
+                            checked={selectedGenders.includes(gender)}
+                            onCheckedChange={(checked) => {
+                              if (checked) {
+                                setSelectedGenders([...selectedGenders, gender])
+                              } else {
+                                setSelectedGenders(selectedGenders.filter(g => g !== gender))
+                              }
+                            }}
+                          />
+                          <Label htmlFor={gender} className="text-sm font-normal cursor-pointer">
+                            {gender}
+                          </Label>
+                        </div>
+                      ))}
                     </CollapsibleContent>
                   </Collapsible>
 
@@ -615,6 +734,41 @@ const BrowsePage = () => {
                           </Label>
                         </div>
                       ))}
+                    </CollapsibleContent>
+                  </Collapsible>
+
+                  <Separator />
+
+                  {/* Expertise */}
+                  <Collapsible open={openSection === 'expertise'} onOpenChange={() => setOpenSection(openSection === 'expertise' ? '' : 'expertise')}>
+                    <CollapsibleTrigger className="flex w-full items-center justify-between py-2 font-medium text-sm hover:underline [&[data-state=open]>svg]:rotate-180">
+                      <div className="flex items-center gap-2">
+                        <Award className="w-4 h-4" />
+                        Expertise
+                      </div>
+                      <ChevronDown className="h-4 w-4 shrink-0 transition-transform duration-200" />
+                    </CollapsibleTrigger>
+                    <CollapsibleContent className="space-y-2 pt-1 pb-2">
+                      <div className={`space-y-2 ${allExpertise.length > 10 ? 'max-h-64 overflow-y-auto pr-2' : ''}`}>
+                        {allExpertise.map((skill) => (
+                          <div key={skill} className="flex items-center space-x-2 pl-6">
+                            <Checkbox 
+                              id={`expertise-${skill}`}
+                              checked={selectedExpertise.includes(skill)}
+                              onCheckedChange={(checked) => {
+                                if (checked) {
+                                  setSelectedExpertise([...selectedExpertise, skill])
+                                } else {
+                                  setSelectedExpertise(selectedExpertise.filter(s => s !== skill))
+                                }
+                              }}
+                            />
+                            <Label htmlFor={`expertise-${skill}`} className="text-sm font-normal cursor-pointer">
+                              {skill}
+                            </Label>
+                          </div>
+                        ))}
+                      </div>
                     </CollapsibleContent>
                   </Collapsible>
 
@@ -714,6 +868,153 @@ const BrowsePage = () => {
                 </div>
               </div>
 
+              {/* Active Filters Pills */}
+              {(selectedCategory !== 'All Categories' || selectedPriceRanges.length > 0 || selectedCountries.length > 0 || selectedIndustries.length > 0 || selectedLanguages.length > 0 || selectedGenders.length > 0 || selectedExpertLevels.length > 0 || selectedExpertise.length > 0 || searchQuery) && (
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {/* Search Query */}
+                  {searchQuery && (
+                    <Badge variant="outline" className="flex items-center gap-1 px-3 py-1">
+                      Search: "{searchQuery}"
+                      <button
+                        onClick={() => setSearchQuery('')}
+                        className="ml-1 hover:bg-gray-200 rounded-full p-0.5"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    </Badge>
+                  )}
+                  
+                  {/* Category */}
+                  {selectedCategory !== 'All Categories' && (
+                    <Badge variant="outline" className="flex items-center gap-1 px-3 py-1">
+                      {selectedCategory}
+                      <button
+                        onClick={() => setSelectedCategory('All Categories')}
+                        className="ml-1 hover:bg-gray-200 rounded-full p-0.5"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    </Badge>
+                  )}
+                  
+                  {/* Price Ranges */}
+                  {selectedPriceRanges.map((range) => (
+                    <Badge key={range} variant="outline" className="flex items-center gap-1 px-3 py-1">
+                      {range}
+                      <button
+                        onClick={() => setSelectedPriceRanges(selectedPriceRanges.filter(r => r !== range))}
+                        className="ml-1 hover:bg-gray-200 rounded-full p-0.5"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    </Badge>
+                  ))}
+                  
+                  {/* Countries */}
+                  {selectedCountries.map((country) => (
+                    <Badge key={country} variant="outline" className="flex items-center gap-1 px-3 py-1">
+                      {country}
+                      <button
+                        onClick={() => setSelectedCountries(selectedCountries.filter(c => c !== country))}
+                        className="ml-1 hover:bg-gray-200 rounded-full p-0.5"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    </Badge>
+                  ))}
+                  
+                  {/* Industries */}
+                  {selectedIndustries.map((industry) => (
+                    <Badge key={industry} variant="outline" className="flex items-center gap-1 px-3 py-1">
+                      {industry}
+                      <button
+                        onClick={() => setSelectedIndustries(selectedIndustries.filter(i => i !== industry))}
+                        className="ml-1 hover:bg-gray-200 rounded-full p-0.5"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    </Badge>
+                  ))}
+                  
+                  {/* Languages */}
+                  {selectedLanguages.map((language) => (
+                    <Badge key={language} variant="outline" className="flex items-center gap-1 px-3 py-1">
+                      {language}
+                      <button
+                        onClick={() => setSelectedLanguages(selectedLanguages.filter(l => l !== language))}
+                        className="ml-1 hover:bg-gray-200 rounded-full p-0.5"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    </Badge>
+                  ))}
+                  
+                  {/* Genders */}
+                  {selectedGenders.map((gender) => (
+                    <Badge key={gender} variant="outline" className="flex items-center gap-1 px-3 py-1">
+                      {gender}
+                      <button
+                        onClick={() => setSelectedGenders(selectedGenders.filter(g => g !== gender))}
+                        className="ml-1 hover:bg-gray-200 rounded-full p-0.5"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    </Badge>
+                  ))}
+
+                  {/* Expert Levels */}
+                  {selectedExpertLevels.map((level) => (
+                    <Badge key={level} variant="outline" className="flex items-center gap-1 px-3 py-1">
+                      {level}
+                      <button
+                        onClick={() => setSelectedExpertLevels(selectedExpertLevels.filter(l => l !== level))}
+                        className="ml-1 hover:bg-gray-200 rounded-full p-0.5"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    </Badge>
+                  ))}
+
+                  {/* Expertise */}
+                  {selectedExpertise.map((skill) => (
+                    <Badge key={skill} variant="outline" className="flex items-center gap-1 px-3 py-1">
+                      {skill}
+                      <button
+                        onClick={() => setSelectedExpertise(selectedExpertise.filter(s => s !== skill))}
+                        className="ml-1 hover:bg-gray-200 rounded-full p-0.5"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    </Badge>
+                  ))}
+                  
+                  {/* Clear All */}
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => {
+                      setSelectedCategory('All Categories')
+                      setSelectedPriceRange('All Prices')
+                      setShowTopRated(false)
+                      setAvailabilityFilters([])
+                      setSearchQuery('')
+                      setSelectedGenders([])
+                      setSelectedCountries([])
+                      setSelectedIndustries([])
+                      setSelectedLanguages([])
+                      setSelectedPriceRanges([])
+                      setSelectedExpertLevels([])
+                      setSelectedExpertise([])
+                      setSelectedSort('Recommended')
+                      setOpenSection('category')
+                    }}
+                    className="text-xs text-muted-foreground hover:text-foreground"
+                  >
+                    Clear all
+                  </Button>
+                </div>
+              )}
+
               {/* Results Count */}
               <div className="text-sm text-muted-foreground mb-4">
                 {filteredExperts.length} expert{filteredExperts.length !== 1 ? 's' : ''} found
@@ -725,9 +1026,10 @@ const BrowsePage = () => {
                   <table className="w-full bg-white border border-gray-200 rounded-lg">
                     <thead>
                       <tr className="border-b bg-gray-50">
-                        <th className="text-left p-4 font-medium text-sm text-muted-foreground">Expert</th>
-                        <th className="text-left p-4 font-medium text-sm text-muted-foreground">Expertise</th>
-                        <th className="text-left p-4 font-medium text-sm text-muted-foreground">Actions</th>
+                        <th className="text-left p-4 font-medium text-sm text-muted-foreground w-44">Photo</th>
+                        <th className="text-left p-4 font-medium text-sm text-muted-foreground w-72">Expert Details</th>
+                        <th className="text-left p-4 font-medium text-sm text-muted-foreground w-80">About</th>
+                        <th className="text-right p-4 font-medium text-sm text-muted-foreground w-48">Book Session</th>
                       </tr>
                     </thead>
                     <tbody>

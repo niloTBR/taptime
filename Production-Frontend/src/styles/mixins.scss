@@ -1,0 +1,171 @@
+// Utility Mixins
+
+// Container mixin
+@mixin container {
+  max-width: $container-max-width;
+  margin: 0 auto;
+  padding: 0 $container-padding;
+  
+  @media (min-width: $breakpoint-sm) {
+    padding: 0 1.5rem;
+  }
+  
+  @media (min-width: $breakpoint-lg) {
+    padding: 0 2rem;
+  }
+}
+
+// Button base styles
+@mixin button-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  text-decoration: none;
+  border-radius: $border-radius-md;
+  transition: all $transition-fast;
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+}
+
+// Button variants
+@mixin button-primary {
+  @include button-base;
+  background: $color-black;
+  color: $color-white;
+  
+  &:hover {
+    background: $color-gray-700;
+  }
+}
+
+@mixin button-outline {
+  @include button-base;
+  background: $color-white;
+  color: $color-black;
+  border: 2px solid $color-black;
+  
+  &:hover {
+    background: $color-black;
+    color: $color-white;
+  }
+}
+
+@mixin button-ghost {
+  @include button-base;
+  background: transparent;
+  color: $color-gray-500;
+  
+  &:hover {
+    color: $color-black;
+    background: $color-gray-100;
+  }
+}
+
+// Button sizes
+@mixin button-large {
+  padding: 0.75rem 2rem;
+  font-size: $font-size-base;
+}
+
+@mixin button-medium {
+  padding: 0.5rem 1rem;
+  font-size: $font-size-sm;
+}
+
+@mixin button-small {
+  padding: 0.375rem 0.75rem;
+  font-size: $font-size-sm;
+}
+
+// Responsive breakpoints
+@mixin mobile {
+  @media (max-width: #{$breakpoint-md - 1px}) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (min-width: $breakpoint-md) and (max-width: #{$breakpoint-lg - 1px}) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: $breakpoint-lg) {
+    @content;
+  }
+}
+
+@mixin mobile-up {
+  @media (min-width: $breakpoint-sm) {
+    @content;
+  }
+}
+
+@mixin tablet-up {
+  @media (min-width: $breakpoint-md) {
+    @content;
+  }
+}
+
+@mixin desktop-up {
+  @media (min-width: $breakpoint-lg) {
+    @content;
+  }
+}
+
+// Text utilities
+@mixin text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin text-line-clamp($lines: 2) {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: $lines;
+}
+
+// Card styles
+@mixin card {
+  background: $color-white;
+  border: 1px solid $color-gray-200;
+  border-radius: $border-radius-lg;
+  box-shadow: $shadow-sm;
+}
+
+@mixin card-hover {
+  @include card;
+  transition: all $transition-normal;
+  
+  &:hover {
+    box-shadow: $shadow-lg;
+    transform: translateY(-2px);
+  }
+}
+
+// Section spacing
+@mixin section-padding {
+  padding: $spacing-20 0;
+}
+
+@mixin section-padding-small {
+  padding: $spacing-12 0;
+}
+
+// Flex utilities
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

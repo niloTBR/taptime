@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import SectionTitle from '@/components/common/SectionTitle'
+import { Link } from 'react-router-dom'
 import { 
   DollarSign, 
   Clock, 
@@ -11,9 +12,17 @@ import {
   CheckCircle, 
   ArrowRight,
   Star,
-  Quote
+  Quote,
+  Award,
+  Briefcase,
+  GraduationCap,
+  MessageSquare,
+  Heart,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react'
 import joinExpertData from '@/data/join-expert.json'
+import { useState } from 'react'
 
 const JoinExpertPage = () => {
   const { 
@@ -26,6 +35,45 @@ const JoinExpertPage = () => {
     faq, 
     stats 
   } = joinExpertData
+
+  const [currentRequirementIndex, setCurrentRequirementIndex] = useState(0)
+
+  // Enhanced requirements with clean icons
+  const enhancedRequirements = [
+    {
+      icon: <Award className="w-6 h-6" />,
+      title: "Proven Experience",
+      description: "5+ years of proven experience in your field"
+    },
+    {
+      icon: <Briefcase className="w-6 h-6" />,
+      title: "Leadership Role",
+      description: "Leadership role at a recognized company or successful entrepreneur"
+    },
+    {
+      icon: <GraduationCap className="w-6 h-6" />,
+      title: "Teaching Experience",
+      description: "Track record of mentoring, teaching, or coaching others"
+    },
+    {
+      icon: <MessageSquare className="w-6 h-6" />,
+      title: "Communication Skills",
+      description: "Excellent communication skills and professional presence"
+    },
+    {
+      icon: <Heart className="w-6 h-6" />,
+      title: "Passion for Helping",
+      description: "Passion for helping others succeed and grow"
+    }
+  ]
+
+  const nextRequirement = () => {
+    setCurrentRequirementIndex((prev) => (prev + 1) % enhancedRequirements.length)
+  }
+
+  const prevRequirement = () => {
+    setCurrentRequirementIndex((prev) => (prev - 1 + enhancedRequirements.length) % enhancedRequirements.length)
+  }
 
   const getIcon = (iconName) => {
     const icons = {
@@ -60,12 +108,11 @@ const JoinExpertPage = () => {
             />
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="rounded-full px-8">
-                {hero.ctaButton}
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-              <Button size="lg" variant="outline" className="rounded-full px-8 border-2 border-foreground">
-                {hero.secondaryButton}
+              <Button size="lg" className="rounded-full px-8" asChild>
+                <Link to="/signup?type=expert">
+                  Apply to Become an Expert
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
               </Button>
             </div>
 
@@ -162,26 +209,23 @@ const JoinExpertPage = () => {
             {testimonials.map((testimonial) => (
               <Card key={testimonial.id} className="border-2 border-foreground">
                 <CardContent className="p-6 space-y-4">
-                  <Quote className="w-8 h-8 text-muted-foreground" />
+                  <div className="flex items-center gap-1 mb-4">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-4 h-4 fill-black text-black" />
+                    ))}
+                  </div>
                   <p className="text-muted-foreground italic">
                     "{testimonial.quote}"
                   </p>
                   <div className="flex items-center gap-3 pt-4">
-                    <Avatar className="w-12 h-12">
-                      <AvatarImage src={testimonial.image} alt={testimonial.name} />
-                      <AvatarFallback>{getInitials(testimonial.name)}</AvatarFallback>
-                    </Avatar>
-                    <div className="flex-1">
+                    <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center">
+                      <span className="text-sm font-medium">
+                        {getInitials(testimonial.name)}
+                      </span>
+                    </div>
+                    <div>
                       <div className="font-semibold text-sm">{testimonial.name}</div>
                       <div className="text-xs text-muted-foreground">{testimonial.title}</div>
-                      <div className="flex items-center gap-3 mt-2">
-                        <Badge variant="secondary" className="bg-gray-100 text-xs">
-                          {testimonial.earnings}
-                        </Badge>
-                        <span className="text-xs text-muted-foreground">
-                          {testimonial.sessions} sessions
-                        </span>
-                      </div>
                     </div>
                   </div>
                 </CardContent>
@@ -203,51 +247,54 @@ const JoinExpertPage = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {categories.map((category, index) => (
-              <Card key={index} className="border-2 border-foreground">
-                <CardContent className="p-6">
-                  <div className="flex justify-between items-start mb-3">
-                    <h3 className="font-semibold">{category.name}</h3>
-                    <Badge 
-                      variant={category.demand === 'Very High' ? 'default' : 'secondary'}
-                      className={category.demand === 'Very High' ? '' : 'bg-gray-100'}
-                    >
-                      {category.demand} Demand
-                    </Badge>
-                  </div>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    {category.description}
-                  </p>
-                  <div className="text-sm font-medium">
-                    {category.averageRate}
-                  </div>
-                </CardContent>
-              </Card>
+              <Link 
+                key={index} 
+                to={`/browse?category=${encodeURIComponent(category.name)}`}
+                className="block hover:scale-[1.02] transition-transform"
+              >
+                <Card className="border-2 border-foreground h-full cursor-pointer">
+                  <CardContent className="p-6">
+                    <div className="mb-3">
+                      <h3 className="font-semibold">{category.name}</h3>
+                    </div>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      {category.description}
+                    </p>
+                    <div className="text-sm font-medium">
+                      {category.averageRate}
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Requirements */}
+      {/* Requirements - Clean Cards */}
       <section className="py-20 px-4">
-        <div className="container mx-auto max-w-5xl">
+        <div className="container mx-auto max-w-6xl">
           <SectionTitle 
             title={requirements.title}
             description={requirements.subtitle}
             className="mb-12"
           />
           
-          <Card className="border-2 border-foreground">
-            <CardContent className="p-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {requirements.criteria.map((criterion, index) => (
-                  <div key={index} className="flex items-start gap-3">
-                    <CheckCircle className="w-5 h-5 text-foreground mt-0.5" />
-                    <span className="text-sm">{criterion}</span>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {enhancedRequirements.map((requirement, index) => (
+              <Card key={index} className="border-2 border-foreground">
+                <CardContent className="p-6 text-center space-y-4">
+                  <div className="w-12 h-12 rounded-full bg-foreground text-background flex items-center justify-center mx-auto">
+                    {requirement.icon}
                   </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+                  <h3 className="font-semibold">{requirement.title}</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    {requirement.description}
+                  </p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -287,9 +334,11 @@ const JoinExpertPage = () => {
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
                 Join the leading platform for expert knowledge sharing and start monetizing your expertise today.
               </p>
-              <Button size="lg" className="rounded-full px-8">
-                Apply to Become an Expert
-                <ArrowRight className="ml-2 h-4 w-4" />
+              <Button size="lg" className="rounded-full px-8" asChild>
+                <Link to="/signup?type=expert">
+                  Apply to Become an Expert
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
               </Button>
             </CardContent>
           </Card>

@@ -1,0 +1,101 @@
+<!-- ExpertCard Component HTML Structure -->
+<div class="expert-card expert-card--{{variant}} expert-card--{{state}}" data-expert-id="{{id}}">
+  {{#if featured}}
+    <div class="expert-card__badge">
+      <span class="expert-card__badge-text">{{featuredText}}</span>
+    </div>
+  {{/if}}
+  
+  <div class="expert-card__header">
+    <div class="expert-card__avatar">
+      {{#if avatar}}
+        <img src="{{avatar}}" alt="{{name}}" class="expert-card__avatar-image">
+      {{else}}
+        <div class="expert-card__avatar-placeholder">
+          <span class="expert-card__avatar-initials">{{initials}}</span>
+        </div>
+      {{/if}}
+      {{#if online}}
+        <div class="expert-card__status expert-card__status--online"></div>
+      {{/if}}
+    </div>
+    
+    <div class="expert-card__actions">
+      <button class="expert-card__favorite" data-action="favorite" aria-label="Add to favorites">
+        <span class="expert-card__favorite-icon">{{favoriteIcon}}</span>
+      </button>
+      <button class="expert-card__share" data-action="share" aria-label="Share profile">
+        <span class="expert-card__share-icon">{{shareIcon}}</span>
+      </button>
+    </div>
+  </div>
+  
+  <div class="expert-card__content">
+    <h3 class="expert-card__name">{{name}}</h3>
+    <p class="expert-card__title">{{title}}</p>
+    <p class="expert-card__company">{{company}}</p>
+    
+    <div class="expert-card__rating">
+      <div class="expert-card__stars" data-rating="{{rating}}">
+        <span class="expert-card__stars-filled" style="width: {{ratingPercent}}%"></span>
+      </div>
+      <span class="expert-card__rating-text">({{reviewCount}})</span>
+    </div>
+    
+    {{#if bio}}
+      <p class="expert-card__bio">{{bio}}</p>
+    {{/if}}
+    
+    {{#if specialties}}
+      <div class="expert-card__specialties">
+        {{#each specialties}}
+          <span class="expert-card__specialty">{{this}}</span>
+        {{/each}}
+      </div>
+    {{/if}}
+    
+    <div class="expert-card__pricing">
+      <span class="expert-card__price">{{currency}}{{price}}</span>
+      <span class="expert-card__duration">/{{duration}}</span>
+    </div>
+  </div>
+  
+  <div class="expert-card__footer">
+    {{#if available}}
+      <button class="expert-card__book-btn" data-action="book">
+        {{bookText}}
+      </button>
+    {{else}}
+      <button class="expert-card__notify-btn" data-action="notify" disabled>
+        {{notifyText}}
+      </button>
+    {{/if}}
+    
+    <button class="expert-card__view-btn" data-action="view">
+      {{viewProfileText}}
+    </button>
+  </div>
+  
+  {{#if state === 'loading'}}
+    <div class="expert-card__loading">
+      <div class="expert-card__skeleton">
+        <div class="expert-card__skeleton-avatar"></div>
+        <div class="expert-card__skeleton-content">
+          <div class="expert-card__skeleton-line expert-card__skeleton-line--title"></div>
+          <div class="expert-card__skeleton-line expert-card__skeleton-line--subtitle"></div>
+          <div class="expert-card__skeleton-line expert-card__skeleton-line--text"></div>
+        </div>
+      </div>
+    </div>
+  {{/if}}
+  
+  {{#if state === 'error'}}
+    <div class="expert-card__error">
+      <span class="expert-card__error-icon">{{errorIcon}}</span>
+      <p class="expert-card__error-message">{{errorMessage}}</p>
+      <button class="expert-card__retry-btn" data-action="retry">
+        {{retryText}}
+      </button>
+    </div>
+  {{/if}}
+</div>

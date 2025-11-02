@@ -13,6 +13,7 @@ import {
   Video,
   Plus,
   CheckCircle,
+  Check,
   ArrowRight,
   MessageCircle,
   MoreHorizontal,
@@ -43,12 +44,15 @@ const UserDashboard = () => {
   const [showReschedule, setShowReschedule] = useState(false)
   const [selectedSession, setSelectedSession] = useState(null)
   const [showSessionDetail, setShowSessionDetail] = useState(false)
-  const [sessionDetailTab, setSessionDetailTab] = useState('details')
+  const [sessionDetailTab, setSessionDetailTab] = useState('summary')
   const [showRatingPopup, setShowRatingPopup] = useState(false)
   const [selectedRating, setSelectedRating] = useState(0)
   const [ratingComment, setRatingComment] = useState('')
   const [expertsScrollPosition, setExpertsScrollPosition] = useState(0)
   const [showPaymentMessage, setShowPaymentMessage] = useState(false)
+  const [showSettings, setShowSettings] = useState(false)
+  const [settingsTab, setSettingsTab] = useState('basic')
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('card')
 
   // Mock user data from onboarding
   const user = {
@@ -485,9 +489,12 @@ const UserDashboard = () => {
                 </div>
               </div>
               
-              <Button className="w-full mt-4 rounded-full text-sm">
+              <Button 
+                className="w-full mt-4 rounded-full text-sm"
+                onClick={() => setShowSettings(true)}
+              >
                 <Edit className="w-3 h-3 mr-2" />
-                Edit Profile
+                Profile & Payment Settings
               </Button>
             </CardContent>
           </Card>
@@ -603,7 +610,7 @@ const UserDashboard = () => {
                               size="sm" 
                               className="rounded-full px-3 py-1 text-xs h-8 flex-1"
                             >
-                              Join Session
+                              Reschedule
                             </Button>
                           ) : (
                             <Button 
@@ -729,6 +736,7 @@ const UserDashboard = () => {
                           <Button 
                             size="sm" 
                             className="rounded-full px-3 py-1 text-xs h-8 flex-1"
+                            onClick={() => window.open(`/booking?expert=${session.expertName.toLowerCase().replace(' ', '-')}`, '_blank')}
                           >
                             {session.cost}/hr Book Again
                           </Button>
@@ -816,55 +824,35 @@ const UserDashboard = () => {
       {showSessionDetail && selectedSession && (
         <div className="fixed inset-0 bg-black/50 z-50">
           <div className="fixed right-0 top-0 h-full w-96 bg-white shadow-xl overflow-y-auto">
-            <div className="p-6">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-semibold">Session</h2>
-                <Button 
-                  variant="outline" 
-                  size="icon"
-                  className="rounded-full"
-                  onClick={() => setShowSessionDetail(false)}
-                >
-                  <X className="w-4 h-4" />
-                </Button>
-              </div>
-              
-              {/* Expert Info */}
-              <div className="flex items-center gap-4 mb-6">
-                <Avatar className="w-16 h-16">
-                  <AvatarImage src={selectedSession.avatar} alt={selectedSession.expertName} />
-                  <AvatarFallback>{getInitials(selectedSession.expertName)}</AvatarFallback>
-                </Avatar>
-                <div className="flex-1">
-                  <h3 className="font-semibold text-lg">{selectedSession.expertName}</h3>
-                  <p className="text-muted-foreground text-sm">{selectedSession.expertTitle}</p>
+            <Card className="border-2 border-foreground h-full rounded-none">
+              <CardHeader>
+                <div className="flex items-center justify-between mb-4">
+                  <CardTitle>Session Details</CardTitle>
                   <Button 
-                    size="sm" 
-                    className="mt-2 rounded-full"
-                    onClick={() => window.open(`/expert/${selectedSession.expertName.toLowerCase().replace(' ', '-')}`, '_blank')}
+                    variant="outline" 
+                    size="icon"
+                    className="rounded-full"
+                    onClick={() => setShowSessionDetail(false)}
                   >
-                    <Eye className="w-4 h-4 mr-2" />
-                    View Full Profile
+                    <X className="w-4 h-4" />
                   </Button>
                 </div>
-              </div>
-              
-              {/* Tab Navigation */}
-              <div className="border-b mb-6">
-                <div className="flex space-x-6">
+                
+                {/* Tab Navigation */}
+                <div className="flex space-x-4 border-b">
                   <button
-                    onClick={() => setSessionDetailTab('details')}
-                    className={`py-3 px-1 border-b-2 font-medium text-sm ${
-                      sessionDetailTab === 'details'
+                    onClick={() => setSessionDetailTab('summary')}
+                    className={`pb-2 px-1 text-sm font-medium border-b-2 transition-colors ${
+                      sessionDetailTab === 'summary'
                         ? 'border-foreground text-foreground'
                         : 'border-transparent text-gray-500 hover:text-gray-700'
                     }`}
                   >
-                    Session Details
+                    Summary
                   </button>
                   <button
                     onClick={() => setSessionDetailTab('chat')}
-                    className={`py-3 px-1 border-b-2 font-medium text-sm ${
+                    className={`pb-2 px-1 text-sm font-medium border-b-2 transition-colors ${
                       sessionDetailTab === 'chat'
                         ? 'border-foreground text-foreground'
                         : 'border-transparent text-gray-500 hover:text-gray-700'
@@ -873,43 +861,84 @@ const UserDashboard = () => {
                     Chat
                   </button>
                 </div>
-              </div>
-              
-              {/* Tab Content */}
-              {sessionDetailTab === 'details' && (
-                <div className="space-y-6">
-                  {/* Session Info */}
-                  <div className="p-4 bg-gray-50 rounded-lg">
-                    <h4 className="font-medium mb-2">{selectedSession.topic}</h4>
-                    <p className="text-sm text-muted-foreground mb-3">{selectedSession.summary}</p>
-                    <div className="space-y-1 text-sm">
-                      <p>📅 {selectedSession.date} at {selectedSession.time}</p>
-                      <p>⏱️ {selectedSession.duration}</p>
-                      <p>💰 {selectedSession.cost}</p>
-                    </div>
+              </CardHeader>
+              <CardContent className="space-y-4">{sessionDetailTab === 'summary' && (
+                <div className="space-y-4">
+                {/* Expert Info with Photo */}
+                <div 
+                  className="flex items-center gap-3 p-3 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors"
+                  onClick={() => window.open(`/expert/${selectedSession.expertName.toLowerCase().replace(' ', '-')}`, '_blank')}
+                >
+                  <Avatar className="w-12 h-12">
+                    <AvatarImage src={selectedSession.avatar} alt={selectedSession.expertName} />
+                    <AvatarFallback>{getInitials(selectedSession.expertName)}</AvatarFallback>
+                  </Avatar>
+                  <div className="flex-1 min-w-0">
+                    <h4 className="font-semibold text-sm truncate">Dr. {selectedSession.expertName}</h4>
+                    <p className="text-xs text-muted-foreground truncate">{selectedSession.expertise}</p>
                   </div>
-                  
-                  {/* Payment Status */}
-                  <div className="p-4 border rounded-lg">
-                    <div className="flex items-center gap-2 mb-2">
-                      <div className={`w-3 h-3 rounded-full ${
-                        selectedSession.paymentStatus === 'paid' ? 'bg-green-500' : 'bg-yellow-500'
-                      }`}></div>
-                      <span className="font-medium">Payment Status</span>
+                  <ChevronRight className="w-4 h-4 text-gray-400" />
+                </div>
+
+                <div className="border-t my-3" />
+
+                {/* Session Details */}
+                <div>
+                  <h5 className="font-medium text-sm mb-3">Session Details</h5>
+                  <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                    <div>
+                      <div className="font-medium text-sm">{selectedSession.topic}</div>
+                      <div className="text-xs text-muted-foreground mt-1">{selectedSession.duration}</div>
                     </div>
-                    <p className="text-sm text-muted-foreground">
-                      {selectedSession.paymentStatus === 'paid' 
-                        ? 'Payment completed successfully' 
-                        : 'Payment is being processed'}
-                    </p>
+                    <div className="font-semibold text-sm">{selectedSession.cost}</div>
                   </div>
-                  
-                  {/* Actions */}
+                </div>
+
+                {/* Date & Time */}
+                <div className="border-t my-3" />
+                <div>
+                  <h5 className="font-medium text-sm mb-2">Date & Time</h5>
+                  <div className="flex items-center gap-2 text-sm">
+                    <Calendar className="w-4 h-4" />
+                    <span>{selectedSession.date}</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm mt-1">
+                    <Clock className="w-4 h-4" />
+                    <span>{selectedSession.time}</span>
+                  </div>
+                </div>
+
+                {/* Payment Status */}
+                <div className="border-t my-3" />
+                <div className="bg-gray-50 p-3 rounded-lg">
+                  <div className="flex justify-between items-center mb-1">
+                    <span className="text-sm">Session fee</span>
+                    <span className="text-sm">{selectedSession.cost}</span>
+                  </div>
+                  <div className="flex justify-between items-center mb-1">
+                    <span className="text-sm">Platform fee</span>
+                    <span className="text-sm">$5</span>
+                  </div>
+                  <div className="border-t my-2" />
+                  <div className="flex justify-between items-center font-semibold">
+                    <span>Status</span>
+                    <Badge variant={selectedSession.paymentStatus === 'paid' ? 'default' : 'secondary'}>
+                      {selectedSession.paymentStatus === 'paid' ? 'Paid' : 'Pending'}
+                    </Badge>
+                  </div>
+                </div>
+
+                {/* Actions based on session status */}
+                <div className="border-t my-3" />
+                {selectedSession.status === 'Upcoming' ? (
                   <div className="space-y-3">
-                    <Button className="w-full rounded-full">
-                      <Video className="w-4 h-4 mr-2" />
+                    {/* Primary Action - Join Session */}
+                    <Button className="w-full rounded-full bg-black hover:bg-gray-800 text-white py-3 text-base font-semibold">
+                      <Video className="w-5 h-5 mr-2" />
                       Join Session
                     </Button>
+                    
+                    {/* Secondary Actions */}
                     <div className="grid grid-cols-2 gap-3">
                       <Button 
                         variant="outline" 
@@ -925,57 +954,123 @@ const UserDashboard = () => {
                         variant="outline" 
                         className="rounded-full border-2 border-red-500 text-red-600 hover:bg-red-50"
                       >
-                        Cancel Session
+                        Cancel
                       </Button>
                     </div>
                   </div>
-                </div>
-              )}
-              
-              {sessionDetailTab === 'chat' && (
-                <div className="space-y-4">
-                  {/* Conversation History */}
-                  <div className="space-y-3 max-h-96 overflow-y-auto">
-                    {/* Previous messages */}
-                    <div className="p-3 bg-gray-50 rounded-lg">
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="text-sm font-medium">{selectedSession.expertName}</span>
-                        <span className="text-xs text-muted-foreground">Yesterday 3:20 PM</span>
-                      </div>
-                      <p className="text-sm">Looking forward to our session tomorrow! I've prepared some materials based on your goals.</p>
-                    </div>
-                    
-                    <div className="p-3 bg-blue-50 rounded-lg ml-6">
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="text-sm font-medium">You</span>
-                        <span className="text-xs text-muted-foreground">Yesterday 4:15 PM</span>
-                      </div>
-                      <p className="text-sm">Perfect! I'm excited to dive into the roadmap discussion. Thanks for the prep work.</p>
-                    </div>
-                    
-                    <div className="p-3 bg-gray-50 rounded-lg">
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="text-sm font-medium">{selectedSession.expertName}</span>
-                        <span className="text-xs text-muted-foreground">Today 9:30 AM</span>
-                      </div>
-                      <p className="text-sm">Just sent you the session agenda and some pre-reading materials via email.</p>
-                    </div>
-                  </div>
-                  
-                  {/* New message input */}
-                  <div className="flex gap-2 pt-4 border-t">
-                    <input 
-                      type="text" 
-                      className="flex-1 p-3 border-2 border-gray-200 rounded-lg" 
-                      placeholder="Type a message..."
-                    />
-                    <Button size="sm" className="rounded-lg px-4">
-                      Send
+                ) : (
+                  /* Past Session Actions */
+                  <div className="space-y-3">
+                    <Button 
+                      className="w-full rounded-full bg-black hover:bg-gray-800 text-white py-3 text-base font-semibold"
+                      onClick={() => window.open(`/booking?expert=${selectedSession.expertName.toLowerCase().replace(' ', '-')}`, '_blank')}
+                    >
+                      Book Again
                     </Button>
+                    
+                    {selectedSession.rating ? (
+                      <div className="text-center p-3 bg-gray-50 rounded-lg">
+                        <p className="text-sm text-muted-foreground mb-2">Your Rating</p>
+                        <div className="flex justify-center gap-1">
+                          {[1, 2, 3, 4, 5].map((star) => (
+                            <Star 
+                              key={star}
+                              className={`h-4 w-4 ${
+                                star <= selectedSession.rating 
+                                  ? 'fill-yellow-400 text-yellow-400' 
+                                  : 'text-gray-300'
+                              }`}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    ) : (
+                      <Button 
+                        variant="outline" 
+                        className="w-full rounded-full border-2 border-foreground"
+                        onClick={() => setShowRatingPopup(true)}
+                      >
+                        <Star className="w-4 h-4 mr-2" />
+                        Rate Session
+                      </Button>
+                    )}
                   </div>
+                )}
                 </div>
-              )}
-            </div>
+                )}
+
+                {sessionDetailTab === 'chat' && (
+                  <div className="space-y-4">
+                    {/* Chat Header with Expert Info */}
+                    <div className="flex items-center gap-3 pb-3 border-b">
+                      <Avatar className="w-10 h-10">
+                        <AvatarImage src={selectedSession.avatar} alt={selectedSession.expertName} />
+                        <AvatarFallback>{getInitials(selectedSession.expertName)}</AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <h4 className="font-semibold text-sm">Dr. {selectedSession.expertName}</h4>
+                        <p className="text-xs text-muted-foreground">{selectedSession.expertise}</p>
+                      </div>
+                    </div>
+
+                    {selectedSession.status === 'Upcoming' ? (
+                      <div>
+                        {/* Conversation History */}
+                        <div className="space-y-3 max-h-96 overflow-y-auto">
+                          {/* Previous messages */}
+                          <div className="p-3 bg-gray-50 rounded-lg">
+                            <div className="flex items-center gap-2 mb-1">
+                              <span className="text-sm font-medium">{selectedSession.expertName}</span>
+                              <span className="text-xs text-muted-foreground">Yesterday 3:20 PM</span>
+                            </div>
+                            <p className="text-sm">Looking forward to our session tomorrow! I've prepared some materials based on your goals.</p>
+                          </div>
+                          
+                          <div className="p-3 bg-blue-50 rounded-lg ml-6">
+                            <div className="flex items-center gap-2 mb-1">
+                              <span className="text-sm font-medium">You</span>
+                              <span className="text-xs text-muted-foreground">Yesterday 4:15 PM</span>
+                            </div>
+                            <p className="text-sm">Perfect! I'm excited to dive into the roadmap discussion. Thanks for the prep work.</p>
+                          </div>
+                          
+                          <div className="p-3 bg-gray-50 rounded-lg">
+                            <div className="flex items-center gap-2 mb-1">
+                              <span className="text-sm font-medium">{selectedSession.expertName}</span>
+                              <span className="text-xs text-muted-foreground">Today 9:30 AM</span>
+                            </div>
+                            <p className="text-sm">Just sent you the session agenda and some pre-reading materials via email.</p>
+                          </div>
+                        </div>
+                        
+                        {/* New message input */}
+                        <div className="flex gap-2 pt-4 border-t">
+                          <input 
+                            type="text" 
+                            className="flex-1 p-3 border border-gray-300 rounded-lg" 
+                            placeholder="Type a message..."
+                          />
+                          <Button size="sm" className="rounded-lg px-4">
+                            Send
+                          </Button>
+                        </div>
+                      </div>
+                    ) : (
+                      /* Past Session - Chat Closed */
+                      <div className="text-center py-8">
+                        <div className="p-6 bg-gray-50 rounded-lg">
+                          <MessageCircle className="w-12 h-12 text-gray-400 mx-auto mb-3" />
+                          <h4 className="font-medium text-gray-600 mb-2">Chat Closed</h4>
+                          <p className="text-sm text-muted-foreground">
+                            Chat is no longer available for completed sessions.
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
           </div>
         </div>
       )}
@@ -1138,6 +1233,731 @@ const UserDashboard = () => {
               </div>
             </CardContent>
           </Card>
+        </div>
+      )}
+
+      {/* Settings Modal */}
+      {showSettings && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-lg w-full max-w-4xl h-[90vh] flex flex-col">
+            {/* Settings Header */}
+            <div className="flex items-center justify-between p-6 border-b">
+              <h2 className="text-xl font-semibold">Profile & Payment Settings</h2>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  onClick={() => setShowSettings(false)}
+                  className="rounded-full px-4"
+                >
+                  DISCARD
+                </Button>
+                <Button
+                  className="rounded-full px-4"
+                >
+                  SAVE
+                </Button>
+              </div>
+            </div>
+
+            {/* Settings Content */}
+            <div className="flex-1 flex overflow-hidden">
+              {/* Tab Navigation */}
+              <div className="w-64 border-r p-4">
+                <nav className="space-y-2">
+                  {[
+                    { id: 'basic', label: 'Basic Information', icon: User },
+                    { id: 'security', label: 'Account Security', icon: Shield },
+                    { id: 'goals', label: 'Goals & Interests', icon: Target },
+                    { id: 'billing', label: 'Billing Information', icon: CreditCard },
+                    { id: 'invoices', label: 'Invoices', icon: Receipt }
+                  ].map((tab) => (
+                    <button
+                      key={tab.id}
+                      onClick={() => setSettingsTab(tab.id)}
+                      className={`w-full flex items-center gap-3 px-3 py-2 text-left rounded-lg transition-colors ${
+                        settingsTab === tab.id
+                          ? 'bg-gray-100 text-gray-900 font-medium'
+                          : 'text-gray-600 hover:bg-gray-50'
+                      }`}
+                    >
+                      <tab.icon className="w-4 h-4" />
+                      {tab.label}
+                    </button>
+                  ))}
+                </nav>
+              </div>
+
+              {/* Tab Content */}
+              <div className="flex-1 p-6 overflow-y-auto">
+                {settingsTab === 'basic' && (
+                  <div>
+                    <h3 className="text-lg font-semibold mb-6">Basic Information</h3>
+                    <div className="space-y-6">
+                      {/* Profile Picture */}
+                      <div className="flex items-center gap-4">
+                        <Avatar className="w-20 h-20">
+                          <AvatarImage src={user.avatar} alt={`${user.firstName} ${user.lastName}`} />
+                          <AvatarFallback className="text-xl">{getInitials()}</AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <Button variant="outline" size="sm" className="mb-2">
+                            Change Photo
+                          </Button>
+                          <p className="text-xs text-muted-foreground">JPG, PNG or GIF. Max size 5MB.</p>
+                        </div>
+                      </div>
+
+                      {/* Name Fields */}
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="text-sm font-medium mb-2 block">First Name</label>
+                          <input 
+                            type="text" 
+                            value={user.firstName}
+                            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                          />
+                        </div>
+                        <div>
+                          <label className="text-sm font-medium mb-2 block">Last Name</label>
+                          <input 
+                            type="text" 
+                            value={user.lastName}
+                            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Email and Phone */}
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="text-sm font-medium mb-2 block">Email Address</label>
+                          <input 
+                            type="email" 
+                            value={user.email}
+                            className="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-500"
+                            disabled
+                          />
+                          <p className="text-xs text-muted-foreground mt-1">Email cannot be changed</p>
+                        </div>
+                        <div>
+                          <label className="text-sm font-medium mb-2 block">Phone Number</label>
+                          <input 
+                            type="tel" 
+                            value={user.phone}
+                            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Country */}
+                      <div>
+                        <label className="text-sm font-medium mb-2 block">Country</label>
+                        <select className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent">
+                          <option value="United States">United States</option>
+                          <option value="Canada">Canada</option>
+                          <option value="United Kingdom">United Kingdom</option>
+                          <option value="Australia">Australia</option>
+                          <option value="Germany">Germany</option>
+                          <option value="France">France</option>
+                          <option value="Other">Other</option>
+                        </select>
+                      </div>
+
+                      {/* Bio */}
+                      <div>
+                        <label className="text-sm font-medium mb-2 block">Bio</label>
+                        <textarea 
+                          value={user.bio}
+                          rows="4"
+                          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent resize-none"
+                          placeholder="Tell us about yourself..."
+                        />
+                        <p className="text-xs text-muted-foreground mt-1">Brief description for your profile. This will be visible to experts.</p>
+                      </div>
+
+                      {/* Time Zone */}
+                      <div>
+                        <label className="text-sm font-medium mb-2 block">Time Zone</label>
+                        <select className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent">
+                          <option value="PST">Pacific Standard Time (PST)</option>
+                          <option value="MST">Mountain Standard Time (MST)</option>
+                          <option value="CST">Central Standard Time (CST)</option>
+                          <option value="EST">Eastern Standard Time (EST)</option>
+                          <option value="GMT">Greenwich Mean Time (GMT)</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                
+                {settingsTab === 'security' && (
+                  <div>
+                    <h3 className="text-lg font-semibold mb-6">Account Security</h3>
+                    <div className="space-y-6">
+                      {/* Current Password */}
+                      <div>
+                        <label className="text-sm font-medium mb-2 block">Current Password</label>
+                        <input 
+                          type="password" 
+                          placeholder="Enter current password"
+                          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                        />
+                      </div>
+
+                      {/* New Password */}
+                      <div>
+                        <label className="text-sm font-medium mb-2 block">New Password</label>
+                        <input 
+                          type="password" 
+                          placeholder="Enter new password"
+                          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                        />
+                        <p className="text-xs text-muted-foreground mt-1">Must be at least 8 characters with uppercase, lowercase, and number</p>
+                      </div>
+
+                      {/* Confirm Password */}
+                      <div>
+                        <label className="text-sm font-medium mb-2 block">Confirm New Password</label>
+                        <input 
+                          type="password" 
+                          placeholder="Confirm new password"
+                          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                        />
+                      </div>
+
+                      {/* Two-Factor Authentication */}
+                      <div className="border-t pt-6">
+                        <h4 className="text-md font-semibold mb-4">Two-Factor Authentication</h4>
+                        <div className="flex items-center justify-between p-4 border rounded-lg">
+                          <div>
+                            <h5 className="font-medium text-sm">SMS Authentication</h5>
+                            <p className="text-xs text-muted-foreground">Receive verification codes via SMS</p>
+                          </div>
+                          <Button variant="outline" size="sm">
+                            Enable
+                          </Button>
+                        </div>
+                      </div>
+
+                      {/* Login Sessions */}
+                      <div className="border-t pt-6">
+                        <h4 className="text-md font-semibold mb-4">Active Sessions</h4>
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between p-3 border rounded-lg">
+                            <div>
+                              <h5 className="font-medium text-sm">Current Session</h5>
+                              <p className="text-xs text-muted-foreground">MacBook Pro • Chrome • San Francisco, CA</p>
+                              <p className="text-xs text-muted-foreground">Last active: Now</p>
+                            </div>
+                            <Badge variant="secondary">Current</Badge>
+                          </div>
+                          <div className="flex items-center justify-between p-3 border rounded-lg">
+                            <div>
+                              <h5 className="font-medium text-sm">iPhone</h5>
+                              <p className="text-xs text-muted-foreground">Safari • San Francisco, CA</p>
+                              <p className="text-xs text-muted-foreground">Last active: 2 hours ago</p>
+                            </div>
+                            <Button variant="outline" size="sm" className="text-red-600 border-red-200 hover:bg-red-50">
+                              Revoke
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                
+                {settingsTab === 'goals' && (
+                  <div>
+                    <h3 className="text-lg font-semibold mb-6">Goals & Interests</h3>
+                    <div className="space-y-6">
+                      {/* Primary Goals */}
+                      <div>
+                        <label className="text-sm font-medium mb-2 block">What are your primary goals?</label>
+                        <textarea 
+                          value={user.primaryGoals}
+                          rows="4"
+                          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent resize-none"
+                          placeholder="e.g., Start a new business, Improve leadership skills, Learn new technologies"
+                        />
+                        <p className="text-xs text-muted-foreground mt-1">Separate multiple goals with commas</p>
+                      </div>
+
+                      {/* Expertise Needed */}
+                      <div>
+                        <label className="text-sm font-medium mb-2 block">What type of expertise are you seeking?</label>
+                        <textarea 
+                          value={user.expertiseNeeded}
+                          rows="4"
+                          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent resize-none"
+                          placeholder="e.g., Product Strategy, Team Leadership, Technology Innovation"
+                        />
+                        <p className="text-xs text-muted-foreground mt-1">Separate multiple areas with commas</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                
+                {settingsTab === 'billing' && (
+                  <div>
+                    <h3 className="text-lg font-semibold mb-6">Billing Information</h3>
+                    <div className="space-y-6">
+                      {/* Current Payment Methods */}
+                      <div>
+                        <h4 className="text-md font-semibold mb-4">Payment Methods</h4>
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between p-4 border rounded-lg">
+                            <div className="flex items-center gap-3">
+                              <div className="w-10 h-6 bg-gradient-to-r from-blue-600 to-purple-600 rounded text-white text-xs flex items-center justify-center font-bold">
+                                VISA
+                              </div>
+                              <div>
+                                <p className="font-medium text-sm">•••• •••• •••• 4242</p>
+                                <p className="text-xs text-muted-foreground">Expires 12/2025</p>
+                              </div>
+                              <Badge variant="secondary" className="ml-2">Primary</Badge>
+                            </div>
+                            <div className="flex gap-2">
+                              <Button variant="outline" size="sm">Edit</Button>
+                              <Button variant="outline" size="sm" className="text-red-600 border-red-200 hover:bg-red-50">Remove</Button>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <Button variant="outline" className="mt-3" size="sm">
+                          <Plus className="w-4 h-4 mr-2" />
+                          Add Payment Method
+                        </Button>
+                      </div>
+
+                      {/* Add New Payment Method */}
+                      <div className="border-t pt-6">
+                        <h4 className="text-md font-semibold mb-4">Add New Payment Method</h4>
+                        
+                        {/* Payment Method Selection */}
+                        <div className="space-y-3 mb-6">
+                          <label className="text-sm font-medium">Choose Payment Method</label>
+                          <div className="space-y-3">
+                            <label className={`flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50 ${
+                              selectedPaymentMethod === 'card' ? 'border-gray-900 bg-gray-50' : 'border-gray-300'
+                            }`}>
+                              <input 
+                                type="radio" 
+                                name="paymentMethod" 
+                                value="card" 
+                                className="mr-3" 
+                                checked={selectedPaymentMethod === 'card'}
+                                onChange={(e) => setSelectedPaymentMethod(e.target.value)}
+                              />
+                              <CreditCard className="w-5 h-5 mr-3 text-gray-600" />
+                              <div>
+                                <p className="font-medium text-sm">Credit/Debit Card</p>
+                                <p className="text-xs text-muted-foreground">Visa, Mastercard, American Express</p>
+                              </div>
+                            </label>
+                            
+                            <label className={`flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50 ${
+                              selectedPaymentMethod === 'apple' ? 'border-gray-900 bg-gray-50' : 'border-gray-300'
+                            }`}>
+                              <input 
+                                type="radio" 
+                                name="paymentMethod" 
+                                value="apple" 
+                                className="mr-3" 
+                                checked={selectedPaymentMethod === 'apple'}
+                                onChange={(e) => setSelectedPaymentMethod(e.target.value)}
+                              />
+                              <div className="w-5 h-5 mr-3 bg-black rounded flex items-center justify-center">
+                                <span className="text-white text-xs font-bold">🍎</span>
+                              </div>
+                              <div>
+                                <p className="font-medium text-sm">Apple Pay</p>
+                                <p className="text-xs text-muted-foreground">Pay with Touch ID or Face ID</p>
+                              </div>
+                            </label>
+                            
+                            <label className={`flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50 ${
+                              selectedPaymentMethod === 'google' ? 'border-gray-900 bg-gray-50' : 'border-gray-300'
+                            }`}>
+                              <input 
+                                type="radio" 
+                                name="paymentMethod" 
+                                value="google" 
+                                className="mr-3" 
+                                checked={selectedPaymentMethod === 'google'}
+                                onChange={(e) => setSelectedPaymentMethod(e.target.value)}
+                              />
+                              <div className="w-5 h-5 mr-3 flex items-center justify-center">
+                                <span className="text-xs">G</span>
+                              </div>
+                              <div>
+                                <p className="font-medium text-sm">Google Pay</p>
+                                <p className="text-xs text-muted-foreground">Quick and secure payments</p>
+                              </div>
+                            </label>
+                            
+                            <label className={`flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50 ${
+                              selectedPaymentMethod === 'bank' ? 'border-gray-900 bg-gray-50' : 'border-gray-300'
+                            }`}>
+                              <input 
+                                type="radio" 
+                                name="paymentMethod" 
+                                value="bank" 
+                                className="mr-3" 
+                                checked={selectedPaymentMethod === 'bank'}
+                                onChange={(e) => setSelectedPaymentMethod(e.target.value)}
+                              />
+                              <Building className="w-5 h-5 mr-3 text-gray-600" />
+                              <div>
+                                <p className="font-medium text-sm">Bank Transfer</p>
+                                <p className="text-xs text-muted-foreground">Direct bank account transfer</p>
+                              </div>
+                            </label>
+                            
+                            <label className={`flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50 ${
+                              selectedPaymentMethod === 'paypal' ? 'border-gray-900 bg-gray-50' : 'border-gray-300'
+                            }`}>
+                              <input 
+                                type="radio" 
+                                name="paymentMethod" 
+                                value="paypal" 
+                                className="mr-3" 
+                                checked={selectedPaymentMethod === 'paypal'}
+                                onChange={(e) => setSelectedPaymentMethod(e.target.value)}
+                              />
+                              <div className="w-5 h-5 mr-3 bg-blue-600 rounded flex items-center justify-center">
+                                <span className="text-white text-xs font-bold">P</span>
+                              </div>
+                              <div>
+                                <p className="font-medium text-sm">PayPal</p>
+                                <p className="text-xs text-muted-foreground">Pay with your PayPal account</p>
+                              </div>
+                            </label>
+                          </div>
+                        </div>
+
+                        {/* Conditional Forms */}
+                        <div className="space-y-4">
+                          {/* Conditional Payment Forms */}
+                          {selectedPaymentMethod === 'card' && (
+                            <div className="space-y-4">
+                              {/* Card Number */}
+                              <div>
+                                <label className="text-sm font-medium mb-2 block">Card Number</label>
+                                <input 
+                                  type="text" 
+                                  placeholder="1234 5678 9012 3456"
+                                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                                />
+                              </div>
+
+                              {/* Expiry and CVC */}
+                              <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                  <label className="text-sm font-medium mb-2 block">Expiry Date</label>
+                                  <input 
+                                    type="text" 
+                                    placeholder="MM/YY"
+                                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                                  />
+                                </div>
+                                <div>
+                                  <label className="text-sm font-medium mb-2 block">CVC</label>
+                                  <input 
+                                    type="text" 
+                                    placeholder="123"
+                                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                                  />
+                                </div>
+                              </div>
+
+                              {/* Cardholder Name */}
+                              <div>
+                                <label className="text-sm font-medium mb-2 block">Cardholder Name</label>
+                                <input 
+                                  type="text" 
+                                  placeholder="John Smith"
+                                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                                />
+                              </div>
+
+                              {/* Billing Address */}
+                              <div className="border-t pt-4">
+                                <h5 className="font-medium text-sm mb-3">Billing Address</h5>
+                                <div className="space-y-4">
+                                  <div>
+                                    <label className="text-sm font-medium mb-2 block">Address Line 1</label>
+                                    <input 
+                                      type="text" 
+                                      placeholder="123 Main Street"
+                                      className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                                    />
+                                  </div>
+                                  <div>
+                                    <label className="text-sm font-medium mb-2 block">Address Line 2 (Optional)</label>
+                                    <input 
+                                      type="text" 
+                                      placeholder="Apartment, suite, etc."
+                                      className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                                    />
+                                  </div>
+                                  <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                      <label className="text-sm font-medium mb-2 block">City</label>
+                                      <input 
+                                        type="text" 
+                                        placeholder="San Francisco"
+                                        className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                                      />
+                                    </div>
+                                    <div>
+                                      <label className="text-sm font-medium mb-2 block">State</label>
+                                      <input 
+                                        type="text" 
+                                        placeholder="CA"
+                                        className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                                      />
+                                    </div>
+                                  </div>
+                                  <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                      <label className="text-sm font-medium mb-2 block">Postal Code</label>
+                                      <input 
+                                        type="text" 
+                                        placeholder="94102"
+                                        className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                                      />
+                                    </div>
+                                    <div>
+                                      <label className="text-sm font-medium mb-2 block">Country</label>
+                                      <select className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent">
+                                        <option value="US">United States</option>
+                                        <option value="CA">Canada</option>
+                                        <option value="GB">United Kingdom</option>
+                                        <option value="AU">Australia</option>
+                                      </select>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          )}
+
+                          {selectedPaymentMethod === 'apple' && (
+                            <div className="text-center py-8 bg-gray-50 rounded-lg">
+                              <div className="w-16 h-16 bg-black rounded-full flex items-center justify-center mx-auto mb-4">
+                                <span className="text-white text-2xl">🍎</span>
+                              </div>
+                              <h5 className="font-medium mb-2">Apple Pay</h5>
+                              <p className="text-sm text-muted-foreground mb-4">
+                                You'll be redirected to complete setup with Apple Pay
+                              </p>
+                              <Button className="bg-black hover:bg-gray-800 text-white">
+                                Continue with Apple Pay
+                              </Button>
+                            </div>
+                          )}
+
+                          {selectedPaymentMethod === 'google' && (
+                            <div className="text-center py-8 bg-gray-50 rounded-lg">
+                              <div className="w-16 h-16 border-2 border-gray-300 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <span className="text-2xl font-bold text-gray-600">G</span>
+                              </div>
+                              <h5 className="font-medium mb-2">Google Pay</h5>
+                              <p className="text-sm text-muted-foreground mb-4">
+                                Quick and secure payments with Google Pay
+                              </p>
+                              <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+                                Continue with Google Pay
+                              </Button>
+                            </div>
+                          )}
+
+                          {selectedPaymentMethod === 'bank' && (
+                            <div className="space-y-4">
+                              <div>
+                                <label className="text-sm font-medium mb-2 block">Bank Account Type</label>
+                                <select className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent">
+                                  <option value="checking">Checking Account</option>
+                                  <option value="savings">Savings Account</option>
+                                </select>
+                              </div>
+                              <div>
+                                <label className="text-sm font-medium mb-2 block">Account Holder Name</label>
+                                <input 
+                                  type="text" 
+                                  placeholder="John Smith"
+                                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                                />
+                              </div>
+                              <div>
+                                <label className="text-sm font-medium mb-2 block">Routing Number</label>
+                                <input 
+                                  type="text" 
+                                  placeholder="123456789"
+                                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                                />
+                              </div>
+                              <div>
+                                <label className="text-sm font-medium mb-2 block">Account Number</label>
+                                <input 
+                                  type="text" 
+                                  placeholder="1234567890123"
+                                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                                />
+                              </div>
+                            </div>
+                          )}
+
+                          {selectedPaymentMethod === 'paypal' && (
+                            <div className="text-center py-8 bg-gray-50 rounded-lg">
+                              <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <span className="text-white text-xl font-bold">PayPal</span>
+                              </div>
+                              <h5 className="font-medium mb-2">PayPal</h5>
+                              <p className="text-sm text-muted-foreground mb-4">
+                                You'll be redirected to log in to your PayPal account
+                              </p>
+                              <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+                                Continue with PayPal
+                              </Button>
+                            </div>
+                          )}
+
+                          <Button className="w-full mt-4">
+                            Add Payment Method
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                
+                {settingsTab === 'invoices' && (
+                  <div>
+                    <h3 className="text-lg font-semibold mb-6">Invoices</h3>
+                    <div className="space-y-6">
+
+                      {/* Filters */}
+                      <div className="flex gap-4 items-center">
+                        <select className="p-2 border border-gray-300 rounded-lg text-sm">
+                          <option>All Invoices</option>
+                          <option>Paid</option>
+                          <option>Pending</option>
+                          <option>Overdue</option>
+                        </select>
+                        <select className="p-2 border border-gray-300 rounded-lg text-sm">
+                          <option>Last 12 months</option>
+                          <option>Last 6 months</option>
+                          <option>Last 3 months</option>
+                          <option>This month</option>
+                        </select>
+                        <Button variant="outline" size="sm">
+                          <Download className="w-4 h-4 mr-2" />
+                          Export All
+                        </Button>
+                      </div>
+
+                      {/* Invoice List */}
+                      <div className="space-y-3">
+                        {[
+                          {
+                            id: 'INV-001',
+                            date: 'Nov 1, 2024',
+                            expert: 'Dr. Michael Chen',
+                            session: 'Product Strategy Session',
+                            amount: '$200',
+                            status: 'Paid',
+                            statusColor: 'bg-green-100 text-green-800'
+                          },
+                          {
+                            id: 'INV-002',
+                            date: 'Oct 28, 2024',
+                            expert: 'Sarah Williams',
+                            session: 'Leadership Coaching',
+                            amount: '$180',
+                            status: 'Paid',
+                            statusColor: 'bg-green-100 text-green-800'
+                          },
+                          {
+                            id: 'INV-003',
+                            date: 'Oct 15, 2024',
+                            expert: 'David Rodriguez',
+                            session: 'Tech Innovation Workshop',
+                            amount: '$250',
+                            status: 'Pending',
+                            statusColor: 'bg-yellow-100 text-yellow-800'
+                          },
+                          {
+                            id: 'INV-004',
+                            date: 'Oct 5, 2024',
+                            expert: 'Dr. Emily Johnson',
+                            session: 'Business Strategy Review',
+                            amount: '$300',
+                            status: 'Paid',
+                            statusColor: 'bg-green-100 text-green-800'
+                          },
+                          {
+                            id: 'INV-005',
+                            date: 'Sep 22, 2024',
+                            expert: 'Alex Thompson',
+                            session: 'Marketing Consultation',
+                            amount: '$150',
+                            status: 'Paid',
+                            statusColor: 'bg-green-100 text-green-800'
+                          }
+                        ].map((invoice) => (
+                          <div key={invoice.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50">
+                            <div className="flex-1">
+                              <div className="flex items-center gap-4">
+                                <div>
+                                  <p className="font-medium text-sm">{invoice.id}</p>
+                                  <p className="text-xs text-muted-foreground">{invoice.date}</p>
+                                </div>
+                                <div className="flex-1">
+                                  <p className="font-medium text-sm">{invoice.session}</p>
+                                  <p className="text-xs text-muted-foreground">with {invoice.expert}</p>
+                                </div>
+                                <div className="text-right">
+                                  <p className="font-semibold text-sm">{invoice.amount}</p>
+                                  <Badge className={`text-xs ${invoice.statusColor}`}>
+                                    {invoice.status}
+                                  </Badge>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="flex gap-2 ml-4">
+                              <Button variant="outline" size="sm">
+                                <Eye className="w-4 h-4 mr-1" />
+                                View
+                              </Button>
+                              <Button variant="outline" size="sm">
+                                <Download className="w-4 h-4 mr-1" />
+                                PDF
+                              </Button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Pagination */}
+                      <div className="flex items-center justify-between pt-4">
+                        <p className="text-sm text-muted-foreground">Showing 5 of 12 invoices</p>
+                        <div className="flex gap-2">
+                          <Button variant="outline" size="sm" disabled>
+                            Previous
+                          </Button>
+                          <Button variant="outline" size="sm">
+                            Next
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>

@@ -111,7 +111,7 @@ const HowItWorksPage = () => {
           <SectionTitle 
             miniTitle="Why TapTime Exists"
             title="We believe the world's greatest untapped resource is human wisdom and it needs to be effortlessly available"
-            description="From starting founders to financial coaches, business advisors to leadership mentors, TapTime connects you with the people who've done the work, lived the journey, and want to share their wisdom with you — so you don't have to waste yours."
+            description="From startup founders to financial coaches, business advisors to leadership mentors, TapTime connects you with the people who've done the work, lived the journey, and want to share their wisdom with you — so you don't have to waste yours."
           />
         </div>
       </section>

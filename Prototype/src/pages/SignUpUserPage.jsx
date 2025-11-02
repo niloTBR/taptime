@@ -3,6 +3,19 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Label } from '@/components/ui/label'
+import { Slider } from '@/components/ui/slider'
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuTrigger,
+  DropdownMenuCheckboxItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator
+} from '@/components/ui/dropdown-menu'
 import { 
   User, 
   Mail, 
@@ -21,39 +34,37 @@ import {
 const SignUpUserPage = () => {
   const [currentStep, setCurrentStep] = useState(1)
   const [formData, setFormData] = useState({
-    // Basic Info
-    firstName: '',
-    lastName: '',
-    email: '',
+    // Already captured from initial signup
+    firstName: 'John', // Pre-filled from signup
+    lastName: 'Smith', // Pre-filled from signup  
+    email: 'john.smith@example.com', // Pre-filled from signup
+    
+    // Step 1: Basic onboarding info
+    phone: '',
+    bio: '',
+    country: '',
+    
+    // Step 2: Account Security
     password: '',
     confirmPassword: '',
-    phone: '',
     
-    // Profile Info
-    location: '',
-    company: '',
-    jobTitle: '',
-    industry: '',
-    experience: '',
-    
-    // Goals & Interests
-    primaryGoal: '',
-    interests: [],
+    // Step 3: Goals and interests
+    primaryGoals: [], // Changed to array for multiselect
     expertiseNeeded: [],
-    budget: '',
-    sessionFrequency: ''
+    budgetRange: [100] // Slider value, starting at $100
   })
 
   const steps = [
-    { step: 1, title: 'Basic Information', description: 'Tell us about yourself' },
-    { step: 2, title: 'Professional Profile', description: 'Your work and experience' },
-    { step: 3, title: 'Goals & Interests', description: 'What you want to achieve' },
+    { step: 1, title: 'Basic Information', description: 'Complete your profile' },
+    { step: 2, title: 'Account Security', description: 'Create your password' },
+    { step: 3, title: 'Goals & Interests', description: 'Help us match you with experts' },
     { step: 4, title: 'Welcome!', description: 'Your account is ready' }
   ]
 
-  const industries = [
-    'Technology', 'Finance', 'Healthcare', 'Marketing', 'Design', 'Business',
-    'Education', 'Consulting', 'Real Estate', 'Legal', 'Media', 'Other'
+  const countries = [
+    'United States', 'Canada', 'United Kingdom', 'Australia', 'Germany', 'France',
+    'Netherlands', 'Sweden', 'Norway', 'Denmark', 'Switzerland', 'Singapore',
+    'Japan', 'South Korea', 'India', 'Brazil', 'Mexico', 'Spain', 'Italy', 'Other'
   ]
 
   const primaryGoals = [
@@ -70,12 +81,10 @@ const SignUpUserPage = () => {
     'Sales', 'Leadership', 'Technology', 'Design', 'Finance', 'Operations'
   ]
 
-  const budgetRanges = [
-    '$50 - $100 per session',
-    '$100 - $250 per session', 
-    '$250 - $500 per session',
-    '$500+ per session'
-  ]
+  const formatBudget = (value) => {
+    if (value >= 500) return '$500+'
+    return `$${value}`
+  }
 
   const handleInputChange = (field, value) => {
     setFormData(prev => ({
@@ -94,7 +103,7 @@ const SignUpUserPage = () => {
   }
 
   const nextStep = () => {
-    if (currentStep < 4) {
+    if (currentStep < 3) {
       setCurrentStep(currentStep + 1)
     }
   }
@@ -176,19 +185,24 @@ const SignUpUserPage = () => {
       <section className="py-12 px-4">
         <div className="container mx-auto max-w-2xl">
           
-          {/* Step 1: Basic Information */}
+          {/* Step 1: Tell us about yourself */}
           {currentStep === 1 && (
             <Card className="border-2 border-foreground">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <User className="w-5 h-5" />
-                  Basic Information
+                  Tell us about yourself
                 </CardTitle>
+                <p className="text-sm text-muted-foreground mt-2">
+                  Welcome {formData.firstName}! Help us personalize your experience.
+                </p>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium mb-2">First Name</label>
+                    <label className="block text-sm font-medium mb-2">
+                      First Name <span className="text-red-500">*</span>
+                    </label>
                     <input
                       type="text"
                       value={formData.firstName}
@@ -198,7 +212,9 @@ const SignUpUserPage = () => {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-2">Last Name</label>
+                    <label className="block text-sm font-medium mb-2">
+                      Last Name <span className="text-red-500">*</span>
+                    </label>
                     <input
                       type="text"
                       value={formData.lastName}
@@ -210,19 +226,77 @@ const SignUpUserPage = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2">Email Address</label>
+                  <label className="block text-sm font-medium mb-2">
+                    Email Address <span className="text-red-500">*</span>
+                  </label>
                   <input
                     type="email"
                     value={formData.email}
-                    onChange={(e) => handleInputChange('email', e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-500 cursor-not-allowed"
                     placeholder="john.smith@example.com"
+                    disabled
+                    readOnly
                   />
                 </div>
 
+                <div>
+                  <label className="block text-sm font-medium mb-2">Phone Number</label>
+                  <input
+                    type="tel"
+                    value={formData.phone}
+                    onChange={(e) => handleInputChange('phone', e.target.value)}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="+1 (555) 123-4567"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-2">Country</label>
+                  <select
+                    value={formData.country}
+                    onChange={(e) => handleInputChange('country', e.target.value)}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="">Select your country</option>
+                    {countries.map(country => (
+                      <option key={country} value={country}>{country}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-2">Short Bio</label>
+                  <textarea
+                    value={formData.bio}
+                    onChange={(e) => handleInputChange('bio', e.target.value)}
+                    rows={3}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Tell us a bit about yourself, your background, or what you're working on..."
+                  />
+                </div>
+
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Step 2: Account Security */}
+          {currentStep === 2 && (
+            <Card className="border-2 border-foreground">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Lock className="w-5 h-5" />
+                  Account Security
+                </CardTitle>
+                <p className="text-sm text-muted-foreground mt-2">
+                  Create a secure password for your account
+                </p>
+              </CardHeader>
+              <CardContent className="space-y-6">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium mb-2">Password</label>
+                    <label className="block text-sm font-medium mb-2">
+                      Password <span className="text-red-500">*</span>
+                    </label>
                     <input
                       type="password"
                       value={formData.password}
@@ -232,7 +306,9 @@ const SignUpUserPage = () => {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-2">Confirm Password</label>
+                    <label className="block text-sm font-medium mb-2">
+                      Confirm Password <span className="text-red-500">*</span>
+                    </label>
                     <input
                       type="password"
                       value={formData.confirmPassword}
@@ -242,163 +318,144 @@ const SignUpUserPage = () => {
                     />
                   </div>
                 </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-2">Phone Number (Optional)</label>
-                  <input
-                    type="tel"
-                    value={formData.phone}
-                    onChange={(e) => handleInputChange('phone', e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="+1 (555) 123-4567"
-                  />
+                <div className="text-sm text-gray-600">
+                  <p>Password must be at least 8 characters long and include:</p>
+                  <ul className="list-disc list-inside mt-1 space-y-1">
+                    <li>At least one uppercase letter</li>
+                    <li>At least one lowercase letter</li>
+                    <li>At least one number</li>
+                  </ul>
                 </div>
               </CardContent>
             </Card>
           )}
 
-          {/* Step 2: Professional Profile */}
-          {currentStep === 2 && (
-            <Card className="border-2 border-foreground">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Briefcase className="w-5 h-5" />
-                  Professional Profile
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div>
-                  <label className="block text-sm font-medium mb-2">Location</label>
-                  <input
-                    type="text"
-                    value={formData.location}
-                    onChange={(e) => handleInputChange('location', e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="San Francisco, CA"
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Company</label>
-                    <input
-                      type="text"
-                      value={formData.company}
-                      onChange={(e) => handleInputChange('company', e.target.value)}
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="Acme Corp"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Job Title</label>
-                    <input
-                      type="text"
-                      value={formData.jobTitle}
-                      onChange={(e) => handleInputChange('jobTitle', e.target.value)}
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="Product Manager"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-2">Industry</label>
-                  <select
-                    value={formData.industry}
-                    onChange={(e) => handleInputChange('industry', e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  >
-                    <option value="">Select your industry</option>
-                    {industries.map(industry => (
-                      <option key={industry} value={industry}>{industry}</option>
-                    ))}
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-2">Years of Experience</label>
-                  <select
-                    value={formData.experience}
-                    onChange={(e) => handleInputChange('experience', e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  >
-                    <option value="">Select experience level</option>
-                    <option value="0-2">0-2 years</option>
-                    <option value="3-5">3-5 years</option>
-                    <option value="6-10">6-10 years</option>
-                    <option value="10+">10+ years</option>
-                  </select>
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
-          {/* Step 3: Goals & Interests */}
+          {/* Step 3: Your goals and interests */}
           {currentStep === 3 && (
             <Card className="border-2 border-foreground">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Target className="w-5 h-5" />
-                  Goals & Interests
+                  Your goals and interests
                 </CardTitle>
+                <p className="text-sm text-muted-foreground mt-2">
+                  Help us match you with the right experts
+                </p>
               </CardHeader>
               <CardContent className="space-y-6">
+                {/* Primary Goals - Dropdown Multiselect */}
                 <div>
-                  <label className="block text-sm font-medium mb-3">What's your primary goal?</label>
-                  <div className="space-y-2">
-                    {primaryGoals.map(goal => (
-                      <button
-                        key={goal}
-                        onClick={() => handleInputChange('primaryGoal', goal)}
-                        className={`w-full p-3 text-left border rounded-lg transition-colors ${
-                          formData.primaryGoal === goal
-                            ? 'border-blue-500 bg-blue-50 text-blue-700'
-                            : 'border-gray-300 hover:border-gray-400'
-                        }`}
-                      >
-                        {goal}
-                      </button>
-                    ))}
-                  </div>
+                  <label className="block text-sm font-medium mb-3">Primary Goals</label>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" className="w-full justify-between">
+                        {formData.primaryGoals.length === 0 
+                          ? "Select your goals..." 
+                          : `${formData.primaryGoals.length} goal${formData.primaryGoals.length > 1 ? 's' : ''} selected`
+                        }
+                        <ChevronRight className="h-4 w-4 transform rotate-90" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-80 max-h-64 overflow-y-auto">
+                      <DropdownMenuLabel>Choose all that apply</DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      {primaryGoals.map(goal => (
+                        <DropdownMenuCheckboxItem
+                          key={goal}
+                          checked={formData.primaryGoals.includes(goal)}
+                          onCheckedChange={(checked) => {
+                            if (checked) {
+                              handleInputChange('primaryGoals', [...formData.primaryGoals, goal])
+                            } else {
+                              handleInputChange('primaryGoals', formData.primaryGoals.filter(g => g !== goal))
+                            }
+                          }}
+                          onSelect={(e) => e.preventDefault()}
+                          className="cursor-pointer"
+                        >
+                          {goal}
+                        </DropdownMenuCheckboxItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                  {formData.primaryGoals.length > 0 && (
+                    <div className="mt-2 flex flex-wrap gap-1">
+                      {formData.primaryGoals.map(goal => (
+                        <Badge key={goal} variant="secondary" className="text-xs">
+                          {goal}
+                        </Badge>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
+                {/* Expertise Areas - Dropdown Multiselect */}
+                <div>
+                  <label className="block text-sm font-medium mb-3">Expertise Areas</label>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" className="w-full justify-between">
+                        {formData.expertiseNeeded.length === 0 
+                          ? "Select expertise areas..." 
+                          : `${formData.expertiseNeeded.length} area${formData.expertiseNeeded.length > 1 ? 's' : ''} selected`
+                        }
+                        <ChevronRight className="h-4 w-4 transform rotate-90" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-80 max-h-64 overflow-y-auto">
+                      <DropdownMenuLabel>Choose all that apply</DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      {expertiseAreas.map(area => (
+                        <DropdownMenuCheckboxItem
+                          key={area}
+                          checked={formData.expertiseNeeded.includes(area)}
+                          onCheckedChange={(checked) => {
+                            if (checked) {
+                              handleInputChange('expertiseNeeded', [...formData.expertiseNeeded, area])
+                            } else {
+                              handleInputChange('expertiseNeeded', formData.expertiseNeeded.filter(e => e !== area))
+                            }
+                          }}
+                          onSelect={(e) => e.preventDefault()}
+                          className="cursor-pointer"
+                        >
+                          {area}
+                        </DropdownMenuCheckboxItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                  {formData.expertiseNeeded.length > 0 && (
+                    <div className="mt-2 flex flex-wrap gap-1">
+                      {formData.expertiseNeeded.map(area => (
+                        <Badge key={area} variant="secondary" className="text-xs">
+                          {area}
+                        </Badge>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Budget Range - Slider */}
                 <div>
                   <label className="block text-sm font-medium mb-3">
-                    What expertise are you looking for? (Select all that apply)
+                    Session Budget: {formatBudget(formData.budgetRange[0])} per session
                   </label>
-                  <div className="grid grid-cols-2 gap-2">
-                    {expertiseAreas.map(area => (
-                      <button
-                        key={area}
-                        onClick={() => handleArrayToggle('expertiseNeeded', area)}
-                        className={`p-3 text-sm text-left border rounded-lg transition-colors ${
-                          formData.expertiseNeeded.includes(area)
-                            ? 'border-blue-500 bg-blue-50 text-blue-700'
-                            : 'border-gray-300 hover:border-gray-400'
-                        }`}
-                      >
-                        {area}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-3">Session Budget</label>
-                  <div className="space-y-2">
-                    {budgetRanges.map(range => (
-                      <button
-                        key={range}
-                        onClick={() => handleInputChange('budget', range)}
-                        className={`w-full p-3 text-left border rounded-lg transition-colors ${
-                          formData.budget === range
-                            ? 'border-blue-500 bg-blue-50 text-blue-700'
-                            : 'border-gray-300 hover:border-gray-400'
-                        }`}
-                      >
-                        {range}
-                      </button>
-                    ))}
+                  <div className="px-4">
+                    <Slider
+                      value={formData.budgetRange}
+                      onValueChange={(value) => handleInputChange('budgetRange', value)}
+                      max={500}
+                      min={50}
+                      step={25}
+                      className="w-full"
+                    />
+                    <div className="flex justify-between text-xs text-gray-500 mt-2">
+                      <span>$50</span>
+                      <span>$150</span>
+                      <span>$250</span>
+                      <span>$350</span>
+                      <span>$500+</span>
+                    </div>
                   </div>
                 </div>
               </CardContent>
@@ -482,7 +539,7 @@ const SignUpUserPage = () => {
                 onClick={nextStep}
                 className="rounded-full px-6 bg-blue-600 hover:bg-blue-700"
               >
-                {currentStep === 3 ? 'Create Account' : 'Continue'}
+                {currentStep === 1 ? 'Continue' : currentStep === 2 ? 'Continue' : 'Create Account'}
                 <ChevronRight className="w-4 h-4 ml-2" />
               </Button>
             </div>

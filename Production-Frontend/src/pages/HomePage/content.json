@@ -1,0 +1,30 @@
+{
+  "meta": {
+    "title": "Expert Guidance Platform",
+    "description": "Connect with world-class experts for personalized guidance"
+  },
+  "hero": {
+    "title": "Your time. Expertly matched",
+    "subtitle": "Get personalized guidance from world-class experts who've built the companies and careers you admire. Book 15-minute sessions that change everything.",
+    "searchPlaceholder": "I'm looking for...",
+    "searchButton": "Search",
+    "primaryCta": "Find Your Expert",
+    "secondaryCta": "Become an Expert"
+  },
+  "featuredExperts": {
+    "label": "Featured Experts",
+    "title": "Learn From The Best",
+    "description": "Get personalized advice and strategic insights from successful founders, seasoned executives, and proven innovators who've already built the companies, products, and careers you're dreaming of achieving.",
+    "viewAllButton": "View All Experts"
+  },
+  "reviews": {
+    "label": "What Our Users Say",
+    "title": "Success Stories",
+    "description": "Real breakthroughs from real people who took action with expert guidance."
+  },
+  "cta": {
+    "title": "Your Next Breakthrough Awaits",
+    "description": "Join thousands of ambitious professionals who've accelerated their success with expert guidance.",
+    "button": "Find Your Expert Now"
+  }
+}

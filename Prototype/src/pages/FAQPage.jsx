@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { Link } from 'react-router-dom'
 import { ChevronDown, Search, MessageCircle } from 'lucide-react'
 import SectionTitle from '@/components/common/SectionTitle'
 import { useState } from 'react'
@@ -185,12 +186,11 @@ const FAQPage = () => {
           <p className="text-muted-foreground mb-8 text-lg">
             Can't find what you're looking for? Our support team is here to help.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="rounded-full px-8">
-              Contact Support
-            </Button>
-            <Button size="lg" variant="outline" className="rounded-full px-8 border-2 border-foreground">
-              Schedule a Demo
+          <div className="flex justify-center">
+            <Button size="lg" className="rounded-full px-8" asChild>
+              <Link to="/contact">
+                Contact Support
+              </Link>
             </Button>
           </div>
         </div>

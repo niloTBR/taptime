@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{meta.title}} - TapTime</title>
+    <style>
+        /* Inline styles for demo - normally would be in HomePage.css */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            line-height: 1.6;
+            color: #111827;
+        }
+        
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        /* Header Styles */
+        .header {
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        
+        .header__content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 4rem;
+        }
+        
+        .header__logo a {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: black;
+            text-decoration: none;
+        }
+        
+        .header__nav {
+            display: none;
+        }
+        
+        @media (min-width: 768px) {
+            .header__nav {
+                display: flex;
+                gap: 2rem;
+            }
+        }
+        
+        .header__actions {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        /* Hero Styles */
+        .hero {
+            background: #f9fafb;
+            padding: 5rem 0;
+        }
+        
+        .hero__content {
+            text-align: center;
+            max-width: 64rem;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        .hero__title {
+            font-size: 2.25rem;
+            font-weight: 700;
+            line-height: 1.2;
+            color: #111827;
+            margin-bottom: 1.5rem;
+        }
+        
+        @media (min-width: 768px) {
+            .hero__title {
+                font-size: 3rem;
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .hero__title {
+                font-size: 3.75rem;
+            }
+        }
+        
+        .hero__subtitle {
+            font-size: 1.25rem;
+            color: #6b7280;
+            margin-bottom: 2rem;
+            max-width: 48rem;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+        
+        .hero__search {
+            max-width: 32rem;
+            margin: 0 auto 2rem;
+        }
+        
+        .hero__actions {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            justify-content: center;
+        }
+        
+        @media (min-width: 640px) {
+            .hero__actions {
+                flex-direction: row;
+            }
+        }
+        
+        /* Search Form */
+        .search-form {
+            position: relative;
+        }
+        
+        .search-form__input {
+            width: 100%;
+            padding: 0.875rem 8rem 0.875rem 1rem;
+            border: 2px solid #d1d5db;
+            border-radius: 9999px;
+            font-size: 1.125rem;
+            outline: none;
+        }
+        
+        .search-form__input:focus {
+            border-color: black;
+        }
+        
+        .search-form__button {
+            position: absolute;
+            right: 0.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: black;
+            color: white;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 9999px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        
+        .search-form__button:hover {
+            background: #374151;
+        }
+        
+        /* Button Styles */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+            text-decoration: none;
+            border-radius: 0.375rem;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+            font-family: inherit;
+        }
+        
+        .btn--primary {
+            background: black;
+            color: white;
+            padding: 0.75rem 2rem;
+        }
+        
+        .btn--primary:hover {
+            background: #374151;
+        }
+        
+        .btn--outline {
+            background: white;
+            color: black;
+            border: 2px solid black;
+            padding: 0.75rem 2rem;
+        }
+        
+        .btn--outline:hover {
+            background: black;
+            color: white;
+        }
+        
+        .btn--ghost {
+            background: transparent;
+            color: #6b7280;
+            padding: 0.5rem 1rem;
+        }
+        
+        .btn--ghost:hover {
+            color: black;
+            background: #f3f4f6;
+        }
+        
+        /* Sections */
+        .section {
+            padding: 5rem 0;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .section-header__title {
+            font-size: 2.25rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .section-header__description {
+            color: #6b7280;
+            font-size: 1.125rem;
+            max-width: 48rem;
+            margin: 0 auto;
+        }
+        
+        /* Grid Layouts */
+        .grid-1 { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+        .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+        .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
+        
+        @media (max-width: 767px) {
+            .grid-2, .grid-3, .grid-4 {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (min-width: 768px) and (max-width: 1023px) {
+            .grid-3, .grid-4 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        /* Card Styles */
+        .card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+        }
+        
+        .card--border-black {
+            border: 2px solid black;
+        }
+        
+        /* Footer */
+        .footer {
+            background: #f9fafb;
+            padding: 3rem 0;
+            border-top: 1px solid #e5e7eb;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Navigation -->
+    <header class="header">
+        <div class="container">
+            <div class="header__content">
+                <div class="header__logo">
+                    <a href="/">{{site.name}}</a>
+                </div>
+                <nav class="header__nav">
+                    <!-- Navigation items populated from navigation.json -->
+                </nav>
+                <div class="header__actions">
+                    <a href="/login" class="btn btn--ghost">{{navigation.login}}</a>
+                    <a href="/signup" class="btn btn--primary">{{navigation.signup}}</a>
+                    <a href="/join-expert" class="btn btn--outline">{{navigation.becomeExpert}}</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <div class="hero__content">
+                    <h1 class="hero__title">{{hero.title}}</h1>
+                    <p class="hero__subtitle">{{hero.subtitle}}</p>
+                    
+                    <!-- Search Bar -->
+                    <div class="hero__search">
+                        <form class="search-form">
+                            <input 
+                                type="text" 
+                                class="search-form__input" 
+                                placeholder="{{hero.searchPlaceholder}}"
+                            >
+                            <button type="submit" class="search-form__button">
+                                {{hero.searchButton}}
+                            </button>
+                        </form>
+                    </div>
+                    
+                    <!-- CTA Buttons -->
+                    <div class="hero__actions">
+                        <a href="/browse" class="btn btn--primary btn--large">
+                            {{hero.primaryCta}}
+                        </a>
+                        <a href="/join-expert" class="btn btn--outline btn--large">
+                            {{hero.secondaryCta}}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Categories Ticker -->
+        <section class="categories-ticker">
+            <div class="ticker">
+                <!-- Categories populated from categories.json -->
+            </div>
+        </section>
+
+        <!-- Featured Experts -->
+        <section class="featured-experts">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-header__label">{{featuredExperts.label}}</span>
+                    <h2 class="section-header__title">{{featuredExperts.title}}</h2>
+                    <p class="section-header__description">{{featuredExperts.description}}</p>
+                </div>
+                
+                <div class="experts-grid">
+                    <!-- Expert cards populated from experts.json -->
+                </div>
+                
+                <div class="section-footer">
+                    <a href="/browse" class="btn btn--outline btn--large">
+                        {{featuredExperts.viewAllButton}}
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Statistics -->
+        <section class="statistics">
+            <div class="container">
+                <div class="statistics-grid">
+                    <!-- Stats populated from statistics.json -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Reviews/Testimonials -->
+        <section class="reviews">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-header__label">{{reviews.label}}</span>
+                    <h2 class="section-header__title">{{reviews.title}}</h2>
+                    <p class="section-header__description">{{reviews.description}}</p>
+                </div>
+                
+                <div class="reviews-grid">
+                    <!-- Review cards populated from reviews.json -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action -->
+        <section class="cta">
+            <div class="container">
+                <div class="cta-card">
+                    <div class="cta-card__content">
+                        <h2 class="cta-card__title">{{cta.title}}</h2>
+                        <p class="cta-card__description">{{cta.description}}</p>
+                        <a href="/browse" class="btn btn--primary btn--large">
+                            {{cta.button}}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <!-- Footer content populated from footer.json -->
+        </div>
+    </footer>
+
+    <script src="./HomePage.js"></script>
+</body>
+</html>

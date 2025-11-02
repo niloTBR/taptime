@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TapTime - Proper Architecture Demo</title>
+    <style>
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 2rem;
+            background: #f9fafb;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        h1 { color: #111827; margin-bottom: 1rem; }
+        h2 { color: #374151; margin-top: 2rem; }
+        .demo-link {
+            display: inline-block;
+            background: black;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            text-decoration: none;
+            border-radius: 4px;
+            margin: 0.5rem 0;
+            font-weight: 500;
+        }
+        .demo-link:hover {
+            background: #374151;
+        }
+        .file-structure {
+            background: #f3f4f6;
+            padding: 1rem;
+            border-radius: 4px;
+            font-family: monospace;
+            margin: 1rem 0;
+        }
+        .highlight {
+            background: #fef3c7;
+            padding: 1rem;
+            border-left: 4px solid #f59e0b;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏗️ TapTime - Proper Website Architecture</h1>
+        
+        <div class="highlight">
+            <strong>✅ Problem Fixed!</strong><br>
+            The website now has proper separation of concerns with clean file structure.
+        </div>
+        
+        <h2>🚀 Live Demo</h2>
+        <a href="http://localhost:3000/" class="demo-link">View Homepage with Proper Architecture</a>
+        
+        <h2>📁 File Structure</h2>
+        <div class="file-structure">
+src/pages/HomePage/
+├── HomePage.html      ← Pure HTML structure (no hardcoded content)
+├── HomePage.scss      ← All styling separated  
+├── HomePage.ts        ← TypeScript logic for interactions
+└── content.json       ← All page content that can be edited
+        </div>
+        
+        <h2>🎯 Key Benefits</h2>
+        <ul>
+            <li><strong>Content Writers</strong> can edit JSON files without touching code</li>
+            <li><strong>Designers</strong> can modify SCSS without breaking functionality</li>
+            <li><strong>Developers</strong> work in TypeScript for interactive features</li>
+            <li><strong>HTML</strong> stays clean and semantic</li>
+        </ul>
+        
+        <h2>📄 Example Files</h2>
+        
+        <h3>1. HTML Structure (HomePage.html)</h3>
+        <div class="file-structure">
+&lt;section class="hero"&gt;
+  &lt;h1 class="hero__title"&gt;{{hero.title}}&lt;/h1&gt;
+  &lt;p class="hero__subtitle"&gt;{{hero.subtitle}}&lt;/p&gt;
+&lt;/section&gt;
+        </div>
+        
+        <h3>2. Content Data (content.json)</h3>
+        <div class="file-structure">
+{
+  "hero": {
+    "title": "Your time. Expertly matched",
+    "subtitle": "Get personalized guidance from experts"
+  }
+}
+        </div>
+        
+        <h3>3. Styling (HomePage.scss)</h3>
+        <div class="file-structure">
+.hero {
+  padding: 5rem 0;
+  background: #f9fafb;
+  
+  &__title {
+    font-size: 3rem;
+    font-weight: 700;
+  }
+}
+        </div>
+        
+        <h3>4. Logic (HomePage.ts)</h3>
+        <div class="file-structure">
+class HomePage {
+  constructor() {
+    this.loadContent();
+    this.bindEvents();
+  }
+  
+  private loadContent() {
+    // Load and render content from JSON
+  }
+}
+        </div>
+        
+        <h2>🔧 How It Works</h2>
+        <ol>
+            <li>Server reads <strong>HTML template</strong> with placeholders like <code>{{hero.title}}</code></li>
+            <li>Server loads <strong>content from JSON</strong> files</li>
+            <li>Server <strong>replaces placeholders</strong> with actual content</li>
+            <li><strong>SCSS compiles to CSS</strong> automatically</li>
+            <li><strong>TypeScript converts to JavaScript</strong> for browsers</li>
+            <li>Clean, separated files are served to browser</li>
+        </ol>
+        
+        <div class="highlight">
+            <strong>🎉 Result:</strong> Professional, maintainable website architecture where different teams can work independently!
+        </div>
+        
+        <a href="http://localhost:3000/" class="demo-link">🚀 View Live Demo</a>
+    </div>
+</body>
+</html>

@@ -1,14 +1,34 @@
+import { useState } from 'react'
 import { Separator } from '@/components/ui/separator'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import { Twitter, Linkedin, Instagram, Facebook } from 'lucide-react'
 import navigationData from '@/data/navigation.json'
+import homepageData from '@/data/homepage.json'
 
 const Footer = () => {
   const { footer } = navigationData
+  const { ctaSection } = homepageData
+  const [newsletterEmail, setNewsletterEmail] = useState('')
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false)
+
+  const handleNewsletterSubmit = (e) => {
+    e.preventDefault()
+    if (newsletterEmail.trim()) {
+      console.log('Newsletter subscription for:', newsletterEmail)
+      setNewsletterEmail('')
+      setShowSuccessMessage(true)
+      // Hide success message after 5 seconds
+      setTimeout(() => {
+        setShowSuccessMessage(false)
+      }, 5000)
+    }
+  }
 
   return (
     <footer className="bg-muted text-foreground">
       <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
           {/* Brand Section */}
           <div className="col-span-1 md:col-span-2 space-y-6">
             <div className="flex items-center">
@@ -59,6 +79,39 @@ const Footer = () => {
               </ul>
             </div>
           ))}
+
+          {/* Newsletter Section */}
+          <div className="space-y-4">
+            <h3 className="font-semibold text-foreground text-lg">
+              Newsletter
+            </h3>
+            
+            {showSuccessMessage ? (
+              <div className="space-y-3">
+                <p className="text-green-600 text-sm font-medium">
+                  Welcome to the TapTime community! Stay tuned for our next insight issue in your inbox.
+                </p>
+              </div>
+            ) : (
+              <form onSubmit={handleNewsletterSubmit} className="space-y-3">
+                <Input
+                  type="email"
+                  placeholder="Enter your email"
+                  value={newsletterEmail}
+                  onChange={(e) => setNewsletterEmail(e.target.value)}
+                  className="rounded-full border-2 border-muted-foreground/20 focus:border-foreground"
+                  required
+                />
+                <Button 
+                  type="submit" 
+                  size="sm"
+                  className="rounded-full px-6 w-full"
+                >
+                  Subscribe
+                </Button>
+              </form>
+            )}
+          </div>
         </div>
 
         <Separator className="my-8" />

@@ -1,6 +1,7 @@
 const SectionTitle = ({ miniTitle, title, description, className = '' }) => {
+  const isLeftAligned = className.includes('text-left')
   return (
-    <div className={`text-center space-y-4 ${className}`}>
+    <div className={`${isLeftAligned ? 'text-left' : 'text-center'} space-y-4 ${className}`}>
       {miniTitle && (
         <div className="text-xs font-semibold tracking-wider uppercase text-muted-foreground">
           {miniTitle}
@@ -10,7 +11,7 @@ const SectionTitle = ({ miniTitle, title, description, className = '' }) => {
         {title}
       </h2>
       {description && (
-        <p className="text-muted-foreground max-w-2xl mx-auto">
+        <p className={`text-muted-foreground max-w-2xl ${isLeftAligned ? '' : 'mx-auto'}`}>
           {description}
         </p>
       )}

@@ -8,36 +8,85 @@
     "reviewCount": 127,
     "responseTime": "Usually responds within 2 hours"
   },
-  "sessionTypes": [
-    {
-      "id": "pmf-deep-dive",
-      "title": "Product-Market Fit Deep Dive",
-      "description": "Get clarity on whether you've achieved PMF and what to focus on next",
-      "duration": "15 min",
-      "price": 500,
-      "currency": "USD"
+  "sessionTypes": {
+    "structured": [
+      {
+        "id": "pmf-deep-dive",
+        "title": "Product-Market Fit Deep Dive",
+        "description": "Get clarity on whether you've achieved PMF and what to focus on next",
+        "duration": "15 min",
+        "price": 500,
+        "currency": "USD",
+        "popular": true
+      },
+      {
+        "id": "fundraising-strategy",
+        "title": "Fundraising Strategy Session",
+        "description": "Review your pitch deck, financial model, and fundraising approach",
+        "duration": "30 min",
+        "price": 1000,
+        "currency": "USD"
+      },
+      {
+        "id": "scaling-strategy",
+        "title": "Scaling Strategy Review",
+        "description": "Plan your path from current stage to next level of growth",
+        "duration": "15 min",
+        "price": 500,
+        "currency": "USD"
+      }
+    ],
+    "flexible": {
+      "id": "general-consultation",
+      "title": "General Consultation",
+      "description": "Open discussion about your business challenges and opportunities",
+      "basePrice": 500,
+      "pricePerUnit": 500,
+      "currency": "USD",
+      "durations": [
+        {"duration": "15 min", "price": 500},
+        {"duration": "30 min", "price": 1000},
+        {"duration": "45 min", "price": 1500}
+      ]
     },
-    {
-      "id": "fundraising-strategy",
-      "title": "Fundraising Strategy Session",
-      "description": "Review your pitch deck, financial model, and fundraising approach",
-      "duration": "30 min",
-      "price": 1000,
-      "currency": "USD"
-    },
-    {
-      "id": "scaling-strategy",
-      "title": "Scaling Strategy Review",
-      "description": "Plan your path from current stage to next level of growth",
-      "duration": "15 min",
-      "price": 500,
-      "currency": "USD"
-    }
-  ],
+    "bundles": [
+      {
+        "id": "startup-accelerator",
+        "title": "Startup Accelerator Package",
+        "description": "Complete startup guidance: PMF validation, fundraising prep, and scaling strategy",
+        "sessions": 3,
+        "totalDuration": "3 x 30 min",
+        "originalPrice": 3000,
+        "bundlePrice": 2400,
+        "savings": 600,
+        "currency": "USD",
+        "includes": [
+          "Product-Market Fit Assessment",
+          "Fundraising Strategy & Deck Review", 
+          "3-Month Scaling Roadmap"
+        ]
+      },
+      {
+        "id": "founder-intensive",
+        "title": "Founder Intensive",
+        "description": "Deep-dive sessions for critical business decisions and strategic planning",
+        "sessions": 2,
+        "totalDuration": "2 x 45 min",
+        "originalPrice": 3000,
+        "bundlePrice": 2700,
+        "savings": 300,
+        "currency": "USD",
+        "includes": [
+          "Business Model Deep Dive",
+          "Strategic Planning Session"
+        ]
+      }
+    ]
+  },
   "calendar": {
     "availableSlots": [
       {
-        "date": "2025-10-07",
+        "date": "2025-11-02",
         "displayDate": "Today",
         "slots": [
           {"time": "14:00", "display": "2:00 PM", "available": true},
@@ -46,7 +95,7 @@
         ]
       },
       {
-        "date": "2025-10-08",
+        "date": "2025-11-03",
         "displayDate": "Tomorrow",
         "slots": [
           {"time": "10:00", "display": "10:00 AM", "available": true},
@@ -56,13 +105,52 @@
         ]
       },
       {
-        "date": "2025-10-09",
-        "displayDate": "Wednesday",
+        "date": "2025-11-04",
+        "displayDate": "Monday",
         "slots": [
           {"time": "09:00", "display": "9:00 AM", "available": true},
           {"time": "11:00", "display": "11:00 AM", "available": true},
           {"time": "15:00", "display": "3:00 PM", "available": true},
           {"time": "17:00", "display": "5:00 PM", "available": true}
+        ]
+      },
+      {
+        "date": "2025-11-05",
+        "displayDate": "Tuesday",
+        "slots": [
+          {"time": "10:00", "display": "10:00 AM", "available": true},
+          {"time": "13:00", "display": "1:00 PM", "available": true},
+          {"time": "16:00", "display": "4:00 PM", "available": false},
+          {"time": "18:00", "display": "6:00 PM", "available": true}
+        ]
+      },
+      {
+        "date": "2025-11-06",
+        "displayDate": "Wednesday", 
+        "slots": [
+          {"time": "09:00", "display": "9:00 AM", "available": true},
+          {"time": "11:00", "display": "11:00 AM", "available": true},
+          {"time": "14:00", "display": "2:00 PM", "available": true},
+          {"time": "16:00", "display": "4:00 PM", "available": true}
+        ]
+      },
+      {
+        "date": "2025-11-07",
+        "displayDate": "Thursday",
+        "slots": [
+          {"time": "10:00", "display": "10:00 AM", "available": true},
+          {"time": "15:00", "display": "3:00 PM", "available": true},
+          {"time": "17:00", "display": "5:00 PM", "available": true}
+        ]
+      },
+      {
+        "date": "2025-11-08",
+        "displayDate": "Friday",
+        "slots": [
+          {"time": "09:00", "display": "9:00 AM", "available": true},
+          {"time": "11:00", "display": "11:00 AM", "available": false},
+          {"time": "14:00", "display": "2:00 PM", "available": true},
+          {"time": "16:00", "display": "4:00 PM", "available": true}
         ]
       }
     ]
@@ -91,19 +179,6 @@
   ],
   "bookingQuestions": [
     {
-      "id": "company_stage",
-      "question": "What stage is your company/project at?",
-      "type": "select",
-      "options": [
-        "Idea stage",
-        "MVP/Pre-launch",
-        "Early traction",
-        "Scaling",
-        "Growth stage"
-      ],
-      "required": true
-    },
-    {
       "id": "specific_challenge",
       "question": "What specific challenge would you like to discuss?",
       "type": "textarea",
@@ -119,9 +194,9 @@
     }
   ],
   "policies": {
-    "cancellation": "Free cancellation up to 24 hours before the session",
-    "rescheduling": "You can reschedule up to 2 hours before the session",
+    "cancellation": "Free cancellation up to 48 hours before the session",
+    "rescheduling": "You can reschedule up to 24 hours before the session",
     "refund": "Full refund if expert cancels. 50% refund for cancellations with less than 24h notice",
-    "preparation": "You'll receive a calendar invite and video link 1 hour before the session"
+    "preparation": "You'll receive a calendar invite and video link after payment"
   }
 }
