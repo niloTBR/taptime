@@ -364,7 +364,16 @@ const ExpertDashboard = () => {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
                     <h3 className="font-semibold text-lg">{expert.name}</h3>
-                    {expert.verified && <Crown className="w-4 h-4 text-yellow-500" />}
+                    {expert.verified && (
+                      <div className="w-5 h-5 flex items-center justify-center flex-shrink-0">
+                        <svg viewBox="0 0 24 24" className="w-5 h-5">
+                          <g>
+                            <path d="M12 1.5c-.5 0-1 .2-1.4.6L9.2 3.5c-.3.3-.7.4-1.1.4H6.5c-.8 0-1.5.7-1.5 1.5v1.6c0 .4-.1.8-.4 1.1L3.2 9.5c-.8.8-.8 2 0 2.8l1.4 1.4c.3.3.4.7.4 1.1V16.5c0 .8.7 1.5 1.5 1.5h1.6c.4 0 .8.1 1.1.4l1.4 1.4c.8.8 2 .8 2.8 0l1.4-1.4c.3-.3.7-.4 1.1-.4h1.6c.8 0 1.5-.7 1.5-1.5v-1.6c0-.4.1-.8.4-1.1l1.4-1.4c.8-.8.8-2 0-2.8l-1.4-1.4c-.3-.3-.4-.7-.4-1.1V5.5c0-.8-.7-1.5-1.5-1.5h-1.6c-.4 0-.8-.1-1.1-.4L13.4 2.1c-.4-.4-.9-.6-1.4-.6z" fill="#1d9bf0"/>
+                            <path d="M9 12l2 2 4-4" stroke="white" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                          </g>
+                        </svg>
+                      </div>
+                    )}
                   </div>
                   <div className="space-y-1 text-xs">
                     <div className="flex items-center gap-2">
@@ -385,21 +394,16 @@ const ExpertDashboard = () => {
               
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
-                  <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                  <Star className="w-4 h-4 fill-black text-black" />
                   <span className="font-medium">{stats.thisMonth.rating}</span>
-                  <span className="text-xs text-muted-foreground">({stats.thisMonth.sessions} sessions)</span>
+                  <span className="text-xs text-muted-foreground">({stats.thisMonth.sessions})</span>
                 </div>
-                <Badge variant="secondary" className="bg-green-100 text-green-700">
-                  {expert.verified ? 'Verified Expert' : 'Pending'}
+                <Badge variant="outline" className="text-xs border-yellow-500 text-yellow-600 bg-yellow-50 px-2 py-1 rounded-full inline-flex items-center gap-1">
+                  <Crown className="w-3 h-3" />
+                  Top Expert
                 </Badge>
               </div>
               
-              <div className="p-2 bg-green-50 rounded-lg mb-4">
-                <div className="flex items-center justify-center gap-2 text-xs text-green-700">
-                  <Eye className="w-3 h-3" />
-                  <span>Profile visible to clients</span>
-                </div>
-              </div>
               
               <div className="space-y-3 text-xs">
                 <div>
@@ -418,18 +422,33 @@ const ExpertDashboard = () => {
                 </div>
                 
                 <div>
+                  <h4 className="font-medium mb-1 text-sm">Industries</h4>
+                  <p className="text-muted-foreground">{expert.industry}</p>
+                </div>
+                
+                <div>
                   <h4 className="font-medium mb-1 text-sm">Hourly Rate</h4>
                   <p className="text-muted-foreground font-medium">${expert.hourlyRate}/hour</p>
                 </div>
               </div>
               
-              <Button 
-                className="w-full mt-4 rounded-full text-sm"
-                onClick={() => setShowSettings(true)}
-              >
-                <Settings className="w-3 h-3 mr-2" />
-                Expert Settings
-              </Button>
+              <div className="space-y-2 mt-4">
+                <Button 
+                  className="w-full rounded-full text-sm"
+                  onClick={() => setShowSettings(true)}
+                >
+                  <Settings className="w-3 h-3 mr-2" />
+                  Profile & Payment Settings
+                </Button>
+                
+                <Button 
+                  variant="outline"
+                  className="w-full rounded-full text-sm border-2 border-foreground"
+                >
+                  <Eye className="w-3 h-3 mr-2" />
+                  View Public Profile
+                </Button>
+              </div>
             </CardContent>
           </Card>
 
