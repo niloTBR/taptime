@@ -20,7 +20,6 @@ import {
   Award,
   Target,
   Users,
-  BookOpen,
   Edit,
   Mail,
   Phone,
@@ -53,6 +52,7 @@ const ExpertDashboard = () => {
   const [activeTab, setActiveTab] = useState('upcoming')
   const [showSessionDetail, setShowSessionDetail] = useState(false)
   const [selectedSession, setSelectedSession] = useState(null)
+  const [sessionDetailTab, setSessionDetailTab] = useState('summary')
   const [showVerificationModal, setShowVerificationModal] = useState(false)
   const [showSettings, setShowSettings] = useState(false)
   const [settingsTab, setSettingsTab] = useState('basic')
@@ -189,29 +189,13 @@ const ExpertDashboard = () => {
     return value > 0 ? 'text-green-600' : value < 0 ? 'text-red-600' : 'text-gray-500'
   }
 
-  const sidebarSections = [
-    {
-      title: 'Sessions',
-      items: [
-        { id: 'upcoming', label: 'Upcoming', count: upcomingSessions.length, icon: Calendar },
-        { id: 'past', label: 'Past Sessions', count: pastSessions.length, icon: Clock },
-        { id: 'meetings', label: 'All Meetings', icon: Users },
-        { id: 'reviews', label: 'Reviews', icon: Star }
-      ]
-    },
-    {
-      title: 'Analytics',
-      items: [
-        { id: 'analytics', label: 'Analytics', icon: TrendingUp },
-        { id: 'billing', label: 'Billing & Payouts', icon: CreditCard }
-      ]
-    }
+  const tabs = [
+    { id: 'upcoming', label: 'Upcoming', count: upcomingSessions.length },
+    { id: 'past', label: 'Past Sessions', count: pastSessions.length },
+    { id: 'reviews', label: 'Reviews', count: 0 }
   ]
 
 
-  const SidebarIcon = ({ icon: Icon, isActive }) => (
-    <Icon className={`w-4 h-4 ${isActive ? 'text-foreground' : 'text-muted-foreground'}`} />
-  )
 
 
   return (
@@ -242,7 +226,7 @@ const ExpertDashboard = () => {
       <section className="bg-gray-50 border-b px-6 py-6">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-lg font-semibold mb-4">This Month's Performance</h2>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Monthly Earnings */}
             <Card className="border-2">
               <CardContent className="p-4">
@@ -259,27 +243,6 @@ const ExpertDashboard = () => {
                     <LineChart data={earningsData}>
                       <Line dataKey="earnings" stroke="#000000" strokeWidth={2} dot={false} />
                     </LineChart>
-                  </ResponsiveContainer>
-                </div>
-              </CardContent>
-            </Card>
-            
-            {/* Total Sessions */}
-            <Card className="border-2">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-2">
-                    <BookOpen className="w-4 h-4 text-muted-foreground" />
-                    <span className="text-sm text-muted-foreground">Total Sessions</span>
-                  </div>
-                  <TrendingUp className="w-4 h-4 text-blue-600" />
-                </div>
-                <p className="text-2xl font-bold mb-2">{stats.thisMonth.sessions}</p>
-                <div className="h-8 w-full">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={sessionsData}>
-                      <Bar dataKey="sessions" fill="#000000" radius={[2, 2, 0, 0]} />
-                    </BarChart>
                   </ResponsiveContainer>
                 </div>
               </CardContent>
@@ -452,46 +415,33 @@ const ExpertDashboard = () => {
             </CardContent>
           </Card>
 
-          {/* Navigation Sidebar */}
-          <Card className="border-2">
-            <CardContent className="p-0">
-              {sidebarSections.map((section, sectionIndex) => (
-                <div key={section.title}>
-                  <div className="px-4 py-3 border-b bg-gray-50">
-                    <h3 className="font-medium text-sm text-foreground">{section.title}</h3>
-                  </div>
-                  <div className="p-2">
-                    {section.items.map((item) => (
-                      <button
-                        key={item.id}
-                        onClick={() => setActiveTab(item.id)}
-                        className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-left transition-colors ${
-                          activeTab === item.id
-                            ? 'bg-gray-100 text-foreground font-medium'
-                            : 'text-muted-foreground hover:bg-gray-50 hover:text-foreground'
-                        }`}
-                      >
-                        <div className="flex items-center gap-3">
-                          <SidebarIcon icon={item.icon} isActive={activeTab === item.id} />
-                          <span className="text-sm">{item.label}</span>
-                        </div>
-                        {item.count > 0 && (
-                          <Badge variant="secondary" className="text-xs">
-                            {item.count}
-                          </Badge>
-                        )}
-                      </button>
-                    ))}
-                  </div>
-                  {sectionIndex < sidebarSections.length - 1 && <div className="border-b" />}
-                </div>
-              ))}
-            </CardContent>
-          </Card>
         </div>
         
         {/* Main Content Area */}
         <div className="flex-1">
+          {/* Navigation Tabs */}
+          <div className="border-b mb-6">
+            <div className="flex space-x-8">
+              {tabs.map(tab => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2 ${
+                    activeTab === tab.id
+                      ? 'border-foreground text-foreground'
+                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  }`}
+                >
+                  {tab.label}
+                  {tab.count > 0 && (
+                    <Badge variant="secondary" className="ml-1">
+                      {tab.count}
+                    </Badge>
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
           
           {/* Content */}
           {activeTab === 'upcoming' && (
@@ -502,6 +452,7 @@ const ExpertDashboard = () => {
                   className="group hover:shadow-xl hover:scale-105 transition-all duration-300 border-2 hover:border-foreground cursor-pointer h-full relative"
                   onClick={() => {
                     setSelectedSession(session)
+                    setSessionDetailTab('summary')
                     setShowSessionDetail(true)
                   }}
                 >
@@ -943,9 +894,6 @@ const ExpertDashboard = () => {
                                 <Button variant="outline" size="sm" className="w-8 h-8 p-0">
                                   <Eye className="w-4 h-4" />
                                 </Button>
-                                <Button variant="outline" size="sm" className="w-8 h-8 p-0">
-                                  <Download className="w-4 h-4" />
-                                </Button>
                               </div>
                             </td>
                           </tr>
@@ -994,7 +942,7 @@ const ExpertDashboard = () => {
             </div>
           )}
 
-          {activeTab === 'analytics' && (
+          {activeTab === 'analytics_disabled' && (
             <div className="space-y-6">
               <h2 className="text-xl font-semibold">Analytics</h2>
               
@@ -1043,7 +991,7 @@ const ExpertDashboard = () => {
             </div>
           )}
 
-          {activeTab === 'billing' && (
+          {activeTab === 'billing_disabled' && (
             <div className="space-y-6">
               <h2 className="text-xl font-semibold">Billing & Payouts</h2>
               
@@ -1876,21 +1824,49 @@ const ExpertDashboard = () => {
       {showSessionDetail && selectedSession && (
         <div className="fixed inset-0 bg-black/50 z-50">
           <div className="fixed right-0 top-0 h-full w-96 bg-white shadow-xl overflow-y-auto">
-            <div className="p-6">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-semibold">Session Details</h2>
-                <Button 
-                  variant="outline" 
-                  size="icon"
-                  className="rounded-full"
-                  onClick={() => setShowSessionDetail(false)}
-                >
-                  ×
-                </Button>
-              </div>
+            <Card className="border-2 border-foreground h-full rounded-none">
+              <CardHeader>
+                <div className="flex items-center justify-between mb-4">
+                  <CardTitle>Session Details</CardTitle>
+                  <Button 
+                    variant="outline" 
+                    size="icon"
+                    className="rounded-full"
+                    onClick={() => setShowSessionDetail(false)}
+                  >
+                    <X className="w-4 h-4" />
+                  </Button>
+                </div>
+                
+                {/* Tab Navigation */}
+                <div className="flex space-x-4 border-b">
+                  <button
+                    onClick={() => setSessionDetailTab('summary')}
+                    className={`pb-2 px-1 text-sm font-medium border-b-2 transition-colors ${
+                      sessionDetailTab === 'summary'
+                        ? 'border-foreground text-foreground'
+                        : 'border-transparent text-gray-500 hover:text-gray-700'
+                    }`}
+                  >
+                    Summary
+                  </button>
+                  <button
+                    onClick={() => setSessionDetailTab('chat')}
+                    className={`pb-2 px-1 text-sm font-medium border-b-2 transition-colors ${
+                      sessionDetailTab === 'chat'
+                        ? 'border-foreground text-foreground'
+                        : 'border-transparent text-gray-500 hover:text-gray-700'
+                    }`}
+                  >
+                    Chat
+                  </button>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-4">{sessionDetailTab === 'summary' && (
+                <div className="space-y-4">
               
-              {/* Client Info */}
-              <div className="flex items-center gap-4 mb-6">
+                {/* Client Info */}
+                <div className="flex items-center gap-3 p-3 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors">
                 <Avatar className="w-16 h-16">
                   <AvatarImage src={selectedSession.avatar} alt={selectedSession.clientName} />
                   <AvatarFallback>{getInitials(selectedSession.clientName)}</AvatarFallback>
@@ -1975,25 +1951,45 @@ const ExpertDashboard = () => {
                 </div>
               </div>
               
-              {/* Session Prep */}
-              <div className="pt-4 border-t">
-                <h4 className="font-medium mb-3">Session Preparation</h4>
-                <div className="space-y-2 text-sm">
-                  <div className="flex items-center gap-2">
-                    <input type="checkbox" className="rounded" />
-                    <span>Review client background</span>
+                </div>
+              )}
+
+              {sessionDetailTab === 'chat' && (
+                <div className="space-y-4">
+                  {/* Chat Messages */}
+                  <div className="space-y-3">
+                    <div className="p-3 bg-gray-50 rounded-lg">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-sm font-medium">{selectedSession.clientName}</span>
+                        <span className="text-xs text-muted-foreground">Today 8:45 AM</span>
+                      </div>
+                      <p className="text-sm">Looking forward to our session today! I have a few questions about market strategy.</p>
+                    </div>
+                    
+                    <div className="p-3 bg-blue-50 rounded-lg ml-6">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-sm font-medium">You</span>
+                        <span className="text-xs text-muted-foreground">Today 9:30 AM</span>
+                      </div>
+                      <p className="text-sm">Perfect! I've prepared some materials that will help with your questions.</p>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <input type="checkbox" className="rounded" />
-                    <span>Prepare session materials</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <input type="checkbox" className="rounded" />
-                    <span>Test video setup</span>
+                  
+                  {/* New message input */}
+                  <div className="flex gap-2">
+                    <input 
+                      type="text" 
+                      className="flex-1 p-2 border border-gray-300 rounded-lg" 
+                      placeholder="Message your client..."
+                    />
+                    <Button size="sm" className="rounded-lg">
+                      Send
+                    </Button>
                   </div>
                 </div>
-              </div>
-            </div>
+              )}
+              </CardContent>
+            </Card>
           </div>
         </div>
       )}
