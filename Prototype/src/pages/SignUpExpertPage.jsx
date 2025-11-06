@@ -17,6 +17,7 @@ import {
   Upload,
   Check,
   ChevronRight,
+  ChevronDown,
   ArrowLeft,
   Globe,
   Award,
@@ -39,16 +40,15 @@ const SignUpExpertPage = () => {
     email: '',
     password: '',
     confirmPassword: '',
-    title: '',
-    shortDescription: '',
     location: '',
     gender: '',
     languagePreference: '',
     
-    // Step 2: Expertise & Industries
-    expertiseCategories: [],
-    expertiseTags: [],
-    industries: [],
+    // Step 2: Professional & Expertise
+    title: '',
+    shortDescription: '',
+    industry: '',
+    expertise: [],
     
     // Step 3: Availability
     timezone: '',
@@ -67,7 +67,6 @@ const SignUpExpertPage = () => {
         { duration: '45 min', price: '' }
       ]
     },
-    bundlePackages: [],
     
     // Step 5: Charity (Optional)
     charityName: '',
@@ -76,7 +75,7 @@ const SignUpExpertPage = () => {
 
   const steps = [
     { step: 1, title: 'Personal Information', description: 'Tell us about yourself' },
-    { step: 2, title: 'Expertise', description: 'Your areas of expertise' },
+    { step: 2, title: 'Professional & Expertise', description: 'Your professional background and expertise' },
     { step: 3, title: 'Set Your Availability', description: 'When you\'re available' },
     { step: 4, title: 'Session Types & Pricing', description: 'Create your session offerings' },
     { step: 5, title: 'Donate for charity', description: 'Optional charity support' }
@@ -179,13 +178,6 @@ const SignUpExpertPage = () => {
     { label: '60 min', value: '60' }
   ]
 
-  const bundleSessionCounts = [
-    { label: '3 sessions', value: '3' },
-    { label: '5 sessions', value: '5' },
-    { label: '8 sessions', value: '8' },
-    { label: '10 sessions', value: '10' }
-  ]
-
   const handleInputChange = (field, value) => {
     setFormData(prev => ({
       ...prev,
@@ -265,41 +257,6 @@ const SignUpExpertPage = () => {
     }))
   }
 
-  const addBundlePackage = () => {
-    setFormData(prev => ({
-      ...prev,
-      bundlePackages: [
-        ...prev.bundlePackages,
-        {
-          id: `bundle-${Date.now()}`,
-          title: '',
-          description: '',
-          sessions: '3',
-          totalDuration: '',
-          originalPrice: '',
-          bundlePrice: '',
-          includes: ['', '']
-        }
-      ]
-    }))
-  }
-
-  const updateBundlePackage = (bundleId, field, value) => {
-    setFormData(prev => ({
-      ...prev,
-      bundlePackages: prev.bundlePackages.map(bundle =>
-        bundle.id === bundleId ? { ...bundle, [field]: value } : bundle
-      )
-    }))
-  }
-
-  const removeBundlePackage = (bundleId) => {
-    setFormData(prev => ({
-      ...prev,
-      bundlePackages: prev.bundlePackages.filter(bundle => bundle.id !== bundleId)
-    }))
-  }
-
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -373,224 +330,268 @@ const SignUpExpertPage = () => {
           
           {/* Step 1: Personal Information */}
           {currentStep === 1 && (
-            <Card className="border-2 border-foreground">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <User className="w-5 h-5" />
-                  Personal Information
+            <Card className="border-2 border-foreground shadow-lg">
+              <CardHeader className="bg-gradient-to-r from-gray-50 to-gray-100 border-b">
+                <CardTitle className="flex items-center gap-3 text-xl">
+                  <div className="w-10 h-10 bg-gray-900 rounded-full flex items-center justify-center">
+                    <User className="w-5 h-5 text-white" />
+                  </div>
+                  Professional Profile
                 </CardTitle>
+                <p className="text-sm text-gray-600 mt-2">Build your professional presence on TapTime</p>
               </CardHeader>
-              <CardContent className="space-y-6">
-                {/* Basic Account Info */}
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium mb-2">First Name</label>
-                    <input
-                      type="text"
-                      value={formData.firstName}
-                      onChange={(e) => handleInputChange('firstName', e.target.value)}
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
-                      placeholder="Sarah"
-                    />
+              <CardContent className="space-y-8 p-8">
+                
+                <div className="space-y-6">
+                  
+                  {/* First Name + Last Name */}
+                  <div className="grid grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-3">First Name *</label>
+                      <input
+                        type="text"
+                        value={formData.firstName}
+                        onChange={(e) => handleInputChange('firstName', e.target.value)}
+                        className="w-full p-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all"
+                        placeholder="Enter your first name"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-3">Last Name *</label>
+                      <input
+                        type="text"
+                        value={formData.lastName}
+                        onChange={(e) => handleInputChange('lastName', e.target.value)}
+                        className="w-full p-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all"
+                        placeholder="Enter your last name"
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Last Name</label>
-                    <input
-                      type="text"
-                      value={formData.lastName}
-                      onChange={(e) => handleInputChange('lastName', e.target.value)}
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
-                      placeholder="Johnson"
-                    />
+
+                  {/* Email + Location */}
+                  <div className="grid grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-3">Email Address *</label>
+                      <div className="relative">
+                        <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                        <input
+                          type="email"
+                          value={formData.email}
+                          onChange={(e) => handleInputChange('email', e.target.value)}
+                          className="w-full pl-12 pr-4 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all"
+                          placeholder="Enter your professional email"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-3">Location *</label>
+                      <div className="relative">
+                        <MapPin className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                        <select
+                          value={formData.location}
+                          onChange={(e) => handleInputChange('location', e.target.value)}
+                          className="w-full pl-12 pr-4 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all appearance-none bg-white"
+                          required
+                        >
+                          <option value="">Select your country</option>
+                          {countries.map(country => (
+                            <option key={country} value={country}>{country}</option>
+                          ))}
+                        </select>
+                        <ChevronDown className="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+                      </div>
+                    </div>
                   </div>
-                </div>
 
-                <div>
-                  <label className="block text-sm font-medium mb-2">Email Address</label>
-                  <input
-                    type="email"
-                    value={formData.email}
-                    onChange={(e) => handleInputChange('email', e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
-                    placeholder="sarah.johnson@example.com"
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Password</label>
-                    <input
-                      type="password"
-                      value={formData.password}
-                      onChange={(e) => handleInputChange('password', e.target.value)}
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
-                      placeholder="••••••••"
-                    />
+                  {/* Gender + Language Preference */}
+                  <div className="grid grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-3">Gender *</label>
+                      <div className="relative">
+                        <User className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                        <select
+                          value={formData.gender}
+                          onChange={(e) => handleInputChange('gender', e.target.value)}
+                          className="w-full pl-12 pr-4 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all appearance-none bg-white"
+                          required
+                        >
+                          <option value="">Select gender</option>
+                          {genderOptions.map(gender => (
+                            <option key={gender} value={gender}>{gender}</option>
+                          ))}
+                        </select>
+                        <ChevronDown className="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-3">Language Preference *</label>
+                      <div className="relative">
+                        <Globe className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                        <select
+                          value={formData.languagePreference}
+                          onChange={(e) => handleInputChange('languagePreference', e.target.value)}
+                          className="w-full pl-12 pr-4 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all appearance-none bg-white"
+                          required
+                        >
+                          <option value="">Select preferred language</option>
+                          {languageOptions.map(language => (
+                            <option key={language} value={language}>{language}</option>
+                          ))}
+                        </select>
+                        <ChevronDown className="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Confirm Password</label>
-                    <input
-                      type="password"
-                      value={formData.confirmPassword}
-                      onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
-                      placeholder="••••••••"
-                    />
+
+                  {/* Password + Confirm Password */}
+                  <div className="grid grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-3">Password *</label>
+                      <div className="relative">
+                        <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                        <input
+                          type="password"
+                          value={formData.password}
+                          onChange={(e) => handleInputChange('password', e.target.value)}
+                          className="w-full pl-12 pr-4 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all"
+                          placeholder="Create secure password"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-3">Confirm Password *</label>
+                      <div className="relative">
+                        <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                        <input
+                          type="password"
+                          value={formData.confirmPassword}
+                          onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
+                          className="w-full pl-12 pr-4 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all"
+                          placeholder="Confirm your password"
+                        />
+                      </div>
+                    </div>
                   </div>
-                </div>
-
-                {/* Expert-specific fields */}
-                <div>
-                  <label className="block text-sm font-medium mb-2">Title*</label>
-                  <input
-                    type="text"
-                    value={formData.title}
-                    onChange={(e) => handleInputChange('title', e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
-                    placeholder="Type Here..."
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-2">
-                    Short Description*
-                    <span className="text-xs text-gray-500 ml-2">100 characters</span>
-                  </label>
-                  <textarea
-                    value={formData.shortDescription}
-                    onChange={(e) => handleInputChange('shortDescription', e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 h-24 resize-none"
-                    placeholder="Type Here..."
-                    maxLength={100}
-                    required
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Location*</label>
-                    <select
-                      value={formData.location}
-                      onChange={(e) => handleInputChange('location', e.target.value)}
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
-                      required
-                    >
-                      <option value="">Country name</option>
-                      {countries.map(country => (
-                        <option key={country} value={country}>{country}</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Gender*</label>
-                    <select
-                      value={formData.gender}
-                      onChange={(e) => handleInputChange('gender', e.target.value)}
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
-                      required
-                    >
-                      <option value="">Gender</option>
-                      {genderOptions.map(gender => (
-                        <option key={gender} value={gender}>{gender}</option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-2">Language Preference*</label>
-                  <select
-                    value={formData.languagePreference}
-                    onChange={(e) => handleInputChange('languagePreference', e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
-                    required
-                  >
-                    <option value="">Type here...</option>
-                    {languageOptions.map(language => (
-                      <option key={language} value={language}>{language}</option>
-                    ))}
-                  </select>
                 </div>
               </CardContent>
             </Card>
           )}
 
-          {/* Step 2: Expertise */}
+          {/* Step 2: Professional & Expertise */}
           {currentStep === 2 && (
             <Card className="border-2 border-foreground">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Award className="w-5 h-5" />
-                  Expertise
+                  Professional & Expertise
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-8">
-                {/* Expertise Categories - Visual Cards */}
-                <div className="space-y-4">
-                  <div className="grid grid-cols-3 gap-4">
-                    {expertiseCategories.map(category => (
-                      <button
-                        key={category.id}
-                        onClick={() => handleArrayToggle('expertiseCategories', category.id)}
-                        className={`flex flex-col items-center p-4 border-2 rounded-lg transition-all hover:border-gray-400 ${
-                          formData.expertiseCategories.includes(category.id)
-                            ? 'border-gray-900 bg-gray-50'
-                            : 'border-gray-200'
-                        }`}
-                      >
-                        <div className="w-full h-20 bg-gray-200 rounded-lg mb-3 flex items-center justify-center">
-                          <span className="text-gray-500 text-xs">📊</span>
-                        </div>
-                        <span className="text-sm font-medium text-center">{category.title}</span>
-                      </button>
-                    ))}
+              <CardContent className="space-y-6">
+                {/* Professional Title */}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Professional Title</label>
+                  <div className="relative">
+                    <Briefcase className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
+                    <input
+                      type="text"
+                      placeholder="e.g., Senior Product Manager, Marketing Director"
+                      value={formData.title}
+                      onChange={(e) => setFormData({...formData, title: e.target.value})}
+                      className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-lg focus:border-gray-900 focus:outline-none"
+                    />
                   </div>
                 </div>
 
-                {/* Expertise Tags */}
-                <div className="space-y-4">
-                  <div className="flex flex-wrap gap-3">
-                    {expertiseTags.map(tag => (
-                      <button
-                        key={tag}
-                        onClick={() => handleArrayToggle('expertiseTags', tag)}
-                        className={`px-4 py-2 border-2 rounded-full text-sm font-medium transition-all ${
-                          formData.expertiseTags.includes(tag)
-                            ? 'border-gray-900 bg-gray-50 text-gray-900'
-                            : 'border-gray-200 text-gray-600 hover:border-gray-400'
-                        }`}
-                      >
-                        {tag}
-                      </button>
-                    ))}
+                {/* Short Description */}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Short Description</label>
+                  <div className="relative">
+                    <FileText className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
+                    <textarea
+                      placeholder="Brief description of your background and expertise..."
+                      value={formData.shortDescription}
+                      onChange={(e) => setFormData({...formData, shortDescription: e.target.value})}
+                      className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-lg focus:border-gray-900 focus:outline-none min-h-[100px] resize-none"
+                    />
                   </div>
                 </div>
 
-                {/* Industries */}
-                <div className="space-y-4">
-                  <h4 className="font-medium text-lg">Industries <span className="text-sm text-gray-500">(3)</span></h4>
-                  <div className="grid grid-cols-2 gap-3">
-                    {industries.map(industry => (
+
+                {/* Industry */}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Industry</label>
+                  <div className="relative">
+                    <Briefcase className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
+                    <select
+                      value={formData.industry}
+                      onChange={(e) => setFormData({...formData, industry: e.target.value})}
+                      className="w-full pl-10 pr-10 py-3 border-2 border-gray-200 rounded-lg focus:border-gray-900 focus:outline-none appearance-none"
+                    >
+                      <option value="">Select your industry</option>
+                      <option value="business-startups">Business & Startups</option>
+                      <option value="technology-software">Technology & Software</option>
+                      <option value="marketing-brand">Marketing & Brand</option>
+                      <option value="career-professional">Career & Professional Development</option>
+                      <option value="finance-investment">Finance & Investment</option>
+                      <option value="healthcare-wellness">Healthcare & Wellness</option>
+                      <option value="creative-design">Creative & Design</option>
+                      <option value="education-training">Education & Training</option>
+                      <option value="real-estate">Real Estate</option>
+                      <option value="legal-consulting">Legal & Consulting</option>
+                      <option value="other">Other</option>
+                    </select>
+                    <ChevronDown className="absolute right-3 top-3 w-4 h-4 text-gray-400" />
+                  </div>
+                </div>
+
+                {/* Expertise */}
+                <div className="space-y-3">
+                  <label className="text-sm font-medium">Areas of Expertise</label>
+                  <p className="text-xs text-gray-500">Select all areas that apply to your expertise</p>
+                  <div className="grid grid-cols-2 gap-3 max-h-48 overflow-y-auto p-2 border border-gray-200 rounded-lg">
+                    {[
+                      'Leadership & Team Building',
+                      'Scaling Startups', 
+                      'Fundraising & Pitching',
+                      'Product Development',
+                      'Marketing Strategy',
+                      'Data Science & Analytics',
+                      'Software Development', 
+                      'UX/UI Design',
+                      'Financial Planning',
+                      'Career Coaching',
+                      'Content Creation',
+                      'Public Speaking',
+                      'Project Management',
+                      'Digital Marketing',
+                      'Business Strategy',
+                      'Sales & Customer Success',
+                      'Operations & Process Improvement',
+                      'Legal & Compliance',
+                      'Human Resources',
+                      'Other'
+                    ].map(skill => (
                       <label
-                        key={industry}
-                        className={`flex items-center gap-3 p-3 border rounded-lg cursor-pointer transition-all ${
-                          formData.industries.includes(industry)
-                            ? 'border-gray-900 bg-gray-50'
-                            : 'border-gray-200 hover:border-gray-400'
-                        }`}
+                        key={skill}
+                        className="flex items-center gap-2 p-2 rounded hover:bg-gray-50 cursor-pointer"
                       >
                         <input
                           type="checkbox"
-                          checked={formData.industries.includes(industry)}
-                          onChange={() => handleArrayToggle('industries', industry)}
+                          checked={formData.expertise.includes(skill)}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              setFormData({...formData, expertise: [...formData.expertise, skill]})
+                            } else {
+                              setFormData({...formData, expertise: formData.expertise.filter(s => s !== skill)})
+                            }
+                          }}
                           className="w-4 h-4 text-gray-900 border-gray-300 rounded focus:ring-gray-900"
                         />
-                        <span className="text-sm">{industry}</span>
-                        <span className="ml-auto text-xs">📊</span>
+                        <span className="text-sm">{skill}</span>
                       </label>
                     ))}
                   </div>
+                  <p className="text-xs text-gray-500">Selected: {formData.expertise.length} areas</p>
                 </div>
               </CardContent>
             </Card>
@@ -605,140 +606,19 @@ const SignUpExpertPage = () => {
                   Set Your Availability
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-6">
-                {/* Left Panel - Settings */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                  <div className="space-y-4">
-                    {/* Time Zone */}
-                    <div>
-                      <label className="block text-sm font-medium mb-2">Time Zone</label>
-                      <select
-                        value={formData.timezone}
-                        onChange={(e) => handleInputChange('timezone', e.target.value)}
-                        className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
-                      >
-                        <option value="">Also timing</option>
-                        {timezones.map(timezone => (
-                          <option key={timezone} value={timezone}>{timezone}</option>
-                        ))}
-                      </select>
-                    </div>
-
-                    {/* Slot Duration */}
-                    <div>
-                      <label className="block text-sm font-medium mb-2">Slot Duration</label>
-                      <select
-                        value={formData.slotDuration}
-                        onChange={(e) => handleInputChange('slotDuration', e.target.value)}
-                        className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
-                      >
-                        <option value="">30 min</option>
-                        {durationOptions.map(duration => (
-                          <option key={duration} value={duration}>{duration}</option>
-                        ))}
-                      </select>
-                    </div>
-
-                    {/* Buffer */}
-                    <div>
-                      <label className="block text-sm font-medium mb-2">Buffer</label>
-                      <select
-                        value={formData.bufferTime}
-                        onChange={(e) => handleInputChange('bufferTime', e.target.value)}
-                        className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
-                      >
-                        <option value="">15 min</option>
-                        {bufferOptions.map(buffer => (
-                          <option key={buffer} value={buffer}>{buffer}</option>
-                        ))}
-                      </select>
-                    </div>
-
-                    {/* Connect Calendly */}
-                    <Button 
-                      variant="outline" 
-                      className="w-full border-2 border-gray-300 hover:border-gray-900"
-                    >
-                      <CalendarIcon className="w-4 h-4 mr-2" />
-                      Connect Calendly
-                    </Button>
-
-                    {/* Mini Calendar */}
-                    <div className="bg-gray-50 p-4 rounded-lg">
-                      <Calendar 
-                        mode="single"
-                        className="w-full"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Right Panel - Weekly Schedule */}
-                  <div className="lg:col-span-2">
-                    <div className="space-y-4">
-                      {/* Week Header */}
-                      <div className="flex items-center justify-between">
-                        <h3 className="text-lg font-medium">Week of Sept 15-21, 2025</h3>
-                        <div className="flex items-center gap-2">
-                          <Button variant="ghost" size="sm">❮ Today ❯</Button>
-                        </div>
-                      </div>
-
-                      {/* Schedule Controls */}
-                      <div className="flex gap-4 mb-4">
-                        <select className="px-3 py-2 border border-gray-300 rounded-lg text-sm">
-                          <option>Daily</option>
-                          <option>Weekly</option>
-                          <option>Monthly</option>
-                        </select>
-                        <select className="px-3 py-2 border border-gray-300 rounded-lg text-sm">
-                          <option>Ends on</option>
-                          <option>Never</option>
-                          <option>After</option>
-                        </select>
-                      </div>
-
-                      {/* Weekly Calendar Grid */}
-                      <div className="border border-gray-200 rounded-lg overflow-hidden">
-                        {/* Day Headers */}
-                        <div className="grid grid-cols-7 bg-gray-50">
-                          {['Mon 15', 'Tue 16', 'Wed 17', 'Thu 18', 'Fri 19', 'Sat 20', 'Sun 21'].map(day => (
-                            <div key={day} className="p-3 text-center text-sm font-medium border-r border-gray-200 last:border-r-0">
-                              {day}
-                            </div>
-                          ))}
-                        </div>
-
-                        {/* Time Slots */}
-                        <div className="grid grid-cols-8">
-                          {/* Time Labels */}
-                          <div className="bg-gray-50 border-r border-gray-200">
-                            {['8:00 AM', '9:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM', '2:00 PM'].map(time => (
-                              <div key={time} className="p-3 text-xs text-gray-600 border-b border-gray-200 h-12 flex items-center">
-                                {time}
-                              </div>
-                            ))}
-                          </div>
-
-                          {/* Calendar Grid */}
-                          {Array.from({ length: 7 }).map((_, dayIndex) => (
-                            <div key={dayIndex} className="border-r border-gray-200 last:border-r-0">
-                              {Array.from({ length: 7 }).map((_, timeIndex) => (
-                                <div 
-                                  key={timeIndex} 
-                                  className="h-12 border-b border-gray-200 cursor-pointer hover:bg-blue-50 transition-colors"
-                                  onClick={() => {
-                                    // Handle time slot selection
-                                    console.log(`Selected: Day ${dayIndex}, Time ${timeIndex}`)
-                                  }}
-                                />
-                              ))}
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+              <CardContent className="flex flex-col items-center justify-center py-12">
+                <CalendarIcon className="w-16 h-16 text-gray-400 mb-4" />
+                <h3 className="text-lg font-medium mb-2">Connect with Calendly</h3>
+                <p className="text-sm text-gray-600 mb-6 text-center">
+                  Sync your availability with Calendly to manage your booking schedule
+                </p>
+                <Button 
+                  variant="outline" 
+                  className="border-2 border-gray-300 hover:border-gray-900 px-6"
+                >
+                  <CalendarIcon className="w-4 h-4 mr-2" />
+                  Connect Calendly
+                </Button>
               </CardContent>
             </Card>
           )}
@@ -899,102 +779,6 @@ const SignUpExpertPage = () => {
                       )}
                     </CardContent>
                   </Card>
-                </div>
-
-                {/* Bundle Packages */}
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-medium">Bundle Packages</h3>
-                    <Button
-                      type="button"
-                      onClick={addBundlePackage}
-                      variant="outline"
-                      size="sm"
-                      className="border-2 border-gray-300 hover:border-gray-900"
-                    >
-                      <Package className="w-4 h-4 mr-2" />
-                      Add Bundle
-                    </Button>
-                  </div>
-                  <p className="text-sm text-gray-600">
-                    Multi-session packages with discounted pricing
-                  </p>
-                  
-                  {formData.bundlePackages.map((bundle) => (
-                    <Card key={bundle.id} className="border border-gray-200">
-                      <CardContent className="p-4 space-y-4">
-                        <div className="flex items-center justify-between">
-                          <h4 className="font-medium text-sm">Bundle Details</h4>
-                          <Button
-                            type="button"
-                            onClick={() => removeBundlePackage(bundle.id)}
-                            variant="ghost"
-                            size="sm"
-                            className="text-red-500 hover:text-red-700"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
-                        </div>
-                        
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <div>
-                            <label className="text-sm font-medium mb-2 block">Package Title*</label>
-                            <input
-                              type="text"
-                              value={bundle.title}
-                              onChange={(e) => updateBundlePackage(bundle.id, 'title', e.target.value)}
-                              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
-                              placeholder="Startup Accelerator Package"
-                            />
-                          </div>
-                          <div className="grid grid-cols-2 gap-2">
-                            <div>
-                              <label className="text-sm font-medium mb-2 block">Sessions</label>
-                              <select
-                                value={bundle.sessions}
-                                onChange={(e) => updateBundlePackage(bundle.id, 'sessions', e.target.value)}
-                                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
-                              >
-                                <option value="2">2 sessions</option>
-                                <option value="3">3 sessions</option>
-                                <option value="4">4 sessions</option>
-                                <option value="5">5 sessions</option>
-                                <option value="6">6 sessions</option>
-                              </select>
-                            </div>
-                            <div>
-                              <label className="text-sm font-medium mb-2 block">Bundle Price ($)</label>
-                              <input
-                                type="number"
-                                value={bundle.bundlePrice}
-                                onChange={(e) => updateBundlePackage(bundle.id, 'bundlePrice', e.target.value)}
-                                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
-                                placeholder="2400"
-                              />
-                            </div>
-                          </div>
-                        </div>
-                        
-                        <div>
-                          <label className="text-sm font-medium mb-2 block">Description</label>
-                          <textarea
-                            value={bundle.description}
-                            onChange={(e) => updateBundlePackage(bundle.id, 'description', e.target.value)}
-                            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 h-20 resize-none"
-                            placeholder="Complete startup guidance: PMF validation, fundraising prep, and scaling strategy"
-                          />
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                  
-                  {formData.bundlePackages.length === 0 && (
-                    <div className="text-center py-8 border-2 border-dashed border-gray-300 rounded-lg">
-                      <Package className="w-8 h-8 mx-auto text-gray-400 mb-2" />
-                      <p className="text-sm text-gray-500">No bundle packages yet</p>
-                      <p className="text-xs text-gray-400">Add multi-session packages with discounts</p>
-                    </div>
-                  )}
                 </div>
 
                 {/* Platform Fee Info */}

@@ -129,14 +129,6 @@ const PrototypeNavigationPage = () => {
                     <div className={`p-3 rounded-full ${prototype.color}`}>
                       {prototype.icon}
                     </div>
-                    <div className="flex gap-2">
-                      <Badge variant={prototype.status === 'Live' ? 'default' : 'secondary'}>
-                        {prototype.status}
-                      </Badge>
-                      <Badge variant="outline">
-                        {prototype.badge}
-                      </Badge>
-                    </div>
                   </div>
                   <CardTitle className="text-xl">{prototype.title}</CardTitle>
                 </CardHeader>
@@ -182,23 +174,13 @@ const PrototypeNavigationPage = () => {
                   </div>
 
                   <div className="pt-4">
-                    {prototype.status === 'Live' ? (
-                      <Button 
-                        className="w-full rounded-full" 
-                        onClick={() => window.location.href = prototype.url}
-                      >
-                        Open Prototype
-                        <ArrowRight className="ml-2 w-4 h-4" />
-                      </Button>
-                    ) : (
-                      <Button 
-                        variant="outline" 
-                        className="w-full rounded-full border-2 border-foreground" 
-                        disabled
-                      >
-                        Coming Soon
-                      </Button>
-                    )}
+                    <Button 
+                      className="w-full rounded-full" 
+                      onClick={() => window.location.href = prototype.url}
+                    >
+                      Open Prototype
+                      <ArrowRight className="ml-2 w-4 h-4" />
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
