@@ -534,6 +534,11 @@ const ExpertDashboard = () => {
                 <Card 
                   key={session.id} 
                   className="group hover:shadow-xl hover:scale-105 transition-all duration-300 border-2 hover:border-foreground cursor-pointer h-full relative"
+                  onClick={() => {
+                    setSelectedSession(session)
+                    setSessionDetailTab('summary')
+                    setShowSessionDetail(true)
+                  }}
                 >
                   {/* Client Photo Header */}
                   <div className="relative h-32 overflow-hidden rounded-t-lg bg-gray-100">
