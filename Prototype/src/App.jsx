@@ -31,6 +31,7 @@ import CMSDashboard from '@/pages/cms/CMSDashboard'
 import UserDashboard from '@/pages/user/UserDashboard'
 import UserDashboardTest from '@/pages/user/UserDashboardTest'
 import ExpertDashboard from '@/pages/expert/ExpertDashboard'
+import AdminDashboard from '@/pages/admin/AdminDashboard'
 import SignUpUserPage from '@/pages/SignUpUserPage'
 import SignUpExpertPage from '@/pages/SignUpExpertPage'
 
@@ -73,6 +74,7 @@ function App() {
         <Route path="/user/dashboard" element={<UserDashboard />} />
         <Route path="/user/dashboard-test" element={<UserDashboardTest />} />
         <Route path="/expert/dashboard" element={<ExpertDashboard />} />
+        <Route path="/admin/dashboard" element={<AdminDashboard />} />
       </Routes>
     </Router>
   )

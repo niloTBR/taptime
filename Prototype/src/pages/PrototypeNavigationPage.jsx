@@ -81,6 +81,17 @@ const PrototypeNavigationPage = () => {
       status: 'Live',
       badge: 'Teaching Hub',
       color: 'bg-orange-600 text-white'
+    },
+    {
+      id: 'admin-dashboard',
+      title: 'Admin Dashboard',
+      description: 'Comprehensive admin panel for platform management, expert approvals, category management, and financial oversight.',
+      features: ['Expert Approval Workflow', 'Platform Statistics', 'Category Management', 'Withdrawal Approvals', 'Meeting Monitoring', '2FA Security'],
+      icon: <ShieldCheck className="w-8 h-8" />,
+      url: '/admin/dashboard',
+      status: 'Live',
+      badge: 'Admin Panel',
+      color: 'bg-red-600 text-white'
     }
   ]
 
