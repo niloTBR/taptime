@@ -41,6 +41,7 @@ import {
   Check,
   Globe,
   ChevronDown,
+  ChevronRight,
   X,
   Crown,
   Package,
@@ -52,6 +53,7 @@ const ExpertDashboard = () => {
   const [activeTab, setActiveTab] = useState('upcoming')
   const [showSessionDetail, setShowSessionDetail] = useState(false)
   const [selectedSession, setSelectedSession] = useState(null)
+  const [selectedSessionType, setSelectedSessionType] = useState(null)
   const [sessionDetailTab, setSessionDetailTab] = useState('summary')
   const [showVerificationModal, setShowVerificationModal] = useState(false)
   const [showSettings, setShowSettings] = useState(false)
@@ -116,7 +118,11 @@ const ExpertDashboard = () => {
       topic: 'Product Roadmap Review',
       summary: 'Review current product strategy and identify areas for improvement. Discuss market positioning and competitive analysis.',
       cost: '$200',
-      avatar: '/api/placeholder/40/40'
+      avatar: '/api/placeholder/40/40',
+      category: 'Business',
+      rating: 4.8,
+      reviewCount: 24,
+      paymentStatus: 'paid'
     },
     {
       id: 2,
@@ -128,7 +134,11 @@ const ExpertDashboard = () => {
       topic: 'Startup Strategy Deep Dive',
       summary: 'Comprehensive strategy session covering product-market fit, go-to-market strategy, and scaling plans.',
       cost: '$300',
-      avatar: '/api/placeholder/40/40'
+      avatar: '/api/placeholder/40/40',
+      category: 'Strategy',
+      rating: 4.9,
+      reviewCount: 31,
+      paymentStatus: 'pending'
     }
   ]
 
@@ -142,7 +152,13 @@ const ExpertDashboard = () => {
       topic: 'Team Leadership Workshop',
       duration: '75 min',
       cost: '$250',
-      feedback: 'Incredible insights on building high-performing product teams. Michael provided actionable frameworks we immediately implemented.'
+      feedback: 'Incredible insights on building high-performing product teams. Michael provided actionable frameworks we immediately implemented.',
+      avatar: '/api/placeholder/40/40',
+      category: 'Leadership',
+      clientRating: 4.9,
+      reviewCount: 18,
+      sessionNumber: 3,
+      clientRatedUs: 5
     },
     {
       id: 2,
@@ -153,7 +169,13 @@ const ExpertDashboard = () => {
       topic: 'Product Strategy Session',
       duration: '60 min',
       cost: '$200',
-      feedback: 'Exceptional strategic guidance. Helped us pivot our roadmap and focus on what truly matters for our customers.'
+      feedback: 'Exceptional strategic guidance. Helped us pivot our roadmap and focus on what truly matters for our customers.',
+      avatar: '/api/placeholder/40/40',
+      category: 'Strategy',
+      clientRating: 4.7,
+      reviewCount: 22,
+      sessionNumber: 1,
+      clientRatedUs: null
     }
   ]
 
@@ -452,7 +474,8 @@ const ExpertDashboard = () => {
                   className="group hover:shadow-xl hover:scale-105 transition-all duration-300 border-2 hover:border-foreground cursor-pointer h-full relative"
                   onClick={() => {
                     setSelectedSession(session)
-                    setSessionDetailTab('summary')
+                    setSelectedSessionType('upcoming')
+                    setSessionDetailTab('chat')
                     setShowSessionDetail(true)
                   }}
                 >
@@ -465,17 +488,31 @@ const ExpertDashboard = () => {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                     
-                    {/* Session Type Badge */}
+                    {/* Category Badge */}
                     <div className="absolute top-3 right-3">
                       <Badge variant="secondary" className="bg-white/90 backdrop-blur-sm text-black text-xs px-2 py-1 shadow-sm">
-                        Upcoming
+                        {session.category}
                       </Badge>
                     </div>
+                    
                   </div>
 
                   <CardContent className="p-6 flex flex-col min-h-0">
                     <div className="flex-1 space-y-4 text-left">
-                      {/* Client Info */}
+                      {/* Rating and Verification Row */}
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-1">
+                            <Star className="w-4 h-4 fill-black text-black" />
+                            <span className="text-sm font-medium">{session.rating}</span>
+                          </div>
+                          <span className="text-xs text-muted-foreground">
+                            ({session.reviewCount})
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Client Name and Title */}
                       <div>
                         <h3 className="font-semibold text-base leading-tight text-left">
                           {session.clientName}
@@ -497,7 +534,11 @@ const ExpertDashboard = () => {
                       <div className="space-y-1 text-xs text-muted-foreground">
                         <p>📅 {session.date} at {session.time}</p>
                         <p>⏱️ {session.duration}</p>
-                        <p className="text-green-600 font-medium">✓ Confirmed</p>
+                        {session.paymentStatus === 'paid' ? (
+                          <p className="text-gray-600 font-medium">✓ Paid</p>
+                        ) : (
+                          <p className="text-orange-600 font-medium">⏳ Payment Pending</p>
+                        )}
                       </div>
                     </div>
 
@@ -505,12 +546,26 @@ const ExpertDashboard = () => {
                     <div className="mt-auto flex-shrink-0 pt-4">
                       <div className="flex justify-between items-center">
                         <div className="flex gap-2 w-full">
-                          <Button 
-                            size="sm" 
-                            className="rounded-full px-3 py-1 text-xs h-8 flex-1"
-                          >
-                            Start Session
-                          </Button>
+                          {session.paymentStatus === 'paid' ? (
+                            <Button 
+                              size="sm" 
+                              className="rounded-full px-3 py-1 text-xs h-8 flex-1"
+                            >
+                              Start Session
+                            </Button>
+                          ) : (
+                            <Button 
+                              size="sm" 
+                              variant="outline"
+                              className="rounded-full px-3 py-1 text-xs h-8 flex-1 border-2 border-gray-300 text-gray-400 bg-gray-100 cursor-not-allowed"
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                setShowPaymentMessage(true)
+                              }}
+                            >
+                              Payment Required
+                            </Button>
+                          )}
                           
                           <Button 
                             size="sm" 
@@ -524,7 +579,7 @@ const ExpertDashboard = () => {
                     </div>
                   </CardContent>
                 </Card>
-              ))}
+              ))})
             </div>
           )}
           
@@ -536,6 +591,7 @@ const ExpertDashboard = () => {
                   className="group hover:shadow-xl hover:scale-105 transition-all duration-300 border-2 hover:border-foreground cursor-pointer h-full relative"
                   onClick={() => {
                     setSelectedSession(session)
+                    setSelectedSessionType('past')
                     setSessionDetailTab('summary')
                     setShowSessionDetail(true)
                   }}
@@ -543,33 +599,34 @@ const ExpertDashboard = () => {
                   {/* Client Photo Header */}
                   <div className="relative h-32 overflow-hidden rounded-t-lg bg-gray-100">
                     <img 
-                      src="/api/placeholder/300/120" 
+                      src={session.avatar} 
                       alt={session.clientName}
                       className="w-full h-full object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                     
-                    {/* Session Type Badge */}
+                    {/* Category Badge */}
                     <div className="absolute top-3 right-3">
                       <Badge variant="secondary" className="bg-white/90 backdrop-blur-sm text-black text-xs px-2 py-1 shadow-sm">
-                        Completed
+                        {session.category}
                       </Badge>
                     </div>
+                    
                   </div>
 
                   <CardContent className="p-6 flex flex-col min-h-0">
                     <div className="flex-1 space-y-4 text-left">
-                      {/* Client Rating and Info */}
+                      {/* Rating and Verification Row */}
                       <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-1">
-                          {[...Array(5)].map((_, i) => (
-                            <Star 
-                              key={i} 
-                              className={`w-4 h-4 ${i < session.rating ? 'fill-black text-black' : 'text-gray-300'}`} 
-                            />
-                          ))}
+                        <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-1">
+                            <Star className="w-4 h-4 fill-black text-black" />
+                            <span className="text-sm font-medium">{session.clientRating}</span>
+                          </div>
+                          <span className="text-xs text-muted-foreground">
+                            ({session.reviewCount})
+                          </span>
                         </div>
-                        <span className="text-xs text-muted-foreground">{session.date}</span>
                       </div>
 
                       {/* Client Name and Title */}
@@ -582,7 +639,7 @@ const ExpertDashboard = () => {
                         </p>
                       </div>
                       
-                      {/* Session Topic and Feedback */}
+                      {/* Session Topic and Summary */}
                       <div>
                         <h4 className="font-medium text-sm mb-1">{session.topic}</h4>
                         <p className="text-xs text-muted-foreground text-left leading-relaxed line-clamp-2">
@@ -592,8 +649,25 @@ const ExpertDashboard = () => {
                       
                       {/* Session Details */}
                       <div className="space-y-1 text-xs text-muted-foreground">
+                        <p>📅 {session.date} • Session {session.sessionNumber}</p>
                         <p>⏱️ {session.duration}</p>
-                        <p className="text-green-600 font-medium">💰 Earned {session.cost}</p>
+                        <div className="flex items-center gap-2">
+                          {session.clientRatedUs ? (
+                            <>
+                              <span>Client rating:</span>
+                              <div className="flex items-center gap-1">
+                                {[...Array(5)].map((_, i) => (
+                                  <Star 
+                                    key={i} 
+                                    className={`w-3 h-3 ${i < session.clientRatedUs ? 'fill-black text-black' : 'text-gray-300'}`} 
+                                  />
+                                ))}
+                              </div>
+                            </>
+                          ) : (
+                            <span className="text-orange-600">Waiting for client rating</span>
+                          )}
+                        </div>
                       </div>
                     </div>
 
@@ -604,23 +678,29 @@ const ExpertDashboard = () => {
                           <Button 
                             size="sm" 
                             className="rounded-full px-3 py-1 text-xs h-8 flex-1"
+                            onClick={() => console.log(`Contact ${session.clientName} again`)}
                           >
-                            Contact Again
+                            💰 Earned {session.cost}
                           </Button>
                           
-                          <Button 
-                            size="sm" 
-                            variant="outline"
-                            className="rounded-full border-2 border-foreground px-3 py-1 text-xs h-8"
-                          >
-                            View
-                          </Button>
+                          <div className="relative">
+                            <Button 
+                              size="sm" 
+                              variant="outline"
+                              className="rounded-full border-2 border-foreground px-3 py-1 text-xs h-8"
+                            >
+                              View
+                            </Button>
+                            {!session.clientRatedUs && (
+                              <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></div>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>
                   </CardContent>
                 </Card>
-              ))}
+              ))})
             </div>
           )}
           
@@ -1869,130 +1949,200 @@ const ExpertDashboard = () => {
               </CardHeader>
               <CardContent className="space-y-4">{sessionDetailTab === 'summary' && (
                 <div className="space-y-4">
-              
-                {/* Client Info */}
-                <div className="flex items-center gap-3 p-3 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors">
-                <Avatar className="w-16 h-16">
-                  <AvatarImage src={selectedSession.avatar} alt={selectedSession.clientName} />
-                  <AvatarFallback>{getInitials(selectedSession.clientName)}</AvatarFallback>
-                </Avatar>
-                <div>
-                  <h3 className="font-semibold text-lg">{selectedSession.clientName}</h3>
-                  <p className="text-muted-foreground">{selectedSession.clientTitle}</p>
-                </div>
-              </div>
-              
-              {/* Session Info */}
-              <div className="space-y-4 mb-6">
-                <div className="p-4 bg-gray-50 rounded-lg">
-                  <h4 className="font-medium mb-2">{selectedSession.topic}</h4>
-                  <p className="text-sm text-muted-foreground mb-3">{selectedSession.summary}</p>
-                  <div className="flex items-center gap-4 text-sm">
-                    <span>📅 {selectedSession.date} at {selectedSession.time}</span>
+                {/* Client Info with Photo */}
+                <div 
+                  className="flex items-center gap-3 p-3 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors"
+                  onClick={() => console.log(`View ${selectedSession.clientName} profile`)}
+                >
+                  <Avatar className="w-12 h-12">
+                    <AvatarImage src={selectedSession.avatar} alt={selectedSession.clientName} />
+                    <AvatarFallback>{getInitials(selectedSession.clientName)}</AvatarFallback>
+                  </Avatar>
+                  <div className="flex-1 min-w-0">
+                    <h4 className="font-semibold text-sm truncate">{selectedSession.clientName}</h4>
+                    <p className="text-xs text-muted-foreground truncate">{selectedSession.clientTitle}</p>
                   </div>
-                  <div className="flex items-center gap-4 text-sm mt-1">
-                    <span>⏱️ {selectedSession.duration}</span>
-                    <span>💰 {selectedSession.cost}</span>
-                  </div>
+                  <ChevronRight className="w-4 h-4 text-gray-400" />
                 </div>
-              </div>
-              
-              {/* Actions */}
-              <div className="space-y-3">
-                <Button className="w-full rounded-full">
-                  <Video className="w-4 h-4 mr-2" />
-                  Start Session
-                </Button>
-                <Button variant="outline" className="w-full rounded-full border-2 border-foreground">
-                  <Calendar className="w-4 h-4 mr-2" />
-                  Reschedule
-                </Button>
-                <Button variant="outline" className="w-full rounded-full border-2 border-foreground">
-                  <Clock className="w-4 h-4 mr-2" />
-                  Send Reminder
-                </Button>
-              </div>
-              
-              {/* Session Conversation */}
-              <div className="mt-6 pt-6 border-t">
-                <h4 className="font-medium mb-3">Conversation with Student</h4>
-                <div className="space-y-3 mb-4">
-                  {/* Previous messages */}
-                  <div className="p-3 bg-blue-50 rounded-lg ml-6">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-sm font-medium">You</span>
-                      <span className="text-xs text-muted-foreground">Yesterday 3:20 PM</span>
-                    </div>
-                    <p className="text-sm">Looking forward to our session tomorrow! I've prepared some materials based on your goals.</p>
-                  </div>
-                  
-                  <div className="p-3 bg-gray-50 rounded-lg">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-sm font-medium">{selectedSession.clientName}</span>
-                      <span className="text-xs text-muted-foreground">Yesterday 4:15 PM</span>
-                    </div>
-                    <p className="text-sm">Perfect! I'm excited to dive into the roadmap discussion. Thanks for the prep work.</p>
-                  </div>
-                  
-                  <div className="p-3 bg-blue-50 rounded-lg ml-6">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-sm font-medium">You</span>
-                      <span className="text-xs text-muted-foreground">Today 9:30 AM</span>
-                    </div>
-                    <p className="text-sm">Just sent you the session agenda and some pre-reading materials via email.</p>
-                  </div>
-                </div>
-                
-                {/* New message input */}
-                <div className="flex gap-2 mb-4">
-                  <input 
-                    type="text" 
-                    className="flex-1 p-2 border-2 border-gray-200 rounded-lg" 
-                    placeholder="Message your student..."
-                  />
-                  <Button size="sm" className="rounded-lg">
-                    Send
-                  </Button>
-                </div>
-              </div>
-              
-                </div>
-              )}
 
-              {sessionDetailTab === 'chat' && (
-                <div className="space-y-4">
-                  {/* Chat Messages */}
-                  <div className="space-y-3">
-                    <div className="p-3 bg-gray-50 rounded-lg">
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="text-sm font-medium">{selectedSession.clientName}</span>
-                        <span className="text-xs text-muted-foreground">Today 8:45 AM</span>
-                      </div>
-                      <p className="text-sm">Looking forward to our session today! I have a few questions about market strategy.</p>
+                <div className="border-t my-3" />
+
+                {/* Session Details */}
+                <div>
+                  <h5 className="font-medium text-sm mb-3">Session Details</h5>
+                  <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                    <div>
+                      <div className="font-medium text-sm">{selectedSession.topic}</div>
+                      <div className="text-xs text-muted-foreground mt-1">{selectedSession.duration}</div>
                     </div>
-                    
-                    <div className="p-3 bg-blue-50 rounded-lg ml-6">
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="text-sm font-medium">You</span>
-                        <span className="text-xs text-muted-foreground">Today 9:30 AM</span>
-                      </div>
-                      <p className="text-sm">Perfect! I've prepared some materials that will help with your questions.</p>
-                    </div>
-                  </div>
-                  
-                  {/* New message input */}
-                  <div className="flex gap-2">
-                    <input 
-                      type="text" 
-                      className="flex-1 p-2 border border-gray-300 rounded-lg" 
-                      placeholder="Message your client..."
-                    />
-                    <Button size="sm" className="rounded-lg">
-                      Send
-                    </Button>
+                    <div className="font-semibold text-sm">{selectedSession.cost}</div>
                   </div>
                 </div>
-              )}
+
+                {/* Date & Time */}
+                <div className="border-t my-3" />
+                <div>
+                  <h5 className="font-medium text-sm mb-2">Date & Time</h5>
+                  <div className="flex items-center gap-2 text-sm">
+                    <Calendar className="w-4 h-4" />
+                    <span>{selectedSession.date}</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm mt-1">
+                    <Clock className="w-4 h-4" />
+                    <span>{selectedSession.time}</span>
+                  </div>
+                </div>
+
+                {/* Earnings */}
+                <div className="border-t my-3" />
+                <div className="bg-gray-50 p-3 rounded-lg">
+                  <div className="flex justify-between items-center mb-1">
+                    <span className="text-sm">Session fee</span>
+                    <span className="text-sm">{selectedSession.cost}</span>
+                  </div>
+                  <div className="flex justify-between items-center mb-1">
+                    <span className="text-sm">Platform fee</span>
+                    <span className="text-sm">-$5</span>
+                  </div>
+                  <div className="border-t my-2" />
+                  <div className="flex justify-between items-center font-semibold">
+                    <span>Your Earnings</span>
+                    <span className="text-green-600">${parseInt(selectedSession.cost.replace('$', '')) - 5}</span>
+                  </div>
+                </div>
+
+                {/* Actions based on session status */}
+                <div className="border-t my-3" />
+                {selectedSessionType === 'upcoming' ? (
+                  <div className="space-y-3">
+                    {/* Primary Action - Start Session */}
+                    <Button className="w-full rounded-full bg-black hover:bg-gray-800 text-white py-3 text-base font-semibold">
+                      <Video className="w-5 h-5 mr-2" />
+                      Start Session
+                    </Button>
+                    
+                    {/* Secondary Actions */}
+                    <div className="grid grid-cols-2 gap-3">
+                      <Button 
+                        variant="outline" 
+                        className="rounded-full border-2 border-foreground"
+                      >
+                        Reschedule
+                      </Button>
+                      <Button 
+                        variant="outline" 
+                        className="rounded-full border-2 border-orange-500 text-orange-600 hover:bg-orange-50"
+                      >
+                        Cancel
+                      </Button>
+                    </div>
+                  </div>
+                ) : (
+                  /* Past Session Actions */
+                  <div className="space-y-3">
+                    <Button 
+                      className="w-full rounded-full bg-black hover:bg-gray-800 text-white py-3 text-base font-semibold"
+                      onClick={() => console.log(`Contact ${selectedSession.clientName} again`)}
+                    >
+                      Contact Again
+                    </Button>
+                    
+                    {selectedSession.clientRatedUs ? (
+                      <div className="text-center p-3 bg-gray-50 rounded-lg">
+                        <p className="text-sm text-muted-foreground mb-2">Client Rating</p>
+                        <div className="flex justify-center gap-1">
+                          {[1, 2, 3, 4, 5].map((star) => (
+                            <Star 
+                              key={star}
+                              className={`h-4 w-4 ${
+                                star <= selectedSession.clientRatedUs 
+                                  ? 'fill-yellow-400 text-yellow-400' 
+                                  : 'text-gray-300'
+                              }`}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="text-center p-3 bg-orange-50 rounded-lg">
+                        <p className="text-sm text-orange-600">Waiting for client rating</p>
+                      </div>
+                    )}
+                  </div>
+                )}
+                </div>
+                )}
+
+                {sessionDetailTab === 'chat' && (
+                  <div className="space-y-4">
+                    {/* Chat Header with Client Info */}
+                    <div className="flex items-center gap-3 pb-3 border-b">
+                      <Avatar className="w-10 h-10">
+                        <AvatarImage src={selectedSession.avatar} alt={selectedSession.clientName} />
+                        <AvatarFallback>{getInitials(selectedSession.clientName)}</AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <h4 className="font-semibold text-sm">{selectedSession.clientName}</h4>
+                        <p className="text-xs text-muted-foreground">{selectedSession.clientTitle}</p>
+                      </div>
+                    </div>
+
+                    {selectedSessionType === 'upcoming' ? (
+                      <div>
+                        {/* Conversation History */}
+                        <div className="space-y-3 max-h-96 overflow-y-auto">
+                          {/* Previous messages */}
+                          <div className="p-3 bg-gray-50 rounded-lg">
+                            <div className="flex items-center gap-2 mb-1">
+                              <span className="text-sm font-medium">{selectedSession.clientName}</span>
+                              <span className="text-xs text-muted-foreground">Yesterday 3:20 PM</span>
+                            </div>
+                            <p className="text-sm">Looking forward to our session tomorrow! I have a few questions about market strategy.</p>
+                          </div>
+                          
+                          <div className="p-3 bg-blue-50 rounded-lg ml-6">
+                            <div className="flex items-center gap-2 mb-1">
+                              <span className="text-sm font-medium">You</span>
+                              <span className="text-xs text-muted-foreground">Yesterday 4:15 PM</span>
+                            </div>
+                            <p className="text-sm">Perfect! I've prepared some materials that will help with your questions. Thanks for booking with me.</p>
+                          </div>
+                          
+                          <div className="p-3 bg-gray-50 rounded-lg">
+                            <div className="flex items-center gap-2 mb-1">
+                              <span className="text-sm font-medium">{selectedSession.clientName}</span>
+                              <span className="text-xs text-muted-foreground">Today 9:30 AM</span>
+                            </div>
+                            <p className="text-sm">Great! I've reviewed the materials you sent. Ready for our session today.</p>
+                          </div>
+                        </div>
+                        
+                        {/* New message input */}
+                        <div className="flex gap-2 pt-4 border-t">
+                          <input 
+                            type="text" 
+                            className="flex-1 p-3 border border-gray-300 rounded-lg" 
+                            placeholder="Type a message..."
+                          />
+                          <Button size="sm" className="rounded-lg px-4">
+                            Send
+                          </Button>
+                        </div>
+                      </div>
+                    ) : (
+                      /* Past Session - Chat Closed */
+                      <div className="text-center py-8">
+                        <div className="p-6 bg-gray-50 rounded-lg">
+                          <MessageCircle className="w-12 h-12 text-gray-400 mx-auto mb-3" />
+                          <h4 className="font-medium text-gray-600 mb-2">Chat Closed</h4>
+                          <p className="text-sm text-muted-foreground">
+                            Chat is no longer available for completed sessions.
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
               </CardContent>
             </Card>
           </div>
