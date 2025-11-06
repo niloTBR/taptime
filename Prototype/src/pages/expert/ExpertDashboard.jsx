@@ -1934,6 +1934,16 @@ const ExpertDashboard = () => {
                     Summary
                   </button>
                   <button
+                    onClick={() => setSessionDetailTab('details')}
+                    className={`pb-2 px-1 text-sm font-medium border-b-2 transition-colors ${
+                      sessionDetailTab === 'details'
+                        ? 'border-foreground text-foreground'
+                        : 'border-transparent text-gray-500 hover:text-gray-700'
+                    }`}
+                  >
+                    Details
+                  </button>
+                  <button
                     onClick={() => setSessionDetailTab('chat')}
                     className={`pb-2 px-1 text-sm font-medium border-b-2 transition-colors ${
                       sessionDetailTab === 'chat'
@@ -2069,6 +2079,81 @@ const ExpertDashboard = () => {
                   </div>
                 )}
                 </div>
+                )}
+
+                {sessionDetailTab === 'details' && (
+                  <div className="space-y-4">
+                    {/* Challenge Description */}
+                    <div>
+                      <h5 className="font-medium text-sm mb-3">What specific challenge would you like to discuss?</h5>
+                      <div className="p-3 bg-gray-50 rounded-lg">
+                        <p className="text-sm text-gray-700 leading-relaxed">
+                          Our product roadmap feels scattered and we're struggling to prioritize features based on actual customer impact. We have multiple stakeholders with conflicting opinions and need a framework for making strategic decisions that align with business goals.
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Supporting Documents */}
+                    <div>
+                      <h5 className="font-medium text-sm mb-3">Supporting Documents</h5>
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                          <div className="flex items-center gap-3">
+                            <FileText className="w-4 h-4 text-red-600" />
+                            <div>
+                              <div className="font-medium text-sm">Current_Product_Roadmap_Q1_2024.pdf</div>
+                              <div className="text-xs text-muted-foreground">2.3 MB</div>
+                            </div>
+                          </div>
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            className="rounded-full border-2 border-foreground px-3 py-1 text-xs h-8"
+                            onClick={() => console.log('Download Current_Product_Roadmap_Q1_2024.pdf')}
+                          >
+                            <Download className="w-3 h-3 mr-1" />
+                            Download
+                          </Button>
+                        </div>
+                        <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                          <div className="flex items-center gap-3">
+                            <FileText className="w-4 h-4 text-red-600" />
+                            <div>
+                              <div className="font-medium text-sm">Customer_Feedback_Analysis.pdf</div>
+                              <div className="text-xs text-muted-foreground">1.8 MB</div>
+                            </div>
+                          </div>
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            className="rounded-full border-2 border-foreground px-3 py-1 text-xs h-8"
+                            onClick={() => console.log('Download Customer_Feedback_Analysis.pdf')}
+                          >
+                            <Download className="w-3 h-3 mr-1" />
+                            Download
+                          </Button>
+                        </div>
+                        <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                          <div className="flex items-center gap-3">
+                            <FileText className="w-4 h-4 text-red-600" />
+                            <div>
+                              <div className="font-medium text-sm">Competitive_Analysis_Report.pdf</div>
+                              <div className="text-xs text-muted-foreground">3.1 MB</div>
+                            </div>
+                          </div>
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            className="rounded-full border-2 border-foreground px-3 py-1 text-xs h-8"
+                            onClick={() => console.log('Download Competitive_Analysis_Report.pdf')}
+                          >
+                            <Download className="w-3 h-3 mr-1" />
+                            Download
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 )}
 
                 {sessionDetailTab === 'chat' && (
