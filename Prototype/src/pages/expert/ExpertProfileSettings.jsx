@@ -18,11 +18,14 @@ import {
   Globe,
   ChevronDown,
   Shield,
-  Edit
+  Edit,
+  FileText,
+  Award,
+  Briefcase
 } from 'lucide-react'
 
 const ExpertProfileSettings = () => {
-  const [activeTab, setActiveTab] = useState('profile')
+  const [activeTab, setActiveTab] = useState('basic')
   const [showVerificationModal, setShowVerificationModal] = useState(false)
 
   // Mock expert data
@@ -42,10 +45,10 @@ const ExpertProfileSettings = () => {
   }
 
   const tabs = [
-    { id: 'profile', label: 'My Profile', icon: User },
+    { id: 'basic', label: 'Basic Information', icon: User },
+    { id: 'professional', label: 'Professional Profile', icon: Target },
     { id: 'availability', label: 'Availability', icon: Calendar },
     { id: 'fees', label: 'My Fees', icon: DollarSign },
-    { id: 'expertise', label: 'Expertise & Industries', icon: Target },
     { id: 'charity', label: 'Charity', icon: Heart },
     { id: 'socials', label: 'Socials', icon: Share2 }
   ]
@@ -139,108 +142,149 @@ const ExpertProfileSettings = () => {
           <div className="col-span-9">
             <Card className="border-2">
               <CardContent className="p-8">
-                {/* My Profile Tab */}
-                {activeTab === 'profile' && (
-                  <div>
-                    <div className="flex items-center justify-between mb-6">
-                      <h2 className="text-xl font-semibold">Personal Information</h2>
-                      <Button 
-                        variant="outline" 
-                        className="border-2 border-foreground"
-                        onClick={() => setShowVerificationModal(true)}
-                      >
-                        <Shield className="w-4 h-4 mr-2" />
-                        Get Verified
-                      </Button>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-6">
-                      <div>
-                        <label className="block text-sm font-medium mb-2">Full Name*</label>
-                        <input 
-                          type="text" 
-                          defaultValue={expert.name}
-                          className="w-full p-3 border-2 border-gray-200 rounded-lg" 
-                          placeholder="Full Name"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium mb-2">Email*</label>
-                        <input 
-                          type="email" 
-                          defaultValue={expert.email}
-                          className="w-full p-3 border-2 border-gray-200 rounded-lg" 
-                          placeholder="Email Address"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium mb-2">Phone Number*</label>
-                        <input 
-                          type="tel" 
-                          defaultValue={expert.phone}
-                          className="w-full p-3 border-2 border-gray-200 rounded-lg" 
-                          placeholder="Phone Number"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium mb-2">Company*</label>
-                        <input 
-                          type="text" 
-                          defaultValue={expert.company}
-                          className="w-full p-3 border-2 border-gray-200 rounded-lg" 
-                          placeholder="Company name"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium mb-2">Short Description*</label>
-                        <textarea 
-                          defaultValue={expert.title}
-                          className="w-full p-3 border-2 border-gray-200 rounded-lg h-20" 
-                          placeholder="Position..."
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium mb-2">Timezone*</label>
-                        <select className="w-full p-3 border-2 border-gray-200 rounded-lg">
-                          <option>GMT+4 (UAE)</option>
-                          <option>GMT+0 (London)</option>
-                          <option>GMT-5 (New York)</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium mb-2">Gender*</label>
-                        <select className="w-full p-3 border-2 border-gray-200 rounded-lg">
-                          <option>Male</option>
-                          <option>Female</option>
-                          <option>Other</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium mb-2">Language Preference*</label>
-                        <input 
-                          type="text" 
-                          defaultValue="English"
-                          className="w-full p-3 border-2 border-gray-200 rounded-lg" 
-                          placeholder="Type here..."
-                        />
+                {/* Basic Information Tab */}
+                {activeTab === 'basic' && (
+                  <div className="space-y-8">
+                    {/* Header */}
+                    <div className="flex items-center justify-between pb-6 border-b border-gray-200">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-gray-900 rounded-full flex items-center justify-center">
+                          <User className="w-5 h-5 text-white" />
+                        </div>
+                        <div>
+                          <h2 className="text-2xl font-bold text-gray-900">Basic Information</h2>
+                          <p className="text-sm text-gray-600">Personal details and account information</p>
+                        </div>
                       </div>
                     </div>
 
-                    <div className="mt-6">
-                      <label className="block text-sm font-medium mb-2">Bio*</label>
-                      <textarea 
-                        defaultValue={expert.bio}
-                        className="w-full p-3 border-2 border-gray-200 rounded-lg h-32" 
-                        placeholder="Enter your bio"
-                      />
+                    <div className="space-y-6">
+                      {/* First Name + Last Name */}
+                      <div className="grid grid-cols-2 gap-6">
+                        <div>
+                          <label className="block text-sm font-semibold text-gray-700 mb-3">First Name *</label>
+                          <input
+                            type="text"
+                            defaultValue="David"
+                            className="w-full p-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all"
+                            placeholder="Enter your first name"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-semibold text-gray-700 mb-3">Last Name *</label>
+                          <input
+                            type="text"
+                            defaultValue="Collins"
+                            className="w-full p-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all"
+                            placeholder="Enter your last name"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Email + Location */}
+                      <div className="grid grid-cols-2 gap-6">
+                        <div>
+                          <label className="block text-sm font-semibold text-gray-700 mb-3">Email Address *</label>
+                          <div className="relative">
+                            <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                            <input
+                              type="email"
+                              defaultValue={expert.email}
+                              className="w-full pl-12 pr-4 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all"
+                              placeholder="Enter your professional email"
+                            />
+                          </div>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-semibold text-gray-700 mb-3">Location *</label>
+                          <div className="relative">
+                            <MapPin className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                            <select 
+                              defaultValue={expert.location}
+                              className="w-full pl-12 pr-4 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all appearance-none bg-white"
+                            >
+                              <option value="">Select your country</option>
+                              <option value="United States">United States</option>
+                              <option value="Canada">Canada</option>
+                              <option value="United Kingdom">United Kingdom</option>
+                              <option value="Germany">Germany</option>
+                              <option value="France">France</option>
+                              <option value="Australia">Australia</option>
+                              <option value="Singapore">Singapore</option>
+                              <option value="Japan">Japan</option>
+                              <option value="UAE">UAE</option>
+                              <option value="India">India</option>
+                              <option value="Other">Other</option>
+                            </select>
+                            <ChevronDown className="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Gender + Language Preference */}
+                      <div className="grid grid-cols-2 gap-6">
+                        <div>
+                          <label className="block text-sm font-semibold text-gray-700 mb-3">Gender *</label>
+                          <div className="relative">
+                            <User className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                            <select
+                              defaultValue={expert.gender}
+                              className="w-full pl-12 pr-4 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all appearance-none bg-white"
+                            >
+                              <option value="">Select gender</option>
+                              <option value="Male">Male</option>
+                              <option value="Female">Female</option>
+                              <option value="Non-binary">Non-binary</option>
+                              <option value="Prefer not to say">Prefer not to say</option>
+                            </select>
+                            <ChevronDown className="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+                          </div>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-semibold text-gray-700 mb-3">Language Preference *</label>
+                          <div className="relative">
+                            <Globe className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                            <select
+                              defaultValue={expert.language}
+                              className="w-full pl-12 pr-4 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all appearance-none bg-white"
+                            >
+                              <option value="">Select preferred language</option>
+                              <option value="English">English</option>
+                              <option value="Arabic">Arabic</option>
+                              <option value="English & Arabic">English & Arabic</option>
+                            </select>
+                            <ChevronDown className="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Password + Confirm Password */}
+                      <div className="grid grid-cols-2 gap-6">
+                        <div>
+                          <label className="block text-sm font-semibold text-gray-700 mb-3">New Password</label>
+                          <input
+                            type="password"
+                            className="w-full p-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all"
+                            placeholder="Enter new password (optional)"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-semibold text-gray-700 mb-3">Confirm Password</label>
+                          <input
+                            type="password"
+                            className="w-full p-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all"
+                            placeholder="Confirm new password"
+                          />
+                        </div>
+                      </div>
                     </div>
 
-                    <div className="flex gap-4 mt-8">
+                    <div className="flex gap-4 pt-6">
                       <Button variant="outline" className="border-2 border-foreground">
                         Discard changes
                       </Button>
                       <Button className="bg-green-500 hover:bg-green-600 text-white">
-                        Save
+                        Save Changes
                       </Button>
                     </div>
                   </div>
@@ -251,9 +295,18 @@ const ExpertProfileSettings = () => {
                   <div>
                     <h2 className="text-xl font-semibold mb-6">Set Your Availability</h2>
                     <div className="text-center py-12">
-                      <Calendar className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                      <p className="text-gray-500">Availability calendar coming soon...</p>
-                      <p className="text-sm text-gray-400 mt-2">Set your working hours, time slots, and buffer time</p>
+                      <Calendar className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                      <h3 className="text-lg font-medium mb-2">Connect with Calendly</h3>
+                      <p className="text-sm text-gray-600 mb-6">
+                        Sync your availability with Calendly to manage your booking schedule
+                      </p>
+                      <Button 
+                        variant="outline" 
+                        className="border-2 border-gray-300 hover:border-gray-900 px-6"
+                      >
+                        <Calendar className="w-4 h-4 mr-2" />
+                        Connect Calendly
+                      </Button>
                     </div>
                   </div>
                 )}
@@ -265,89 +318,74 @@ const ExpertProfileSettings = () => {
                     <p className="text-sm text-muted-foreground mb-6">Platform fee: 20% per transaction (includes support & secure payments).</p>
                     
                     <div className="space-y-6">
-                      <div className="grid grid-cols-3 gap-6">
-                        <div>
-                          <label className="block text-sm font-medium mb-2">What are your fees ?</label>
-                          <div className="flex gap-2">
-                            <input 
-                              type="number" 
-                              defaultValue="500"
-                              className="flex-1 p-3 border-2 border-gray-200 rounded-lg" 
-                              placeholder="$ 500"
+                      <h3 className="text-lg font-medium">General Consultation</h3>
+                      <p className="text-sm text-gray-600">
+                        Open-ended consultation where clients choose the duration
+                      </p>
+                      
+                      <Card className="border border-gray-200">
+                        <CardContent className="p-4 space-y-4">
+                          <div className="flex items-center gap-3">
+                            <input
+                              type="checkbox"
+                              defaultChecked={true}
+                              className="w-4 h-4 text-gray-900 border-gray-300 rounded focus:ring-gray-900"
                             />
-                            <select className="p-3 border-2 border-gray-200 rounded-lg">
-                              <option>60 min</option>
-                              <option>30 min</option>
-                              <option>90 min</option>
-                            </select>
+                            <label className="text-sm font-medium">Enable general consultation</label>
                           </div>
-                        </div>
-                        <div className="text-center">
-                          <label className="block text-sm font-medium mb-2">Client pays</label>
-                          <div className="text-2xl font-bold">$ 500</div>
-                        </div>
-                        <div className="text-center">
-                          <label className="block text-sm font-medium mb-2">What you get</label>
-                          <div className="text-2xl font-bold">$ 400</div>
-                        </div>
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium mb-2">What are your fees for bundle session ?</label>
-                        <div className="flex gap-2">
-                          <input 
-                            type="number" 
-                            defaultValue="2500"
-                            className="flex-1 p-3 border-2 border-gray-200 rounded-lg" 
-                            placeholder="$ 2500"
-                          />
-                          <select className="p-3 border-2 border-gray-200 rounded-lg">
-                            <option>6 Sessions</option>
-                            <option>3 Sessions</option>
-                            <option>10 Sessions</option>
-                          </select>
-                        </div>
-                      </div>
-
-                      <Card className="p-4 bg-gray-50">
-                        <h3 className="font-medium mb-2">Bundle Details</h3>
-                        <p className="text-sm text-muted-foreground mb-4">
-                          This package includes multiple consultation sessions at a discounted rate. Each session is scheduled for a fixed duration, and the bundle must be used within the validity period.
-                        </p>
-                        <div className="grid grid-cols-2 gap-4">
-                          <div>
-                            <label className="block text-sm font-medium mb-2">Number of Sessions</label>
-                            <select className="w-full p-3 border-2 border-gray-200 rounded-lg">
-                              <option>6 Sessions</option>
-                              <option>3 Sessions</option>
-                              <option>10 Sessions</option>
-                            </select>
+                          
+                          <div className="space-y-3">
+                            <label className="text-sm font-medium block">Set pricing for each duration:</label>
+                            
+                            <div className="flex items-center gap-4">
+                              <span className="text-sm w-16">15 min</span>
+                              <div className="flex items-center">
+                                <span className="text-lg font-medium mr-2">$</span>
+                                <input
+                                  type="number"
+                                  defaultValue="150"
+                                  className="w-24 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 text-center"
+                                  placeholder="150"
+                                />
+                              </div>
+                              <div className="text-xs text-gray-500">
+                                Client pays: $150 | You get: $120
+                              </div>
+                            </div>
+                            
+                            <div className="flex items-center gap-4">
+                              <span className="text-sm w-16">30 min</span>
+                              <div className="flex items-center">
+                                <span className="text-lg font-medium mr-2">$</span>
+                                <input
+                                  type="number"
+                                  defaultValue="300"
+                                  className="w-24 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 text-center"
+                                  placeholder="300"
+                                />
+                              </div>
+                              <div className="text-xs text-gray-500">
+                                Client pays: $300 | You get: $240
+                              </div>
+                            </div>
+                            
+                            <div className="flex items-center gap-4">
+                              <span className="text-sm w-16">45 min</span>
+                              <div className="flex items-center">
+                                <span className="text-lg font-medium mr-2">$</span>
+                                <input
+                                  type="number"
+                                  defaultValue="450"
+                                  className="w-24 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 text-center"
+                                  placeholder="450"
+                                />
+                              </div>
+                              <div className="text-xs text-gray-500">
+                                Client pays: $450 | You get: $360
+                              </div>
+                            </div>
                           </div>
-                          <div>
-                            <label className="block text-sm font-medium mb-2">Duration of Each Session</label>
-                            <select className="w-full p-3 border-2 border-gray-200 rounded-lg">
-                              <option>60 minutes</option>
-                              <option>30 minutes</option>
-                              <option>90 minutes</option>
-                            </select>
-                          </div>
-                          <div>
-                            <label className="block text-sm font-medium mb-2">Validity Period</label>
-                            <select className="w-full p-3 border-2 border-gray-200 rounded-lg">
-                              <option>3 months</option>
-                              <option>6 months</option>
-                              <option>1 year</option>
-                            </select>
-                          </div>
-                          <div>
-                            <label className="block text-sm font-medium mb-2">Mode of Session</label>
-                            <select className="w-full p-3 border-2 border-gray-200 rounded-lg">
-                              <option>Zoom/Google Meet</option>
-                              <option>In-person</option>
-                              <option>Phone Call</option>
-                            </select>
-                          </div>
-                        </div>
+                        </CardContent>
                       </Card>
                     </div>
 
@@ -362,14 +400,127 @@ const ExpertProfileSettings = () => {
                   </div>
                 )}
 
-                {/* Expertise & Industries Tab */}
-                {activeTab === 'expertise' && (
-                  <div>
-                    <h2 className="text-xl font-semibold mb-6">Expertise & Industries</h2>
-                    <div className="text-center py-12">
-                      <Target className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                      <p className="text-gray-500">Expertise selection coming soon...</p>
-                      <p className="text-sm text-gray-400 mt-2">Select your areas of expertise and industries</p>
+                {/* Professional Profile Tab */}
+                {activeTab === 'professional' && (
+                  <div className="space-y-8">
+                    {/* Header */}
+                    <div className="flex items-center justify-between pb-6 border-b border-gray-200">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-gray-900 rounded-full flex items-center justify-center">
+                          <Target className="w-5 h-5 text-white" />
+                        </div>
+                        <div>
+                          <h2 className="text-2xl font-bold text-gray-900">Professional Profile</h2>
+                          <p className="text-sm text-gray-600">Your professional background and expertise</p>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-6">
+                      {/* Professional Title */}
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium">Professional Title</label>
+                        <div className="relative">
+                          <Building className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
+                          <input
+                            type="text"
+                            placeholder="e.g., Senior Product Manager, Marketing Director"
+                            defaultValue={expert.title}
+                            className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-lg focus:border-gray-900 focus:outline-none"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Short Description */}
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium">Short Description</label>
+                        <div className="relative">
+                          <Edit className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
+                          <textarea
+                            placeholder="Brief description of your background and expertise..."
+                            defaultValue={expert.bio}
+                            className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-lg focus:border-gray-900 focus:outline-none min-h-[100px] resize-none"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Industry */}
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium">Industry</label>
+                        <div className="relative">
+                          <Building className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
+                          <select
+                            defaultValue="technology-software"
+                            className="w-full pl-10 pr-10 py-3 border-2 border-gray-200 rounded-lg focus:border-gray-900 focus:outline-none appearance-none"
+                          >
+                            <option value="">Select your industry</option>
+                            <option value="business-startups">Business & Startups</option>
+                            <option value="technology-software">Technology & Software</option>
+                            <option value="marketing-brand">Marketing & Brand</option>
+                            <option value="career-professional">Career & Professional Development</option>
+                            <option value="finance-investment">Finance & Investment</option>
+                            <option value="healthcare-wellness">Healthcare & Wellness</option>
+                            <option value="creative-design">Creative & Design</option>
+                            <option value="education-training">Education & Training</option>
+                            <option value="real-estate">Real Estate</option>
+                            <option value="legal-consulting">Legal & Consulting</option>
+                            <option value="other">Other</option>
+                          </select>
+                          <ChevronDown className="absolute right-3 top-3 w-4 h-4 text-gray-400" />
+                        </div>
+                      </div>
+
+                      {/* Expertise */}
+                      <div className="space-y-3">
+                        <label className="text-sm font-medium">Areas of Expertise</label>
+                        <p className="text-xs text-gray-500">Select all areas that apply to your expertise</p>
+                        <div className="grid grid-cols-2 gap-3 max-h-48 overflow-y-auto p-2 border border-gray-200 rounded-lg">
+                          {[
+                            'Leadership & Team Building',
+                            'Scaling Startups', 
+                            'Fundraising & Pitching',
+                            'Product Development',
+                            'Marketing Strategy',
+                            'Data Science & Analytics',
+                            'Software Development', 
+                            'UX/UI Design',
+                            'Financial Planning',
+                            'Career Coaching',
+                            'Content Creation',
+                            'Public Speaking',
+                            'Project Management',
+                            'Digital Marketing',
+                            'Business Strategy',
+                            'Sales & Customer Success',
+                            'Operations & Process Improvement',
+                            'Legal & Compliance',
+                            'Human Resources',
+                            'Other'
+                          ].map((skill, index) => (
+                            <label
+                              key={skill}
+                              className="flex items-center gap-2 p-2 rounded hover:bg-gray-50 cursor-pointer"
+                            >
+                              <input
+                                type="checkbox"
+                                defaultChecked={index < 3} // Pre-select first 3 for demo
+                                className="w-4 h-4 text-gray-900 border-gray-300 rounded focus:ring-gray-900"
+                              />
+                              <span className="text-sm">{skill}</span>
+                            </label>
+                          ))}
+                        </div>
+                        <p className="text-xs text-gray-500">3 areas selected</p>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-4 pt-6">
+                      <Button variant="outline" className="border-2 border-foreground">
+                        Discard changes
+                      </Button>
+                      <Button className="bg-green-500 hover:bg-green-600 text-white">
+                        Save Changes
+                      </Button>
                     </div>
                   </div>
                 )}

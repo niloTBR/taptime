@@ -44,7 +44,7 @@ const SignUpExpertPage = () => {
     gender: '',
     languagePreference: '',
     
-    // Step 2: Professional & Expertise
+    // Step 2: Professional & Expertise  
     title: '',
     shortDescription: '',
     industry: '',

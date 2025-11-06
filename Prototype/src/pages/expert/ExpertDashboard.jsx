@@ -32,6 +32,7 @@ import {
   Download,
   Receipt,
   Shield,
+  ShieldCheck,
   AlertCircle,
   Building2,
   Settings,
@@ -1133,19 +1134,22 @@ const ExpertDashboard = () => {
       {showSettings && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg w-full max-w-6xl max-h-[90vh] overflow-hidden">
+            {/* Settings Header */}
+            <div className="flex items-center justify-between p-6 border-b">
+              <h2 className="text-xl font-semibold">Profile & Payment Settings</h2>
+              <div className="flex items-center gap-2">
+                <Button variant="outline" onClick={() => setShowSettings(false)} className="rounded-full px-4">
+                  DISCARD
+                </Button>
+                <Button className="rounded-full px-4">SAVE</Button>
+              </div>
+            </div>
+            
             <div className="flex">
               {/* Settings Sidebar */}
               <div className="w-64 bg-gray-50 p-6 border-r">
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-lg font-semibold">Expert Settings</h2>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setShowSettings(false)}
-                    className="rounded-full w-8 h-8 p-0"
-                  >
-                    <X className="w-4 h-4" />
-                  </Button>
+                <div className="mb-6">
+                  <h3 className="text-sm font-semibold text-gray-600 mb-4">SETTINGS</h3>
                 </div>
                 
                 <nav className="space-y-2">
@@ -1154,6 +1158,7 @@ const ExpertDashboard = () => {
                     { id: 'professional', label: 'Professional Profile', icon: Award },
                     { id: 'sessions', label: 'Session Types', icon: Package },
                     { id: 'availability', label: 'Availability', icon: CalendarDays },
+                    { id: 'verification', label: 'Verification', icon: ShieldCheck },
                     { id: 'billing', label: 'Billing & Payments', icon: CreditCard },
                     { id: 'charity', label: 'Charity', icon: Heart }
                   ].map(tab => {
@@ -1201,23 +1206,74 @@ const ExpertDashboard = () => {
                       </div>
                     </div>
                     
-                    <div>
-                      <label className="text-sm font-medium mb-2 block">Email</label>
-                      <input 
-                        type="email" 
-                        defaultValue={expert.email}
-                        className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
-                      />
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-sm font-medium mb-2 block">Email</label>
+                        <input 
+                          type="email" 
+                          defaultValue={expert.email}
+                          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium mb-2 block">Location*</label>
+                        <select className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900">
+                          <option value="US">United States</option>
+                          <option value="CA">Canada</option>
+                          <option value="GB">United Kingdom</option>
+                          <option value="DE">Germany</option>
+                          <option value="FR">France</option>
+                          <option value="AU">Australia</option>
+                        </select>
+                      </div>
                     </div>
                     
-                    <div>
-                      <label className="text-sm font-medium mb-2 block">Phone</label>
-                      <input 
-                        type="tel" 
-                        defaultValue={expert.phone}
-                        className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
-                      />
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-sm font-medium mb-2 block">Gender*</label>
+                        <select className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900">
+                          <option value="">Select gender</option>
+                          <option value="male">Male</option>
+                          <option value="female">Female</option>
+                          <option value="non-binary">Non-binary</option>
+                          <option value="prefer-not-say">Prefer not to say</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium mb-2 block">Language Preference*</label>
+                        <select className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900">
+                          <option value="">Select language</option>
+                          <option value="english">English</option>
+                          <option value="arabic">Arabic</option>
+                          <option value="both">English & Arabic</option>
+                        </select>
+                      </div>
                     </div>
+                    
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-sm font-medium mb-2 block">Password</label>
+                        <input 
+                          type="password" 
+                          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+                          placeholder="Enter new password"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium mb-2 block">Confirm Password</label>
+                        <input 
+                          type="password" 
+                          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+                          placeholder="Confirm new password"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {settingsTab === 'professional' && (
+                  <div className="space-y-6">
+                    <h3 className="text-xl font-semibold">Professional Profile</h3>
                     
                     <div>
                       <label className="text-sm font-medium mb-2 block">Title*</label>
@@ -1242,93 +1298,33 @@ const ExpertDashboard = () => {
                       />
                     </div>
                     
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <label className="text-sm font-medium mb-2 block">Location*</label>
-                        <select className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900">
-                          <option value="US">United States</option>
-                          <option value="CA">Canada</option>
-                          <option value="GB">United Kingdom</option>
-                          <option value="DE">Germany</option>
-                          <option value="FR">France</option>
-                          <option value="AU">Australia</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label className="text-sm font-medium mb-2 block">Gender*</label>
-                        <select className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900">
-                          <option value="">Select gender</option>
-                          <option value="male">Male</option>
-                          <option value="female">Female</option>
-                          <option value="non-binary">Non-binary</option>
-                          <option value="prefer-not-say">Prefer not to say</option>
-                        </select>
-                      </div>
-                    </div>
-                    
                     <div>
-                      <label className="text-sm font-medium mb-2 block">Language Preference*</label>
+                      <label className="text-sm font-medium mb-2 block">Industry*</label>
                       <select className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900">
-                        <option value="">Select language</option>
-                        <option value="english">English</option>
-                        <option value="arabic">Arabic</option>
-                        <option value="both">English & Arabic</option>
+                        <option value="">Select Industry</option>
+                        <option value="business-startup">Business & Startups</option>
+                        <option value="career-professional">Career & Professional</option>
+                        <option value="marketing-brand">Marketing & Brand</option>
+                        <option value="tech-product">Tech & Product</option>
+                        <option value="wellness-mental">Wellness & Mental</option>
+                        <option value="finance-investment">Finance & Investment</option>
                       </select>
                     </div>
-                  </div>
-                )}
 
-                {settingsTab === 'professional' && (
-                  <div className="space-y-6">
-                    <h3 className="text-xl font-semibold">Professional Profile</h3>
-                    
-                    {/* Expertise Categories */}
-                    <div className="space-y-4">
-                      <h4 className="font-medium">Expertise Categories</h4>
-                      <div className="grid grid-cols-3 gap-4">
-                        {['Business & Startups', 'Career & Professional', 'Marketing & Brand', 'Tech & Product', 'Wellness & Mental', 'Finance & Investment'].map(category => (
-                          <button
-                            key={category}
-                            className="flex flex-col items-center p-4 border-2 rounded-lg transition-all hover:border-gray-400 border-gray-200"
-                          >
-                            <div className="w-full h-16 bg-gray-200 rounded-lg mb-3 flex items-center justify-center">
-                              <span className="text-gray-500 text-xs">📊</span>
-                            </div>
-                            <span className="text-sm font-medium text-center">{category}</span>
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Expertise Tags */}
-                    <div className="space-y-4">
-                      <h4 className="font-medium">Expertise Tags</h4>
-                      <div className="flex flex-wrap gap-3">
-                        {['Leadership & Team Building', 'Scaling Startups', 'Fundraising & Pitching', 'Exit Strategy & M&A', 'Product Strategy', 'Market Analysis'].map(tag => (
-                          <button
-                            key={tag}
-                            className="px-4 py-2 border-2 rounded-full text-sm font-medium transition-all border-gray-200 text-gray-600 hover:border-gray-400"
-                          >
-                            {tag}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Industries */}
-                    <div className="space-y-4">
-                      <h4 className="font-medium">Industries</h4>
-                      <div className="grid grid-cols-2 gap-3">
-                        {['Technology', 'Finance', 'Healthcare', 'Marketing', 'Consulting', 'Real Estate', 'Legal', 'Education'].map(industry => (
+                    <div>
+                      <label className="text-sm font-medium mb-2 block">Expertise* (Select multiple)</label>
+                      <div className="space-y-2">
+                        {['Leadership & Team Building', 'Scaling Startups', 'Fundraising & Pitching', 'Exit Strategy & M&A', 'Product Strategy', 'Market Analysis', 'Business Development', 'Strategic Planning'].map(expertise => (
                           <label
-                            key={industry}
+                            key={expertise}
                             className="flex items-center gap-3 p-3 border rounded-lg cursor-pointer transition-all border-gray-200 hover:border-gray-400"
                           >
                             <input
                               type="checkbox"
                               className="w-4 h-4 text-gray-900 border-gray-300 rounded focus:ring-gray-900"
+                              defaultChecked={expert.expertise.includes(expertise)}
                             />
-                            <span className="text-sm">{industry}</span>
+                            <span className="text-sm">{expertise}</span>
                           </label>
                         ))}
                       </div>
@@ -1337,12 +1333,83 @@ const ExpertDashboard = () => {
                 )}
 
                 {settingsTab === 'sessions' && (
-                  <div className="space-y-6">
-                    <h3 className="text-xl font-semibold">Session Types & Pricing</h3>
-                    <p className="text-sm text-gray-600">
-                      Manage the session types that clients will see when booking with you.
-                    </p>
+                  <div className="space-y-8">
+                    <div>
+                      <h3 className="text-xl font-semibold">Session Types & Pricing</h3>
+                      <p className="text-sm text-gray-600 mt-2">
+                        Create the session types that clients will see when booking with you. You can always modify these later.
+                      </p>
+                    </div>
                     
+                    {/* Structured Sessions */}
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <h3 className="text-lg font-medium">Structured Sessions</h3>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          className="border-2 border-gray-300 hover:border-gray-900"
+                        >
+                          <Plus className="w-4 h-4 mr-2" />
+                          Add Session
+                        </Button>
+                      </div>
+                      <p className="text-sm text-gray-600">
+                        Pre-defined consultation types with specific topics and durations
+                      </p>
+                      
+                      <div className="text-center py-8 border-2 border-dashed border-gray-300 rounded-lg">
+                        <Clock className="w-8 h-8 mx-auto text-gray-400 mb-2" />
+                        <p className="text-sm text-gray-500">No structured sessions yet</p>
+                        <p className="text-xs text-gray-400">Add pre-defined consultation types</p>
+                      </div>
+                    </div>
+
+                    {/* General Consultation */}
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-medium">General Consultation</h3>
+                      <p className="text-sm text-gray-600">
+                        Open-ended consultation where clients choose the duration
+                      </p>
+                      
+                      <Card className="border border-gray-200">
+                        <CardContent className="p-4 space-y-4">
+                          <div className="flex items-center gap-3">
+                            <input
+                              type="checkbox"
+                              defaultChecked={true}
+                              className="w-4 h-4 text-gray-900 border-gray-300 rounded focus:ring-gray-900"
+                            />
+                            <label className="text-sm font-medium">Enable general consultation</label>
+                          </div>
+                          
+                          <div className="space-y-3">
+                            <label className="text-sm font-medium block">Set pricing for each duration:</label>
+                            {[
+                              { duration: '15 min', price: '500' },
+                              { duration: '30 min', price: '1000' },
+                              { duration: '45 min', price: '1500' },
+                              { duration: '60 min', price: '2000' }
+                            ].map((duration) => (
+                              <div key={duration.duration} className="flex items-center gap-4">
+                                <span className="text-sm w-16">{duration.duration}</span>
+                                <div className="flex items-center">
+                                  <span className="text-lg font-medium mr-2">$</span>
+                                  <input
+                                    type="number"
+                                    defaultValue={duration.price}
+                                    className="w-24 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 text-center"
+                                    placeholder="500"
+                                  />
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </div>
+
                     {/* Platform Fee Info */}
                     <div className="bg-gray-50 p-4 rounded-lg">
                       <h4 className="font-medium text-sm mb-2">Platform Fee</h4>
@@ -1350,96 +1417,99 @@ const ExpertDashboard = () => {
                         TapTime charges a 20% platform fee on all sessions. This includes payment processing, support, and platform maintenance.
                       </p>
                     </div>
-
-                    {/* Quick Pricing Setup */}
-                    <div className="space-y-4">
-                      <h4 className="font-medium">Quick Setup</h4>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <label className="text-sm font-medium mb-2 block">Base Hourly Rate</label>
-                          <div className="flex items-center">
-                            <span className="text-lg font-medium mr-2">$</span>
-                            <input 
-                              type="number" 
-                              defaultValue="500"
-                              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
-                              placeholder="500"
-                            />
-                          </div>
-                        </div>
-                        <div>
-                          <label className="text-sm font-medium mb-2 block">Default Duration</label>
-                          <select className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900">
-                            <option value="15">15 min</option>
-                            <option value="30">30 min</option>
-                            <option value="45">45 min</option>
-                            <option value="60">60 min</option>
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Session Types Summary */}
-                    <div className="space-y-3">
-                      <h4 className="font-medium">Current Session Types</h4>
-                      <div className="space-y-2">
-                        <div className="flex items-center justify-between p-3 border rounded-lg">
-                          <div>
-                            <span className="font-medium text-sm">General Consultation</span>
-                            <p className="text-xs text-gray-600">15/30/45 min options</p>
-                          </div>
-                          <span className="text-sm font-medium">$500-1500</span>
-                        </div>
-                        <Button variant="outline" className="w-full border-2 border-gray-300 hover:border-gray-900">
-                          <Package className="w-4 h-4 mr-2" />
-                          Manage Advanced Session Types
-                        </Button>
-                      </div>
-                    </div>
                   </div>
                 )}
 
                 {settingsTab === 'availability' && (
                   <div className="space-y-6">
-                    <h3 className="text-xl font-semibold">Availability Settings</h3>
+                    <h3 className="text-xl font-semibold">Set Your Availability</h3>
                     
-                    <div className="grid grid-cols-2 gap-6">
-                      <div>
-                        <label className="text-sm font-medium mb-2 block">Timezone</label>
-                        <select className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900">
-                          <option value="">Select timezone</option>
-                          <option value="PST">America/Los_Angeles (PST)</option>
-                          <option value="EST">America/New_York (EST)</option>
-                          <option value="GMT">Europe/London (GMT)</option>
-                          <option value="CET">Europe/Berlin (CET)</option>
-                          <option value="GST">Asia/Dubai (GST)</option>
-                        </select>
+                    <div className="flex flex-col items-center justify-center py-12">
+                      <Calendar className="w-16 h-16 text-gray-400 mb-4" />
+                      <h3 className="text-lg font-medium mb-2">Connect with Calendly</h3>
+                      <p className="text-sm text-gray-600 mb-6 text-center">
+                        Sync your availability with Calendly to manage your booking schedule
+                      </p>
+                      <Button 
+                        variant="outline" 
+                        className="border-2 border-gray-300 hover:border-gray-900 px-6"
+                      >
+                        <Calendar className="w-4 h-4 mr-2" />
+                        Connect Calendly
+                      </Button>
+                    </div>
+                  </div>
+                )}
+
+                {settingsTab === 'verification' && (
+                  <div className="space-y-8">
+                    <h3 className="text-xl font-semibold">Verification</h3>
+                    
+                    {/* Main Verification Header */}
+                    <div className="text-center py-8">
+                      <div className="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                        <Check className="w-8 h-8 text-green-600" />
                       </div>
-                      <div>
-                        <label className="text-sm font-medium mb-2 block">Default Slot Duration</label>
-                        <select className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900">
-                          <option value="30">30 min</option>
-                          <option value="15">15 min</option>
-                          <option value="45">45 min</option>
-                          <option value="60">60 min</option>
-                        </select>
-                      </div>
+                      <h2 className="text-2xl font-semibold text-green-700 mb-3">Get Verified on Taptime</h2>
+                      <p className="text-gray-600 max-w-md mx-auto">
+                        Show your audience you're real. Share your booking link, tag us, and we'll verify you fast.
+                      </p>
                     </div>
 
-                    <div>
-                      <label className="text-sm font-medium mb-2 block">Buffer Time</label>
-                      <select className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900">
-                        <option value="15">15 min</option>
-                        <option value="5">5 min</option>
-                        <option value="10">10 min</option>
-                        <option value="30">30 min</option>
-                      </select>
+                    {/* Steps Section */}
+                    <div className="bg-gray-50 rounded-lg p-6">
+                      <h4 className="font-medium text-lg mb-6">Follow the steps to get verified</h4>
+                      
+                      <div className="space-y-6">
+                        <div className="flex gap-4">
+                          <span className="text-sm font-semibold text-green-600 min-w-[60px]">Step 1:</span>
+                          <span className="text-sm text-gray-700">
+                            Add your booking link in at least one social media channel - LinkedIn / X / Threads / TikTok / Instagram
+                          </span>
+                        </div>
+                        
+                        <hr className="border-gray-200" />
+                        
+                        <div className="flex gap-4">
+                          <span className="text-sm font-semibold text-green-600 min-w-[60px]">Step 2:</span>
+                          <span className="text-sm text-gray-700">
+                            Tag us @taptime.ai
+                          </span>
+                        </div>
+                        
+                        <hr className="border-gray-200" />
+                        
+                        <div className="flex gap-4">
+                          <span className="text-sm font-semibold text-green-600 min-w-[60px]">Step 3:</span>
+                          <span className="text-sm text-gray-700">
+                            You will be verified within 72 hours
+                          </span>
+                        </div>
+                        
+                        <hr className="border-gray-200" />
+                        
+                        <div className="flex gap-4">
+                          <span className="text-sm font-semibold text-green-600 min-w-[60px]">Step 4:</span>
+                          <span className="text-sm text-gray-700">
+                            Share your post here
+                          </span>
+                        </div>
+                        
+                        <div className="mt-6">
+                          <input 
+                            type="url" 
+                            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900" 
+                            placeholder="Paste your post link here..."
+                          />
+                        </div>
+                        
+                        <div className="flex justify-end pt-4">
+                          <Button className="bg-green-600 hover:bg-green-700 text-white px-6">
+                            Submit for Verification
+                          </Button>
+                        </div>
+                      </div>
                     </div>
-
-                    <Button className="w-full border-2 border-gray-300 hover:border-gray-900" variant="outline">
-                      <CalendarDays className="w-4 h-4 mr-2" />
-                      Manage Calendar & Time Slots
-                    </Button>
                   </div>
                 )}
 

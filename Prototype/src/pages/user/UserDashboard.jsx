@@ -53,6 +53,7 @@ const UserDashboard = () => {
   const [showSettings, setShowSettings] = useState(false)
   const [settingsTab, setSettingsTab] = useState('basic')
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('card')
+  const [selectedSessionType, setSelectedSessionType] = useState(null)
 
   // Mock user data from onboarding
   const user = {
@@ -535,6 +536,8 @@ const UserDashboard = () => {
                   className="group hover:shadow-xl hover:scale-105 transition-all duration-300 border-2 hover:border-foreground cursor-pointer h-full relative"
                   onClick={() => {
                     setSelectedSession(session)
+                    setSelectedSessionType('upcoming')
+                    setSessionDetailTab('chat')
                     setShowSessionDetail(true)
                   }}
                 >
@@ -651,6 +654,8 @@ const UserDashboard = () => {
                   className="group hover:shadow-xl hover:scale-105 transition-all duration-300 border-2 hover:border-foreground cursor-pointer h-full relative"
                   onClick={() => {
                     setSelectedSession(session)
+                    setSelectedSessionType('past')
+                    setSessionDetailTab('summary')
                     setShowSessionDetail(true)
                   }}
                 >
@@ -930,7 +935,7 @@ const UserDashboard = () => {
 
                 {/* Actions based on session status */}
                 <div className="border-t my-3" />
-                {selectedSession.status === 'Upcoming' ? (
+                {selectedSessionType === 'upcoming' ? (
                   <div className="space-y-3">
                     {/* Primary Action - Join Session */}
                     <Button className="w-full rounded-full bg-black hover:bg-gray-800 text-white py-3 text-base font-semibold">
@@ -1013,7 +1018,7 @@ const UserDashboard = () => {
                       </div>
                     </div>
 
-                    {selectedSession.status === 'Upcoming' ? (
+                    {selectedSessionType === 'upcoming' ? (
                       <div>
                         {/* Conversation History */}
                         <div className="space-y-3 max-h-96 overflow-y-auto">
