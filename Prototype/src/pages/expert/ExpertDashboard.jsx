@@ -285,7 +285,7 @@ const ExpertDashboard = () => {
                 <p className="text-2xl font-bold mb-2">12</p>
                 <div className="h-8 w-full">
                   <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={sessionData}>
+                    <BarChart data={sessionsData}>
                       <Bar dataKey="sessions" fill="#000000" radius={[2, 2, 0, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
