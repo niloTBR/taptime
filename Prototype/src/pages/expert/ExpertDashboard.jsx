@@ -272,27 +272,23 @@ const ExpertDashboard = () => {
               </CardContent>
             </Card>
             
-            {/* Top Expertise */}
+            {/* Average Sessions */}
             <Card className="border-2">
               <CardContent className="p-4">
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
-                    <Target className="w-4 h-4 text-muted-foreground" />
-                    <span className="text-sm text-muted-foreground">Top Expertise</span>
+                    <BookOpen className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-sm text-muted-foreground">Average Sessions</span>
                   </div>
-                  <span className="text-xs text-muted-foreground">4 areas</span>
+                  <TrendingUp className="w-4 h-4 text-green-600" />
                 </div>
-                <p className="text-2xl font-bold mb-3">Product</p>
-                <div className="flex flex-wrap gap-1">
-                  <Badge variant="secondary" className="bg-purple-100 text-purple-700 text-xs px-2 py-1">
-                    Product Strategy
-                  </Badge>
-                  <Badge variant="secondary" className="bg-blue-100 text-blue-700 text-xs px-2 py-1">
-                    Team Leadership
-                  </Badge>
-                  <Badge variant="secondary" className="bg-green-100 text-green-700 text-xs px-2 py-1">
-                    Market Analysis
-                  </Badge>
+                <p className="text-2xl font-bold mb-2">12</p>
+                <div className="h-8 w-full">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={sessionData}>
+                      <Bar dataKey="sessions" fill="#000000" radius={[2, 2, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
                 </div>
               </CardContent>
             </Card>
