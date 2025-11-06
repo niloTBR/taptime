@@ -114,6 +114,7 @@ const ExpertDashboard = () => {
       id: 1,
       clientName: 'Sarah Johnson',
       clientTitle: 'Product Manager at TechCorp',
+      clientLocation: 'New York, NY',
       date: 'Tomorrow',
       time: '2:00 PM',
       duration: '60 min',
@@ -130,6 +131,7 @@ const ExpertDashboard = () => {
       id: 2,
       clientName: 'David Thompson',
       clientTitle: 'Startup Founder',
+      clientLocation: 'Austin, TX',
       date: 'March 25',
       time: '10:00 AM',
       duration: '90 min',
@@ -149,6 +151,7 @@ const ExpertDashboard = () => {
       id: 1,
       clientName: 'Emily Rodriguez',
       clientTitle: 'Head of Product',
+      clientLocation: 'Seattle, WA',
       date: 'Mar 18',
       rating: 5,
       topic: 'Team Leadership Workshop',
@@ -166,6 +169,7 @@ const ExpertDashboard = () => {
       id: 2,
       clientName: 'James Wilson',
       clientTitle: 'VP Product',
+      clientLocation: 'Boston, MA',
       date: 'Mar 15',
       rating: 5,
       topic: 'Product Strategy Session',
@@ -1968,7 +1972,7 @@ const ExpertDashboard = () => {
                   </Avatar>
                   <div className="flex-1 min-w-0">
                     <h4 className="font-semibold text-sm truncate">{selectedSession.clientName}</h4>
-                    <p className="text-xs text-muted-foreground truncate">{selectedSession.clientTitle}</p>
+                    <p className="text-xs text-muted-foreground truncate">{selectedSession.clientLocation}</p>
                   </div>
                   <ChevronRight className="w-4 h-4 text-gray-400" />
                 </div>
@@ -2166,7 +2170,7 @@ const ExpertDashboard = () => {
                       </Avatar>
                       <div>
                         <h4 className="font-semibold text-sm">{selectedSession.clientName}</h4>
-                        <p className="text-xs text-muted-foreground">{selectedSession.clientTitle}</p>
+                        <p className="text-xs text-muted-foreground">{selectedSession.clientLocation}</p>
                       </div>
                     </div>
 
