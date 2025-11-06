@@ -46,7 +46,9 @@ import {
   Crown,
   Package,
   Trash2,
-  CalendarDays
+  CalendarDays,
+  FileText,
+  BookOpen
 } from 'lucide-react'
 
 const ExpertDashboard = () => {
