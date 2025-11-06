@@ -2101,54 +2101,48 @@ const ExpertDashboard = () => {
                     <div>
                       <h5 className="font-medium text-sm mb-3">Supporting Documents</h5>
                       <div className="space-y-2">
-                        <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                          <div className="flex items-center gap-3">
-                            <FileText className="w-4 h-4 text-red-600" />
-                            <div>
-                              <div className="font-medium text-sm">Current_Product_Roadmap_Q1_2024.pdf</div>
-                              <div className="text-xs text-muted-foreground">2.3 MB</div>
-                            </div>
+                        <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                          <FileText className="w-4 h-4 text-red-600 flex-shrink-0" />
+                          <div className="flex-1 min-w-0">
+                            <div className="font-medium text-sm truncate">Current_Product_Roadmap_Q1_2024.pdf</div>
+                            <div className="text-xs text-muted-foreground">2.3 MB</div>
                           </div>
                           <Button 
                             size="sm" 
                             variant="outline"
-                            className="rounded-full border-2 border-foreground px-3 py-1 text-xs h-8"
+                            className="rounded-full border-2 border-foreground px-3 py-1 text-xs h-8 flex-shrink-0"
                             onClick={() => console.log('Download Current_Product_Roadmap_Q1_2024.pdf')}
                           >
                             <Download className="w-3 h-3 mr-1" />
                             Download
                           </Button>
                         </div>
-                        <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                          <div className="flex items-center gap-3">
-                            <FileText className="w-4 h-4 text-red-600" />
-                            <div>
-                              <div className="font-medium text-sm">Customer_Feedback_Analysis.pdf</div>
-                              <div className="text-xs text-muted-foreground">1.8 MB</div>
-                            </div>
+                        <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                          <FileText className="w-4 h-4 text-red-600 flex-shrink-0" />
+                          <div className="flex-1 min-w-0">
+                            <div className="font-medium text-sm truncate">Customer_Feedback_Analysis.pdf</div>
+                            <div className="text-xs text-muted-foreground">1.8 MB</div>
                           </div>
                           <Button 
                             size="sm" 
                             variant="outline"
-                            className="rounded-full border-2 border-foreground px-3 py-1 text-xs h-8"
+                            className="rounded-full border-2 border-foreground px-3 py-1 text-xs h-8 flex-shrink-0"
                             onClick={() => console.log('Download Customer_Feedback_Analysis.pdf')}
                           >
                             <Download className="w-3 h-3 mr-1" />
                             Download
                           </Button>
                         </div>
-                        <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                          <div className="flex items-center gap-3">
-                            <FileText className="w-4 h-4 text-red-600" />
-                            <div>
-                              <div className="font-medium text-sm">Competitive_Analysis_Report.pdf</div>
-                              <div className="text-xs text-muted-foreground">3.1 MB</div>
-                            </div>
+                        <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                          <FileText className="w-4 h-4 text-red-600 flex-shrink-0" />
+                          <div className="flex-1 min-w-0">
+                            <div className="font-medium text-sm truncate">Competitive_Analysis_Report.pdf</div>
+                            <div className="text-xs text-muted-foreground">3.1 MB</div>
                           </div>
                           <Button 
                             size="sm" 
                             variant="outline"
-                            className="rounded-full border-2 border-foreground px-3 py-1 text-xs h-8"
+                            className="rounded-full border-2 border-foreground px-3 py-1 text-xs h-8 flex-shrink-0"
                             onClick={() => console.log('Download Competitive_Analysis_Report.pdf')}
                           >
                             <Download className="w-3 h-3 mr-1" />
