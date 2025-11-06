@@ -342,6 +342,22 @@ const SignUpExpertPage = () => {
               </CardHeader>
               <CardContent className="space-y-8 p-8">
                 
+                {/* Profile Picture Upload */}
+                <div className="flex flex-col items-center space-y-4">
+                  <div className="relative">
+                    <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center border-2 border-dashed border-gray-300 hover:border-gray-400 transition-colors">
+                      <User className="w-8 h-8 text-gray-400" />
+                    </div>
+                    <button className="absolute -bottom-1 -right-1 w-8 h-8 bg-gray-900 rounded-full flex items-center justify-center text-white hover:bg-gray-800 transition-colors">
+                      <Plus className="w-4 h-4" />
+                    </button>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-sm font-medium text-gray-700 mb-1">Upload Profile Picture</p>
+                    <p className="text-xs text-gray-500">JPG, PNG or GIF (max 5MB)</p>
+                  </div>
+                </div>
+                
                 <div className="space-y-6">
                   
                   {/* First Name + Last Name */}

@@ -57,6 +57,7 @@ const ExpertDashboard = () => {
   const [showSettings, setShowSettings] = useState(false)
   const [settingsTab, setSettingsTab] = useState('basic')
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('card')
+  const [billingTab, setBillingTab] = useState('withdrawal')
 
   // Mock expert data from onboarding
   const expert = {
@@ -1187,6 +1188,22 @@ const ExpertDashboard = () => {
                   <div className="space-y-6">
                     <h3 className="text-xl font-semibold">Basic Information</h3>
                     
+                    {/* Profile Picture Upload */}
+                    <div className="flex flex-col items-center space-y-4">
+                      <div className="relative">
+                        <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center border-2 border-dashed border-gray-300 hover:border-gray-400 transition-colors">
+                          <User className="w-8 h-8 text-gray-400" />
+                        </div>
+                        <button className="absolute -bottom-1 -right-1 w-8 h-8 bg-gray-900 rounded-full flex items-center justify-center text-white hover:bg-gray-800 transition-colors">
+                          <Edit className="w-4 h-4" />
+                        </button>
+                      </div>
+                      <div className="text-center">
+                        <p className="text-sm font-medium text-gray-700 mb-1">Update Profile Picture</p>
+                        <p className="text-xs text-gray-500">JPG, PNG or GIF (max 5MB)</p>
+                      </div>
+                    </div>
+                    
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <label className="text-sm font-medium mb-2 block">First Name</label>
@@ -1517,93 +1534,212 @@ const ExpertDashboard = () => {
                   <div className="space-y-6">
                     <h3 className="text-xl font-semibold">Billing & Payments</h3>
                     
-                    {/* Payment Method Selection */}
-                    <div className="space-y-4">
-                      <h4 className="font-medium">How would you like to receive payments?</h4>
-                      <div className="space-y-3">
+                    {/* Payment Overview */}
+                    <div className="space-y-6">
+                      <h4 className="text-lg font-medium">Payment Overview</h4>
+                      
+                      {/* Current Balance Card */}
+                      <div className="bg-white border-2 border-gray-200 rounded-lg p-6 max-w-sm">
+                        <div className="border-b border-gray-200 pb-3 mb-3">
+                          <h5 className="text-sm text-gray-600">Current Balance</h5>
+                        </div>
+                        <div className="text-3xl font-bold text-green-600 mb-2">$800</div>
+                        <div className="text-xs text-green-600 bg-green-50 px-2 py-1 rounded inline-block">
+                          Sufficient Balance. You can withdraw now
+                        </div>
+                      </div>
+                      
+                      {/* Tab Navigation */}
+                      <div className="flex gap-2">
                         {[
-                          { id: 'card', label: 'Credit/Debit Card', icon: '💳' },
-                          { id: 'bank', label: 'Bank Transfer', icon: '🏦' },
-                          { id: 'paypal', label: 'PayPal', icon: '💰' }
-                        ].map(method => (
-                          <label
-                            key={method.id}
-                            className={`flex items-center p-3 border rounded-lg cursor-pointer transition-all ${
-                              selectedPaymentMethod === method.id 
-                                ? 'border-gray-900 bg-gray-50' 
-                                : 'border-gray-200 hover:border-gray-400'
+                          { id: 'payment', label: 'Payment Details' },
+                          { id: 'withdrawal', label: 'Withdrawal request' },
+                          { id: 'history', label: 'Withdrawal history' }
+                        ].map(tab => (
+                          <button
+                            key={tab.id}
+                            onClick={() => setBillingTab(tab.id)}
+                            className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                              billingTab === tab.id
+                                ? 'bg-gray-900 text-white'
+                                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                             }`}
                           >
-                            <input
-                              type="radio"
-                              name="paymentMethod"
-                              value={method.id}
-                              checked={selectedPaymentMethod === method.id}
-                              onChange={(e) => setSelectedPaymentMethod(e.target.value)}
-                              className="w-4 h-4 text-gray-900 border-gray-300 focus:ring-gray-900"
-                            />
-                            <span className="text-lg mr-3 ml-3">{method.icon}</span>
-                            <span className="font-medium">{method.label}</span>
-                          </label>
+                            {tab.label}
+                          </button>
                         ))}
                       </div>
                     </div>
 
-                    {/* Conditional Payment Forms */}
-                    {selectedPaymentMethod === 'card' && (
-                      <div className="space-y-4">
-                        <h4 className="font-medium">Card Details</h4>
-                        <div className="grid grid-cols-2 gap-4">
-                          <div>
-                            <label className="text-sm font-medium mb-2 block">Card Number</label>
-                            <input 
-                              type="text" 
-                              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
-                              placeholder="1234 5678 9012 3456"
-                            />
-                          </div>
-                          <div>
-                            <label className="text-sm font-medium mb-2 block">Expiry Date</label>
-                            <input 
-                              type="text" 
-                              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
-                              placeholder="MM/YY"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    )}
-
-                    {selectedPaymentMethod === 'bank' && (
-                      <div className="space-y-4">
-                        <h4 className="font-medium">Bank Account Details</h4>
+                    {/* Payment Details Tab */}
+                    {billingTab === 'payment' && (
+                      <div className="space-y-6">
+                        <h4 className="text-lg font-medium">Bank information</h4>
+                        
                         <div className="space-y-4">
-                          <div>
-                            <label className="text-sm font-medium mb-2 block">Account Holder Name</label>
-                            <input 
-                              type="text" 
-                              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
-                              placeholder="John Smith"
-                            />
-                          </div>
                           <div className="grid grid-cols-2 gap-4">
+                            <div>
+                              <label className="text-sm font-medium mb-2 block">Bank account*</label>
+                              <input 
+                                type="text" 
+                                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+                                placeholder="0000 0000 0000 0000"
+                              />
+                            </div>
+                            <div>
+                              <label className="text-sm font-medium mb-2 block">Account Number*</label>
+                              <input 
+                                type="text" 
+                                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+                                placeholder="0000 0000 0000 0000"
+                              />
+                            </div>
+                          </div>
+                          
+                          <div className="grid grid-cols-2 gap-4">
+                            <div>
+                              <label className="text-sm font-medium mb-2 block">IBAN</label>
+                              <input 
+                                type="text" 
+                                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+                                placeholder="Type here..."
+                              />
+                            </div>
+                            <div>
+                              <label className="text-sm font-medium mb-2 block">Bank Name</label>
+                              <input 
+                                type="text" 
+                                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+                                placeholder="Type here..."
+                              />
+                            </div>
+                          </div>
+                          
+                          <div className="grid grid-cols-3 gap-4">
                             <div>
                               <label className="text-sm font-medium mb-2 block">Routing Number</label>
                               <input 
                                 type="text" 
                                 className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
-                                placeholder="123456789"
+                                placeholder="City"
                               />
                             </div>
                             <div>
-                              <label className="text-sm font-medium mb-2 block">Account Number</label>
+                              <label className="text-sm font-medium mb-2 block">Branch</label>
                               <input 
                                 type="text" 
                                 className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
-                                placeholder="1234567890"
+                                placeholder="State"
                               />
                             </div>
+                            <div>
+                              <label className="text-sm font-medium mb-2 block">Country</label>
+                              <select className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900">
+                                <option>Select Country</option>
+                                <option>United States</option>
+                                <option>Canada</option>
+                                <option>United Kingdom</option>
+                              </select>
+                            </div>
                           </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Withdrawal Request Tab */}
+                    {billingTab === 'withdrawal' && (
+                      <div className="space-y-6">
+                        <h4 className="text-lg font-medium">Withdrawal Details</h4>
+                        
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <label className="text-sm font-medium mb-2 block">Amount to Withdraw*</label>
+                            <input 
+                              type="text" 
+                              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+                              placeholder="Type Here..."
+                            />
+                          </div>
+                          <div>
+                            <label className="text-sm font-medium mb-2 block">Payment method*</label>
+                            <select className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900">
+                              <option>Bank transfer</option>
+                              <option>PayPal</option>
+                              <option>UPI</option>
+                            </select>
+                          </div>
+                        </div>
+                        
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <label className="text-sm font-medium mb-2 block">Account Details Preview</label>
+                            <button className="w-full p-3 border border-gray-300 rounded-lg text-left hover:bg-gray-50 flex items-center justify-between">
+                              <span>Update Payment Information</span>
+                              <ArrowRight className="w-4 h-4" />
+                            </button>
+                          </div>
+                          <div>
+                            <label className="text-sm font-medium mb-2 block">Notes (Optional)</label>
+                            <textarea 
+                              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 h-12 resize-none"
+                              placeholder="Type here..."
+                            />
+                          </div>
+                        </div>
+                        
+                        <div className="flex justify-end">
+                          <Button className="bg-green-600 hover:bg-green-700 text-white px-6">
+                            Request Withdrawal
+                          </Button>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Withdrawal History Tab */}
+                    {billingTab === 'history' && (
+                      <div className="space-y-6">
+                        <h4 className="text-lg font-medium">Recent Transactions</h4>
+                        
+                        <div className="overflow-x-auto">
+                          <table className="w-full">
+                            <thead className="border-b border-gray-200">
+                              <tr className="text-left">
+                                <th className="py-3 text-sm font-medium text-gray-700">Transaction ID</th>
+                                <th className="py-3 text-sm font-medium text-gray-700">Date</th>
+                                <th className="py-3 text-sm font-medium text-gray-700">Amount</th>
+                                <th className="py-3 text-sm font-medium text-gray-700">Payment Method</th>
+                                <th className="py-3 text-sm font-medium text-gray-700">Reference/UTR No.</th>
+                                <th className="py-3 text-sm font-medium text-gray-700">Actions</th>
+                              </tr>
+                            </thead>
+                            <tbody className="divide-y divide-gray-200">
+                              {[
+                                { id: 'TXN-001', date: '22 Sep 2025', amount: '₹5,000', method: 'Bank Transfer', ref: 'UTR12345' },
+                                { id: 'TXN-002', date: '19 Sep 2025', amount: '₹2,500', method: 'PayPal', ref: 'UTR98765' },
+                                { id: 'TXN-003', date: '15 Sep 2025', amount: '₹7,200', method: 'UPI (GPay)', ref: 'UTR12345' },
+                                { id: 'TXN-004', date: '12 Sep 2025', amount: '₹10,000', method: 'Bank Transfer', ref: 'UTR98765' },
+                                { id: 'TXN-005', date: '10 Sep 2025', amount: '₹3,000', method: 'Payoneer', ref: 'UTR12345' }
+                              ].map((transaction) => (
+                                <tr key={transaction.id} className="hover:bg-gray-50">
+                                  <td className="py-3 text-sm">{transaction.id}</td>
+                                  <td className="py-3 text-sm">{transaction.date}</td>
+                                  <td className="py-3 text-sm font-medium">{transaction.amount}</td>
+                                  <td className="py-3 text-sm">{transaction.method}</td>
+                                  <td className="py-3 text-sm">{transaction.ref}</td>
+                                  <td className="py-3">
+                                    <div className="flex gap-2">
+                                      <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                        <Eye className="w-4 h-4" />
+                                      </Button>
+                                      <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                        <Download className="w-4 h-4" />
+                                      </Button>
+                                    </div>
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
                         </div>
                       </div>
                     )}
