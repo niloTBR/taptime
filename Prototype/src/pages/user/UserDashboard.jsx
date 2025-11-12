@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge'
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, LineChart, Line } from 'recharts'
 import ExpertCard from '@/components/common/ExpertCard'
+import homepageData from '@/data/homepage.json'
 import { 
   Calendar,
   Clock,
@@ -37,10 +38,14 @@ import {
   Shield,
   CreditCard,
   Download,
-  Receipt
+  Receipt,
+  Heart
 } from 'lucide-react'
 
 const UserDashboard = () => {
+  const { featuredSection } = homepageData
+  const favouriteExperts = featuredSection.experts.slice(0, 3) // Get first 3 experts for favourites
+  
   const [activeTab, setActiveTab] = useState('upcoming')
   const [showReschedule, setShowReschedule] = useState(false)
   const [selectedSession, setSelectedSession] = useState(null)
@@ -325,7 +330,8 @@ const UserDashboard = () => {
 
   const tabs = [
     { id: 'upcoming', label: 'Upcoming', count: upcomingSessions.length },
-    { id: 'past', label: 'Past Sessions', count: pastSessions.length }
+    { id: 'past', label: 'Past Sessions', count: pastSessions.length },
+    { id: 'favourites', label: 'Favourites', count: favouriteExperts.length, icon: Heart }
   ]
 
   return (
@@ -383,6 +389,21 @@ const UserDashboard = () => {
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={sessionData}>
                       <Bar dataKey="sessions" fill="#000000" radius={[2, 2, 0, 0]} />
+                      <ChartTooltip
+                        content={({ active, payload, label }) => {
+                          if (active && payload && payload.length) {
+                            return (
+                              <div className="bg-white p-3 border border-gray-200 rounded-lg shadow-lg">
+                                <p className="text-sm font-medium">{label}</p>
+                                <p className="text-sm text-blue-600">
+                                  Sessions: <span className="font-semibold">{payload[0].value}</span>
+                                </p>
+                              </div>
+                            )
+                          }
+                          return null
+                        }}
+                      />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
@@ -404,6 +425,21 @@ const UserDashboard = () => {
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={learningData}>
                       <Line dataKey="hours" stroke="#000000" strokeWidth={2} dot={false} />
+                      <ChartTooltip
+                        content={({ active, payload, label }) => {
+                          if (active && payload && payload.length) {
+                            return (
+                              <div className="bg-white p-3 border border-gray-200 rounded-lg shadow-lg">
+                                <p className="text-sm font-medium">{label}</p>
+                                <p className="text-sm text-green-600">
+                                  Learning Hours: <span className="font-semibold">{payload[0].value}h</span>
+                                </p>
+                              </div>
+                            )
+                          }
+                          return null
+                        }}
+                      />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
@@ -526,6 +562,7 @@ const UserDashboard = () => {
                       : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                   }`}
                 >
+                  {tab.icon && <tab.icon className="w-4 h-4" />}
                   {tab.label}
                   {tab.count > 0 && (
                     <Badge variant="secondary" className="ml-1">
@@ -775,6 +812,38 @@ const UserDashboard = () => {
             </div>
           )}
           
+          {/* Favourites Tab Content */}
+          {activeTab === 'favourites' && (
+            <div>
+              <div className="mb-6">
+                <h2 className="text-xl font-semibold mb-2">Your Favourite Experts</h2>
+                <p className="text-gray-600 text-sm">Experts you've bookmarked for future sessions</p>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {favouriteExperts.map((expert) => (
+                  <ExpertCard
+                    key={expert.id}
+                    expert={expert}
+                    showActions={true}
+                    className="h-full"
+                  />
+                ))}
+              </div>
+              
+              {favouriteExperts.length === 0 && (
+                <div className="text-center py-12">
+                  <Heart className="w-16 h-16 mx-auto text-gray-300 mb-4" />
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">No favourites yet</h3>
+                  <p className="text-gray-600 mb-6">Start building your list of favourite experts by bookmarking them during your browsing sessions.</p>
+                  <Button className="rounded-full">
+                    <Plus className="w-4 h-4 mr-2" />
+                    Browse Experts
+                  </Button>
+                </div>
+              )}
+            </div>
+          )}
           
         </div>
       </div>

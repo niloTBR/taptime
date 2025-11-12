@@ -3,6 +3,9 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Label } from '@/components/ui/label'
 import { 
   User,
   Calendar,
@@ -23,10 +26,15 @@ import {
   Award,
   Briefcase
 } from 'lucide-react'
+import categoriesData from '@/data/categories.json'
 
 const ExpertProfileSettings = () => {
+  const { categories } = categoriesData
   const [activeTab, setActiveTab] = useState('basic')
   const [showVerificationModal, setShowVerificationModal] = useState(false)
+  const [selectedExpertiseArea, setSelectedExpertiseArea] = useState('All Expertise')
+  const [selectedExpertiseSkills, setSelectedExpertiseSkills] = useState(['Software Development', 'Product Development', 'Leadership & Team Building']) // Pre-selected for demo
+  const [expandedExpertiseAreas, setExpandedExpertiseAreas] = useState(['Technology & Innovation']) // Pre-expanded for demo
 
   // Mock expert data
   const expert = {
@@ -444,73 +452,115 @@ const ExpertProfileSettings = () => {
                         </div>
                       </div>
 
-                      {/* Industry */}
-                      <div className="space-y-2">
-                        <label className="text-sm font-medium">Industry</label>
-                        <div className="relative">
-                          <Building className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
-                          <select
-                            defaultValue="technology-software"
-                            className="w-full pl-10 pr-10 py-3 border-2 border-gray-200 rounded-lg focus:border-gray-900 focus:outline-none appearance-none"
-                          >
-                            <option value="">Select your industry</option>
-                            <option value="business-startups">Business & Startups</option>
-                            <option value="technology-software">Technology & Software</option>
-                            <option value="marketing-brand">Marketing & Brand</option>
-                            <option value="career-professional">Career & Professional Development</option>
-                            <option value="finance-investment">Finance & Investment</option>
-                            <option value="healthcare-wellness">Healthcare & Wellness</option>
-                            <option value="creative-design">Creative & Design</option>
-                            <option value="education-training">Education & Training</option>
-                            <option value="real-estate">Real Estate</option>
-                            <option value="legal-consulting">Legal & Consulting</option>
-                            <option value="other">Other</option>
-                          </select>
-                          <ChevronDown className="absolute right-3 top-3 w-4 h-4 text-gray-400" />
-                        </div>
-                      </div>
-
-                      {/* Expertise */}
+                      {/* Expertise - Hierarchical */}
                       <div className="space-y-3">
-                        <label className="text-sm font-medium">Areas of Expertise</label>
-                        <p className="text-xs text-gray-500">Select all areas that apply to your expertise</p>
-                        <div className="grid grid-cols-2 gap-3 max-h-48 overflow-y-auto p-2 border border-gray-200 rounded-lg">
-                          {[
-                            'Leadership & Team Building',
-                            'Scaling Startups', 
-                            'Fundraising & Pitching',
-                            'Product Development',
-                            'Marketing Strategy',
-                            'Data Science & Analytics',
-                            'Software Development', 
-                            'UX/UI Design',
-                            'Financial Planning',
-                            'Career Coaching',
-                            'Content Creation',
-                            'Public Speaking',
-                            'Project Management',
-                            'Digital Marketing',
-                            'Business Strategy',
-                            'Sales & Customer Success',
-                            'Operations & Process Improvement',
-                            'Legal & Compliance',
-                            'Human Resources',
-                            'Other'
-                          ].map((skill, index) => (
-                            <label
-                              key={skill}
-                              className="flex items-center gap-2 p-2 rounded hover:bg-gray-50 cursor-pointer"
-                            >
-                              <input
-                                type="checkbox"
-                                defaultChecked={index < 3} // Pre-select first 3 for demo
-                                className="w-4 h-4 text-gray-900 border-gray-300 rounded focus:ring-gray-900"
+                        <label className="text-sm font-medium">Expertise</label>
+                        <p className="text-xs text-gray-500">Select expertise areas and specific skills that match your background</p>
+                        
+                        <div className="border border-gray-200 rounded-lg p-4 max-h-96 overflow-y-auto">
+                          <div className="space-y-2">
+                            {/* All Expertise Option */}
+                            <div className="flex items-center space-x-2">
+                              <Checkbox 
+                                id="all-expertise-profile"
+                                checked={selectedExpertiseArea === 'All Expertise'}
+                                onCheckedChange={(checked) => {
+                                  if (checked) {
+                                    setSelectedExpertiseArea('All Expertise')
+                                    setSelectedExpertiseSkills([])
+                                    setExpandedExpertiseAreas([])
+                                  }
+                                }}
                               />
-                              <span className="text-sm">{skill}</span>
-                            </label>
-                          ))}
+                              <Label htmlFor="all-expertise-profile" className="text-sm font-medium cursor-pointer">
+                                All Expertise Areas
+                              </Label>
+                            </div>
+                            
+                            {/* Main Categories with Subcategories */}
+                            {categories.map((category) => (
+                              <div key={category.name} className="space-y-1">
+                                {/* Main Category */}
+                                <div className="flex items-center space-x-2">
+                                  <Checkbox 
+                                    id={`profile-${category.name}`}
+                                    checked={selectedExpertiseArea === category.name}
+                                    onCheckedChange={(checked) => {
+                                      if (checked) {
+                                        setSelectedExpertiseArea(category.name)
+                                        // Expand this category when selected
+                                        if (!expandedExpertiseAreas.includes(category.name)) {
+                                          setExpandedExpertiseAreas([...expandedExpertiseAreas, category.name])
+                                        }
+                                      } else {
+                                        setSelectedExpertiseArea('All Expertise')
+                                        // Optionally collapse when unchecked
+                                        setExpandedExpertiseAreas(expandedExpertiseAreas.filter(name => name !== category.name))
+                                      }
+                                    }}
+                                  />
+                                  <button
+                                    onClick={() => {
+                                      // Toggle expansion
+                                      if (expandedExpertiseAreas.includes(category.name)) {
+                                        setExpandedExpertiseAreas(expandedExpertiseAreas.filter(name => name !== category.name))
+                                      } else {
+                                        setExpandedExpertiseAreas([...expandedExpertiseAreas, category.name])
+                                      }
+                                    }}
+                                    className="flex items-center gap-1 text-sm font-medium cursor-pointer hover:text-blue-600 flex-1 text-left"
+                                  >
+                                    <ChevronDown className={`w-3 h-3 transition-transform ${
+                                      expandedExpertiseAreas.includes(category.name) ? 'rotate-180' : ''
+                                    }`} />
+                                    {category.name}
+                                  </button>
+                                </div>
+                                
+                                {/* Subcategories (only show if expanded) */}
+                                {expandedExpertiseAreas.includes(category.name) && (
+                                  <div className="space-y-1 ml-6">
+                                    {category.subcategories.map((subcategory) => (
+                                      <div key={subcategory.name} className="flex items-center space-x-2">
+                                        <Checkbox 
+                                          id={`profile-${subcategory.name}`}
+                                          checked={selectedExpertiseSkills.includes(subcategory.name)}
+                                          onCheckedChange={(checked) => {
+                                            if (checked) {
+                                              setSelectedExpertiseSkills([...selectedExpertiseSkills, subcategory.name])
+                                            } else {
+                                              setSelectedExpertiseSkills(selectedExpertiseSkills.filter(skill => skill !== subcategory.name))
+                                            }
+                                          }}
+                                        />
+                                        <Label htmlFor={`profile-${subcategory.name}`} className="text-xs font-normal cursor-pointer text-gray-700">
+                                          {subcategory.name}
+                                        </Label>
+                                      </div>
+                                    ))}
+                                  </div>
+                                )}
+                              </div>
+                            ))}
+                          </div>
                         </div>
-                        <p className="text-xs text-gray-500">3 areas selected</p>
+                        
+                        {/* Selected count */}
+                        <p className="text-xs text-gray-500">
+                          {selectedExpertiseSkills.length} specific {selectedExpertiseSkills.length === 1 ? 'skill' : 'skills'} selected
+                          {selectedExpertiseArea !== 'All Expertise' && ` in ${selectedExpertiseArea}`}
+                        </p>
+                        
+                        {/* Selected skills display */}
+                        {selectedExpertiseSkills.length > 0 && (
+                          <div className="flex flex-wrap gap-1 mt-2">
+                            {selectedExpertiseSkills.map((skill) => (
+                              <Badge key={skill} variant="secondary" className="text-xs">
+                                {skill}
+                              </Badge>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     </div>
 

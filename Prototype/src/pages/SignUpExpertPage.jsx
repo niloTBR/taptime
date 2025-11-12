@@ -3,6 +3,8 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Calendar } from '@/components/ui/calendar'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Label } from '@/components/ui/label'
 import { 
   Crown, 
   User, 
@@ -29,10 +31,13 @@ import {
   Package,
   Zap
 } from 'lucide-react'
+import categoriesData from '@/data/categories.json'
 
 const SignUpExpertPage = () => {
+  const { categories } = categoriesData
   const [currentStep, setCurrentStep] = useState(1)
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [expandedExpertiseAreas, setExpandedExpertiseAreas] = useState([])
   const [formData, setFormData] = useState({
     // Step 1: Personal Information (includes user fields)
     firstName: '',
@@ -47,8 +52,9 @@ const SignUpExpertPage = () => {
     // Step 2: Professional & Expertise  
     title: '',
     shortDescription: '',
-    industry: '',
-    expertise: [],
+    industry: [], // Changed to array for multiselect
+    expertiseArea: 'All Expertise',
+    expertiseSkills: [],
     
     // Step 3: Availability
     timezone: '',
@@ -555,81 +561,157 @@ const SignUpExpertPage = () => {
                 </div>
 
 
-                {/* Industry */}
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Industry</label>
-                  <div className="relative">
-                    <Briefcase className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
-                    <select
-                      value={formData.industry}
-                      onChange={(e) => setFormData({...formData, industry: e.target.value})}
-                      className="w-full pl-10 pr-10 py-3 border-2 border-gray-200 rounded-lg focus:border-gray-900 focus:outline-none appearance-none"
-                    >
-                      <option value="">Select your industry</option>
-                      <option value="business-startups">Business & Startups</option>
-                      <option value="technology-software">Technology & Software</option>
-                      <option value="marketing-brand">Marketing & Brand</option>
-                      <option value="career-professional">Career & Professional Development</option>
-                      <option value="finance-investment">Finance & Investment</option>
-                      <option value="healthcare-wellness">Healthcare & Wellness</option>
-                      <option value="creative-design">Creative & Design</option>
-                      <option value="education-training">Education & Training</option>
-                      <option value="real-estate">Real Estate</option>
-                      <option value="legal-consulting">Legal & Consulting</option>
-                      <option value="other">Other</option>
-                    </select>
-                    <ChevronDown className="absolute right-3 top-3 w-4 h-4 text-gray-400" />
-                  </div>
-                </div>
-
-                {/* Expertise */}
+                {/* Industry - Multiselect */}
                 <div className="space-y-3">
-                  <label className="text-sm font-medium">Areas of Expertise</label>
-                  <p className="text-xs text-gray-500">Select all areas that apply to your expertise</p>
-                  <div className="grid grid-cols-2 gap-3 max-h-48 overflow-y-auto p-2 border border-gray-200 rounded-lg">
+                  <label className="text-sm font-medium">Industry</label>
+                  <p className="text-xs text-gray-500">Select all industries that apply to your work</p>
+                  <div className="space-y-2 max-h-48 overflow-y-auto p-2 border border-gray-200 rounded-lg">
                     {[
-                      'Leadership & Team Building',
-                      'Scaling Startups', 
-                      'Fundraising & Pitching',
-                      'Product Development',
-                      'Marketing Strategy',
-                      'Data Science & Analytics',
-                      'Software Development', 
-                      'UX/UI Design',
-                      'Financial Planning',
-                      'Career Coaching',
-                      'Content Creation',
-                      'Public Speaking',
-                      'Project Management',
-                      'Digital Marketing',
-                      'Business Strategy',
-                      'Sales & Customer Success',
-                      'Operations & Process Improvement',
-                      'Legal & Compliance',
-                      'Human Resources',
+                      'Business & Startups',
+                      'Technology & Software',
+                      'Marketing & Brand',
+                      'Career & Professional Development',
+                      'Finance & Investment',
+                      'Healthcare & Wellness',
+                      'Creative & Design',
+                      'Education & Training',
+                      'Real Estate',
+                      'Legal & Consulting',
                       'Other'
-                    ].map(skill => (
+                    ].map(industry => (
                       <label
-                        key={skill}
+                        key={industry}
                         className="flex items-center gap-2 p-2 rounded hover:bg-gray-50 cursor-pointer"
                       >
                         <input
                           type="checkbox"
-                          checked={formData.expertise.includes(skill)}
+                          checked={formData.industry.includes(industry)}
                           onChange={(e) => {
                             if (e.target.checked) {
-                              setFormData({...formData, expertise: [...formData.expertise, skill]})
+                              setFormData({...formData, industry: [...formData.industry, industry]})
                             } else {
-                              setFormData({...formData, expertise: formData.expertise.filter(s => s !== skill)})
+                              setFormData({...formData, industry: formData.industry.filter(i => i !== industry)})
                             }
                           }}
                           className="w-4 h-4 text-gray-900 border-gray-300 rounded focus:ring-gray-900"
                         />
-                        <span className="text-sm">{skill}</span>
+                        <span className="text-sm">{industry}</span>
                       </label>
                     ))}
                   </div>
-                  <p className="text-xs text-gray-500">Selected: {formData.expertise.length} areas</p>
+                  <p className="text-xs text-gray-500">Selected: {formData.industry.length} industries</p>
+                </div>
+
+                {/* Expertise - Hierarchical */}
+                <div className="space-y-3">
+                  <label className="text-sm font-medium">Expertise</label>
+                  <p className="text-xs text-gray-500">Select your expertise areas and specific skills</p>
+                  
+                  <div className="border border-gray-200 rounded-lg p-4 max-h-96 overflow-y-auto">
+                    <div className="space-y-2">
+                      {/* All Expertise Option */}
+                      <div className="flex items-center space-x-2">
+                        <Checkbox 
+                          id="all-expertise-onboarding"
+                          checked={formData.expertiseArea === 'All Expertise'}
+                          onCheckedChange={(checked) => {
+                            if (checked) {
+                              setFormData({...formData, expertiseArea: 'All Expertise', expertiseSkills: []})
+                              setExpandedExpertiseAreas([])
+                            }
+                          }}
+                        />
+                        <Label htmlFor="all-expertise-onboarding" className="text-sm font-medium cursor-pointer">
+                          All Expertise Areas
+                        </Label>
+                      </div>
+                      
+                      {/* Main Categories with Subcategories */}
+                      {categories.map((category) => (
+                        <div key={category.name} className="space-y-1">
+                          {/* Main Category */}
+                          <div className="flex items-center space-x-2">
+                            <Checkbox 
+                              id={`onboarding-${category.name}`}
+                              checked={formData.expertiseArea === category.name}
+                              onCheckedChange={(checked) => {
+                                if (checked) {
+                                  setFormData({...formData, expertiseArea: category.name})
+                                  // Expand this category when selected
+                                  if (!expandedExpertiseAreas.includes(category.name)) {
+                                    setExpandedExpertiseAreas([...expandedExpertiseAreas, category.name])
+                                  }
+                                } else {
+                                  setFormData({...formData, expertiseArea: 'All Expertise'})
+                                  // Optionally collapse when unchecked
+                                  setExpandedExpertiseAreas(expandedExpertiseAreas.filter(name => name !== category.name))
+                                }
+                              }}
+                            />
+                            <button
+                              onClick={() => {
+                                // Toggle expansion
+                                if (expandedExpertiseAreas.includes(category.name)) {
+                                  setExpandedExpertiseAreas(expandedExpertiseAreas.filter(name => name !== category.name))
+                                } else {
+                                  setExpandedExpertiseAreas([...expandedExpertiseAreas, category.name])
+                                }
+                              }}
+                              className="flex items-center gap-1 text-sm font-medium cursor-pointer hover:text-blue-600 flex-1 text-left"
+                            >
+                              <ChevronDown className={`w-3 h-3 transition-transform ${
+                                expandedExpertiseAreas.includes(category.name) ? 'rotate-180' : ''
+                              }`} />
+                              {category.name}
+                            </button>
+                          </div>
+                          
+                          {/* Subcategories (only show if expanded) */}
+                          {expandedExpertiseAreas.includes(category.name) && (
+                            <div className="space-y-1 ml-6">
+                              {category.subcategories.map((subcategory) => (
+                                <div key={subcategory.name} className="flex items-center space-x-2">
+                                  <Checkbox 
+                                    id={`onboarding-${subcategory.name}`}
+                                    checked={formData.expertiseSkills.includes(subcategory.name)}
+                                    onCheckedChange={(checked) => {
+                                      if (checked) {
+                                        setFormData({...formData, expertiseSkills: [...formData.expertiseSkills, subcategory.name]})
+                                      } else {
+                                        setFormData({...formData, expertiseSkills: formData.expertiseSkills.filter(skill => skill !== subcategory.name)})
+                                      }
+                                    }}
+                                  />
+                                  <Label htmlFor={`onboarding-${subcategory.name}`} className="text-xs font-normal cursor-pointer text-gray-700">
+                                    {subcategory.name}
+                                  </Label>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  {/* Selected count and display */}
+                  <div className="space-y-2">
+                    <p className="text-xs text-gray-500">
+                      {formData.expertiseSkills.length} specific {formData.expertiseSkills.length === 1 ? 'skill' : 'skills'} selected
+                      {formData.expertiseArea !== 'All Expertise' && ` in ${formData.expertiseArea}`}
+                    </p>
+                    
+                    {/* Selected skills display */}
+                    {formData.expertiseSkills.length > 0 && (
+                      <div className="flex flex-wrap gap-1">
+                        {formData.expertiseSkills.map((skill) => (
+                          <Badge key={skill} variant="secondary" className="text-xs">
+                            {skill}
+                          </Badge>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </CardContent>
             </Card>

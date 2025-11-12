@@ -5,6 +5,8 @@ import InboxSidebar from '@/components/common/InboxSidebar'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Label } from '@/components/ui/label'
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, LineChart, Line } from 'recharts'
 import { 
@@ -55,8 +57,14 @@ import {
   ToggleLeft,
   ToggleRight
 } from 'lucide-react'
+import categoriesData from '@/data/categories.json'
+import homepageData from '@/data/homepage.json'
+import ExpertCard from '@/components/common/ExpertCard'
 
 const ExpertDashboard = () => {
+  const { categories } = categoriesData
+  const { featuredSection } = homepageData
+  const favouriteExperts = featuredSection.experts.slice(0, 3) // Get first 3 experts for favourites
   const [activeTab, setActiveTab] = useState('upcoming')
   const [showSessionDetail, setShowSessionDetail] = useState(false)
   const [selectedSession, setSelectedSession] = useState(null)
@@ -68,6 +76,9 @@ const ExpertDashboard = () => {
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('card')
   const [billingTab, setBillingTab] = useState('withdrawal')
   const [showInbox, setShowInbox] = useState(false)
+  const [selectedExpertiseArea, setSelectedExpertiseArea] = useState('Technology & Innovation')
+  const [selectedExpertiseSkills, setSelectedExpertiseSkills] = useState(['Software Development', 'Product Development', 'Leadership & Team Building'])
+  const [expandedExpertiseAreas, setExpandedExpertiseAreas] = useState(['Technology & Innovation'])
   const [reviewVisibility, setReviewVisibility] = useState({})
   const [structuredSessions, setStructuredSessions] = useState([])
 
@@ -228,6 +239,7 @@ const ExpertDashboard = () => {
   const tabs = [
     { id: 'upcoming', label: 'Upcoming', count: upcomingSessions.length },
     { id: 'past', label: 'Past Sessions', count: pastSessions.length },
+    { id: 'favourites', label: 'Favourites', count: favouriteExperts.length, icon: Heart },
     { id: 'reviews', label: 'Reviews', count: 0 }
   ]
 
@@ -508,6 +520,7 @@ const ExpertDashboard = () => {
                       : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                   }`}
                 >
+                  {tab.icon && <tab.icon className="w-4 h-4" />}
                   {tab.label}
                   {tab.count > 0 && (
                     <Badge variant="secondary" className="ml-1">
@@ -758,6 +771,38 @@ const ExpertDashboard = () => {
             </div>
           )}
           
+          {/* Favourites Tab Content */}
+          {activeTab === 'favourites' && (
+            <div>
+              <div className="mb-6">
+                <h2 className="text-xl font-semibold mb-2">Your Favourite Experts</h2>
+                <p className="text-gray-600 text-sm">Industry experts you've bookmarked for inspiration and networking</p>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {favouriteExperts.map((expert) => (
+                  <ExpertCard
+                    key={expert.id}
+                    expert={expert}
+                    showActions={true}
+                    className="h-full"
+                  />
+                ))}
+              </div>
+              
+              {favouriteExperts.length === 0 && (
+                <div className="text-center py-12">
+                  <Heart className="w-16 h-16 mx-auto text-gray-300 mb-4" />
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">No favourites yet</h3>
+                  <p className="text-gray-600 mb-6">Start building your network by bookmarking other experts whose work inspires you.</p>
+                  <Button className="rounded-full">
+                    <Plus className="w-4 h-4 mr-2" />
+                    Browse Experts
+                  </Button>
+                </div>
+              )}
+            </div>
+          )}
           
           {activeTab === 'meetings' && (
             <div className="space-y-6">
@@ -1444,34 +1489,144 @@ const ExpertDashboard = () => {
                     
                     <div>
                       <label className="text-sm font-medium mb-2 block">Industry*</label>
-                      <select className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900">
-                        <option value="">Select Industry</option>
-                        <option value="business-startup">Business & Startups</option>
-                        <option value="career-professional">Career & Professional</option>
-                        <option value="marketing-brand">Marketing & Brand</option>
-                        <option value="tech-product">Tech & Product</option>
-                        <option value="wellness-mental">Wellness & Mental</option>
-                        <option value="finance-investment">Finance & Investment</option>
-                      </select>
-                    </div>
-
-                    <div>
-                      <label className="text-sm font-medium mb-2 block">Expertise* (Select multiple)</label>
-                      <div className="space-y-2">
-                        {['Leadership & Team Building', 'Scaling Startups', 'Fundraising & Pitching', 'Exit Strategy & M&A', 'Product Strategy', 'Market Analysis', 'Business Development', 'Strategic Planning'].map(expertise => (
+                      <p className="text-xs text-gray-500 mb-3">Select all industries that apply to your work</p>
+                      <div className="space-y-2 max-h-48 overflow-y-auto p-2 border border-gray-300 rounded-lg">
+                        {[
+                          'Business & Startups',
+                          'Technology & Software',
+                          'Marketing & Brand',
+                          'Career & Professional Development',
+                          'Finance & Investment',
+                          'Healthcare & Wellness',
+                          'Creative & Design',
+                          'Education & Training',
+                          'Real Estate',
+                          'Legal & Consulting',
+                          'Other'
+                        ].map((industry, index) => (
                           <label
-                            key={expertise}
-                            className="flex items-center gap-3 p-3 border rounded-lg cursor-pointer transition-all border-gray-200 hover:border-gray-400"
+                            key={industry}
+                            className="flex items-center gap-2 p-2 rounded hover:bg-gray-50 cursor-pointer"
                           >
                             <input
                               type="checkbox"
+                              defaultChecked={index < 2} // Pre-select first 2 for demo
                               className="w-4 h-4 text-gray-900 border-gray-300 rounded focus:ring-gray-900"
-                              defaultChecked={expert.expertise.includes(expertise)}
                             />
-                            <span className="text-sm">{expertise}</span>
+                            <span className="text-sm">{industry}</span>
                           </label>
                         ))}
                       </div>
+                    </div>
+
+                    <div>
+                      <label className="text-sm font-medium mb-2 block">Expertise*</label>
+                      <p className="text-xs text-gray-500 mb-3">Select your expertise areas and specific skills</p>
+                      
+                      <div className="border border-gray-300 rounded-lg p-4 max-h-96 overflow-y-auto">
+                        <div className="space-y-2">
+                          {/* All Expertise Option */}
+                          <div className="flex items-center space-x-2">
+                            <Checkbox 
+                              id="all-expertise-dashboard"
+                              checked={selectedExpertiseArea === 'All Expertise'}
+                              onCheckedChange={(checked) => {
+                                if (checked) {
+                                  setSelectedExpertiseArea('All Expertise')
+                                  setSelectedExpertiseSkills([])
+                                  setExpandedExpertiseAreas([])
+                                }
+                              }}
+                            />
+                            <Label htmlFor="all-expertise-dashboard" className="text-sm font-medium cursor-pointer">
+                              All Expertise Areas
+                            </Label>
+                          </div>
+                          
+                          {/* Main Categories with Subcategories */}
+                          {categories.map((category) => (
+                            <div key={category.name} className="space-y-1">
+                              {/* Main Category */}
+                              <div className="flex items-center space-x-2">
+                                <Checkbox 
+                                  id={`dashboard-${category.name}`}
+                                  checked={selectedExpertiseArea === category.name}
+                                  onCheckedChange={(checked) => {
+                                    if (checked) {
+                                      setSelectedExpertiseArea(category.name)
+                                      // Expand this category when selected
+                                      if (!expandedExpertiseAreas.includes(category.name)) {
+                                        setExpandedExpertiseAreas([...expandedExpertiseAreas, category.name])
+                                      }
+                                    } else {
+                                      setSelectedExpertiseArea('All Expertise')
+                                      // Optionally collapse when unchecked
+                                      setExpandedExpertiseAreas(expandedExpertiseAreas.filter(name => name !== category.name))
+                                    }
+                                  }}
+                                />
+                                <button
+                                  onClick={() => {
+                                    // Toggle expansion
+                                    if (expandedExpertiseAreas.includes(category.name)) {
+                                      setExpandedExpertiseAreas(expandedExpertiseAreas.filter(name => name !== category.name))
+                                    } else {
+                                      setExpandedExpertiseAreas([...expandedExpertiseAreas, category.name])
+                                    }
+                                  }}
+                                  className="flex items-center gap-1 text-sm font-medium cursor-pointer hover:text-blue-600 flex-1 text-left"
+                                >
+                                  <ChevronDown className={`w-3 h-3 transition-transform ${
+                                    expandedExpertiseAreas.includes(category.name) ? 'rotate-180' : ''
+                                  }`} />
+                                  {category.name}
+                                </button>
+                              </div>
+                              
+                              {/* Subcategories (only show if expanded) */}
+                              {expandedExpertiseAreas.includes(category.name) && (
+                                <div className="space-y-1 ml-6">
+                                  {category.subcategories.map((subcategory) => (
+                                    <div key={subcategory.name} className="flex items-center space-x-2">
+                                      <Checkbox 
+                                        id={`dashboard-${subcategory.name}`}
+                                        checked={selectedExpertiseSkills.includes(subcategory.name)}
+                                        onCheckedChange={(checked) => {
+                                          if (checked) {
+                                            setSelectedExpertiseSkills([...selectedExpertiseSkills, subcategory.name])
+                                          } else {
+                                            setSelectedExpertiseSkills(selectedExpertiseSkills.filter(skill => skill !== subcategory.name))
+                                          }
+                                        }}
+                                      />
+                                      <Label htmlFor={`dashboard-${subcategory.name}`} className="text-xs font-normal cursor-pointer text-gray-700">
+                                        {subcategory.name}
+                                      </Label>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                      
+                      {/* Selected count */}
+                      <p className="text-xs text-gray-500 mt-2">
+                        {selectedExpertiseSkills.length} specific {selectedExpertiseSkills.length === 1 ? 'skill' : 'skills'} selected
+                        {selectedExpertiseArea !== 'All Expertise' && ` in ${selectedExpertiseArea}`}
+                      </p>
+                      
+                      {/* Selected skills display */}
+                      {selectedExpertiseSkills.length > 0 && (
+                        <div className="flex flex-wrap gap-1 mt-2">
+                          {selectedExpertiseSkills.map((skill) => (
+                            <Badge key={skill} variant="secondary" className="text-xs">
+                              {skill}
+                            </Badge>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   </div>
                 )}
@@ -1485,6 +1640,50 @@ const ExpertDashboard = () => {
                       </p>
                     </div>
                     
+                    {/* General Consultation */}
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-medium">General Consultation</h3>
+                      <p className="text-sm text-gray-600">
+                        Open-ended consultation where clients choose the duration
+                      </p>
+                      
+                      <Card className="border border-gray-200">
+                        <CardContent className="p-4 space-y-4">
+                          <div className="flex items-center gap-3">
+                            <input
+                              type="checkbox"
+                              defaultChecked={true}
+                              className="w-4 h-4 text-gray-900 border-gray-300 rounded focus:ring-gray-900"
+                            />
+                            <label className="text-sm font-medium">Enable general consultation</label>
+                          </div>
+                          
+                          <div className="space-y-3">
+                            <label className="text-sm font-medium block">Set pricing for each duration:</label>
+                            {[
+                              { duration: '15 min', price: '500' },
+                              { duration: '30 min', price: '1000' },
+                              { duration: '45 min', price: '1500' },
+                              { duration: '60 min', price: '2000' }
+                            ].map((duration) => (
+                              <div key={duration.duration} className="flex items-center gap-4">
+                                <span className="text-sm w-16">{duration.duration}</span>
+                                <div className="flex items-center">
+                                  <span className="text-lg font-medium mr-2">$</span>
+                                  <input
+                                    type="number"
+                                    defaultValue={duration.price}
+                                    className="w-24 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 text-center"
+                                    placeholder="500"
+                                  />
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </div>
+
                     {/* Structured Sessions */}
                     <div className="space-y-4">
                       <div className="flex items-center justify-between">
@@ -1578,50 +1777,6 @@ const ExpertDashboard = () => {
                           <p className="text-xs text-gray-400">Add pre-defined consultation types</p>
                         </div>
                       )}
-                    </div>
-
-                    {/* General Consultation */}
-                    <div className="space-y-4">
-                      <h3 className="text-lg font-medium">General Consultation</h3>
-                      <p className="text-sm text-gray-600">
-                        Open-ended consultation where clients choose the duration
-                      </p>
-                      
-                      <Card className="border border-gray-200">
-                        <CardContent className="p-4 space-y-4">
-                          <div className="flex items-center gap-3">
-                            <input
-                              type="checkbox"
-                              defaultChecked={true}
-                              className="w-4 h-4 text-gray-900 border-gray-300 rounded focus:ring-gray-900"
-                            />
-                            <label className="text-sm font-medium">Enable general consultation</label>
-                          </div>
-                          
-                          <div className="space-y-3">
-                            <label className="text-sm font-medium block">Set pricing for each duration:</label>
-                            {[
-                              { duration: '15 min', price: '500' },
-                              { duration: '30 min', price: '1000' },
-                              { duration: '45 min', price: '1500' },
-                              { duration: '60 min', price: '2000' }
-                            ].map((duration) => (
-                              <div key={duration.duration} className="flex items-center gap-4">
-                                <span className="text-sm w-16">{duration.duration}</span>
-                                <div className="flex items-center">
-                                  <span className="text-lg font-medium mr-2">$</span>
-                                  <input
-                                    type="number"
-                                    defaultValue={duration.price}
-                                    className="w-24 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 text-center"
-                                    placeholder="500"
-                                  />
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        </CardContent>
-                      </Card>
                     </div>
 
                     {/* Platform Fee Info */}
