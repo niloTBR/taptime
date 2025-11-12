@@ -17,11 +17,12 @@ import {
   ExternalLink
 } from 'lucide-react'
 import expertProfileData from '@/data/expert-profile.json'
+import ShareModal from '@/components/common/ShareModal'
 
 const ExpertProfilePage = () => {
   const { expert, about, sessions, reviews, calendar } = expertProfileData
   const [activeTab, setActiveTab] = useState('about')
-  const [showShareTooltip, setShowShareTooltip] = useState(false)
+  const [showShareModal, setShowShareModal] = useState(false)
   const [showFloatingButton, setShowFloatingButton] = useState(false)
 
   const getInitials = (name) => {
@@ -69,20 +70,7 @@ const ExpertProfilePage = () => {
   }
 
   const handleShareProfile = () => {
-    const profileUrl = window.location.href
-    if (navigator.share) {
-      navigator.share({
-        title: `${expert.name} - TapTime Expert`,
-        text: `Check out ${expert.name}'s expert profile on TapTime`,
-        url: profileUrl
-      })
-    } else {
-      // Fallback - copy to clipboard
-      navigator.clipboard.writeText(profileUrl).then(() => {
-        setShowShareTooltip(true)
-        setTimeout(() => setShowShareTooltip(false), 2000)
-      })
-    }
+    setShowShareModal(true)
   }
 
 
@@ -141,11 +129,6 @@ const ExpertProfilePage = () => {
                       >
                         <Share className="w-4 h-4" />
                       </div>
-                      {showShareTooltip && (
-                        <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-foreground text-background px-2 py-1 rounded text-xs whitespace-nowrap">
-                          Link copied!
-                        </div>
-                      )}
                     </div>
                     <div className="w-8 h-8 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center cursor-pointer transition-colors">
                       <Heart className="w-4 h-4" />
@@ -387,6 +370,14 @@ const ExpertProfilePage = () => {
           `}</style>
         </div>
       )}
+
+      {/* Share Modal */}
+      <ShareModal
+        isOpen={showShareModal}
+        onClose={() => setShowShareModal(false)}
+        expertName={expert.name}
+        profileUrl={window.location.href}
+      />
     </div>
   )
 }

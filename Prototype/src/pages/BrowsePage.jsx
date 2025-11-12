@@ -37,13 +37,15 @@ import {
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import browseData from '@/data/browse.json'
+import categoriesData from '@/data/categories.json'
 
 const BrowsePage = () => {
   const { hero, filters, sortOptions, experts, stats } = browseData
+  const { categories } = categoriesData
   const [searchParams, setSearchParams] = useSearchParams()
   
   // State management
-  const [selectedCategory, setSelectedCategory] = useState('All Categories')
+  const [selectedExpertiseArea, setSelectedExpertiseArea] = useState('All Expertise')
   const [selectedPriceRange, setSelectedPriceRange] = useState('All Prices')
   const [selectedSort, setSelectedSort] = useState('Recommended')
   const [viewMode, setViewMode] = useState('grid') // 'grid' or 'table'
@@ -58,14 +60,15 @@ const BrowsePage = () => {
   const [selectedLanguages, setSelectedLanguages] = useState([])
   const [selectedPriceRanges, setSelectedPriceRanges] = useState([])
   const [selectedExpertLevels, setSelectedExpertLevels] = useState([])
-  const [selectedExpertise, setSelectedExpertise] = useState([])
-  const [openSection, setOpenSection] = useState('price')
+  const [selectedExpertiseSkills, setSelectedExpertiseSkills] = useState([])
+  const [expandedExpertiseAreas, setExpandedExpertiseAreas] = useState([])
+  const [openSection, setOpenSection] = useState('expertise')
 
   // Handle URL parameters
   useEffect(() => {
-    const categoryParam = searchParams.get('category')
-    if (categoryParam) {
-      setSelectedCategory(categoryParam)
+    const expertiseParam = searchParams.get('expertise') || searchParams.get('category')
+    if (expertiseParam) {
+      setSelectedExpertiseArea(expertiseParam)
     }
   }, [searchParams])
 
@@ -83,7 +86,7 @@ const BrowsePage = () => {
     }
 
     // Category filter
-    if (selectedCategory !== 'All Categories') {
+    if (selectedExpertiseArea !== 'All Expertise') {
       filtered = filtered.filter(expert => {
         // Map expertise to categories
         const categoryMap = {
@@ -102,7 +105,7 @@ const BrowsePage = () => {
         }
         
         return expert.expertise && expert.expertise.some(skill => 
-          categoryMap[skill] === selectedCategory
+          categoryMap[skill] === selectedExpertiseArea
         )
       })
     }
@@ -164,9 +167,9 @@ const BrowsePage = () => {
     }
 
     // Expertise filter
-    if (selectedExpertise.length > 0) {
+    if (selectedExpertiseSkills.length > 0) {
       filtered = filtered.filter(expert => 
-        expert.expertise && expert.expertise.some(skill => selectedExpertise.includes(skill))
+        expert.expertise && expert.expertise.some(skill => selectedExpertiseSkills.includes(skill))
       )
     }
 
@@ -211,7 +214,7 @@ const BrowsePage = () => {
     }
 
     return filtered
-  }, [experts, searchQuery, selectedCategory, selectedPriceRange, selectedSort, showTopRated, availabilityFilters, selectedPriceRanges, selectedCountries, selectedIndustries, selectedLanguages, selectedExpertLevels, selectedExpertise])
+  }, [experts, searchQuery, selectedExpertiseArea, selectedPriceRange, selectedSort, showTopRated, availabilityFilters, selectedPriceRanges, selectedCountries, selectedIndustries, selectedLanguages, selectedExpertLevels, selectedExpertiseSkills])
 
   const handleSearch = (query) => {
     setSearchQuery(query)
@@ -540,32 +543,96 @@ const BrowsePage = () => {
                 </div>
 
                 <div className="space-y-2">
-                  {/* Category */}
-                  <Collapsible open={openSection === 'category'} onOpenChange={() => setOpenSection(openSection === 'category' ? '' : 'category')}>
+                  {/* Expertise */}
+                  <Collapsible open={openSection === 'expertise'} onOpenChange={() => setOpenSection(openSection === 'expertise' ? '' : 'expertise')}>
                     <CollapsibleTrigger className="flex w-full items-center justify-between py-2 font-medium text-sm hover:underline [&[data-state=open]>svg]:rotate-180">
                       <div className="flex items-center gap-2">
                         <Briefcase className="w-4 h-4" />
-                        Category
+                        Expertise
                       </div>
                       <ChevronDown className="h-4 w-4 shrink-0 transition-transform duration-200" />
                     </CollapsibleTrigger>
                     <CollapsibleContent className="space-y-2 pt-1 pb-2">
-                      {['All Categories', 'Business & Startups', 'Technology & Innovation', 'Design & Creativity', 'Marketing & Growth', 'Finance & Economics', 'Health & Wellness'].map((category) => (
-                        <div key={category} className="flex items-center space-x-2 pl-6">
-                          <Checkbox 
-                            id={category}
-                            checked={selectedCategory === category}
-                            onCheckedChange={(checked) => {
-                              if (checked) {
-                                setSelectedCategory(category)
-                              } else {
-                                setSelectedCategory('All Categories')
-                              }
-                            }}
-                          />
-                          <Label htmlFor={category} className="text-sm font-normal cursor-pointer">
-                            {category}
-                          </Label>
+                      {/* All Expertise Option */}
+                      <div className="flex items-center space-x-2 pl-6">
+                        <Checkbox 
+                          id="all-expertise"
+                          checked={selectedExpertiseArea === 'All Expertise'}
+                          onCheckedChange={(checked) => {
+                            if (checked) {
+                              setSelectedExpertiseArea('All Expertise')
+                              setExpandedExpertiseAreas([])
+                            }
+                          }}
+                        />
+                        <Label htmlFor="all-expertise" className="text-sm font-normal cursor-pointer">
+                          All Expertise
+                        </Label>
+                      </div>
+                      
+                      {/* Main Categories with Subcategories */}
+                      {categories.map((category) => (
+                        <div key={category.name} className="space-y-1">
+                          {/* Main Category */}
+                          <div className="flex items-center space-x-2 pl-6">
+                            <Checkbox 
+                              id={category.name}
+                              checked={selectedExpertiseArea === category.name}
+                              onCheckedChange={(checked) => {
+                                if (checked) {
+                                  setSelectedExpertiseArea(category.name)
+                                  // Expand this category when selected
+                                  if (!expandedExpertiseAreas.includes(category.name)) {
+                                    setExpandedExpertiseAreas([...expandedExpertiseAreas, category.name])
+                                  }
+                                } else {
+                                  setSelectedExpertiseArea('All Expertise')
+                                  // Optionally collapse when unchecked
+                                  setExpandedExpertiseAreas(expandedExpertiseAreas.filter(name => name !== category.name))
+                                }
+                              }}
+                            />
+                            <button
+                              onClick={() => {
+                                // Toggle expansion
+                                if (expandedExpertiseAreas.includes(category.name)) {
+                                  setExpandedExpertiseAreas(expandedExpertiseAreas.filter(name => name !== category.name))
+                                } else {
+                                  setExpandedExpertiseAreas([...expandedExpertiseAreas, category.name])
+                                }
+                              }}
+                              className="flex items-center gap-1 text-sm font-normal cursor-pointer hover:text-blue-600 flex-1 text-left"
+                            >
+                              <ChevronDown className={`w-3 h-3 transition-transform ${
+                                expandedExpertiseAreas.includes(category.name) ? 'rotate-180' : ''
+                              }`} />
+                              {category.name}
+                            </button>
+                          </div>
+                          
+                          {/* Subcategories (only show if expanded) */}
+                          {expandedExpertiseAreas.includes(category.name) && (
+                            <div className="space-y-1">
+                              {category.subcategories.map((subcategory) => (
+                                <div key={subcategory.name} className="flex items-center space-x-2 pl-12">
+                                  <Checkbox 
+                                    id={subcategory.name}
+                                    checked={selectedExpertiseSkills.includes(subcategory.name)}
+                                    onCheckedChange={(checked) => {
+                                      if (checked) {
+                                        setSelectedExpertiseSkills([...selectedExpertiseSkills, subcategory.name])
+                                      } else {
+                                        setSelectedExpertiseSkills(selectedExpertiseSkills.filter(skill => skill !== subcategory.name))
+                                      }
+                                    }}
+                                  />
+                                  <Label htmlFor={subcategory.name} className="text-xs font-normal cursor-pointer text-gray-600">
+                                    {subcategory.name}
+                                  </Label>
+                                </div>
+                              ))}
+                            </div>
+                          )}
                         </div>
                       ))}
                     </CollapsibleContent>
@@ -739,41 +806,6 @@ const BrowsePage = () => {
 
                   <Separator />
 
-                  {/* Expertise */}
-                  <Collapsible open={openSection === 'expertise'} onOpenChange={() => setOpenSection(openSection === 'expertise' ? '' : 'expertise')}>
-                    <CollapsibleTrigger className="flex w-full items-center justify-between py-2 font-medium text-sm hover:underline [&[data-state=open]>svg]:rotate-180">
-                      <div className="flex items-center gap-2">
-                        <Award className="w-4 h-4" />
-                        Expertise
-                      </div>
-                      <ChevronDown className="h-4 w-4 shrink-0 transition-transform duration-200" />
-                    </CollapsibleTrigger>
-                    <CollapsibleContent className="space-y-2 pt-1 pb-2">
-                      <div className={`space-y-2 ${allExpertise.length > 10 ? 'max-h-64 overflow-y-auto pr-2' : ''}`}>
-                        {allExpertise.map((skill) => (
-                          <div key={skill} className="flex items-center space-x-2 pl-6">
-                            <Checkbox 
-                              id={`expertise-${skill}`}
-                              checked={selectedExpertise.includes(skill)}
-                              onCheckedChange={(checked) => {
-                                if (checked) {
-                                  setSelectedExpertise([...selectedExpertise, skill])
-                                } else {
-                                  setSelectedExpertise(selectedExpertise.filter(s => s !== skill))
-                                }
-                              }}
-                            />
-                            <Label htmlFor={`expertise-${skill}`} className="text-sm font-normal cursor-pointer">
-                              {skill}
-                            </Label>
-                          </div>
-                        ))}
-                      </div>
-                    </CollapsibleContent>
-                  </Collapsible>
-
-                  <Separator />
-
                   {/* Language */}
                   <Collapsible open={openSection === 'language'} onOpenChange={() => setOpenSection(openSection === 'language' ? '' : 'language')}>
                     <CollapsibleTrigger className="flex w-full items-center justify-between py-2 font-medium text-sm hover:underline [&[data-state=open]>svg]:rotate-180">
@@ -869,7 +901,7 @@ const BrowsePage = () => {
               </div>
 
               {/* Active Filters Pills */}
-              {(selectedCategory !== 'All Categories' || selectedPriceRanges.length > 0 || selectedCountries.length > 0 || selectedIndustries.length > 0 || selectedLanguages.length > 0 || selectedGenders.length > 0 || selectedExpertLevels.length > 0 || selectedExpertise.length > 0 || searchQuery) && (
+              {(selectedExpertiseArea !== 'All Expertise' || selectedPriceRanges.length > 0 || selectedCountries.length > 0 || selectedIndustries.length > 0 || selectedLanguages.length > 0 || selectedGenders.length > 0 || selectedExpertLevels.length > 0 || selectedExpertiseSkills.length > 0 || searchQuery) && (
                 <div className="flex flex-wrap gap-2 mb-4">
                   {/* Search Query */}
                   {searchQuery && (
@@ -884,12 +916,12 @@ const BrowsePage = () => {
                     </Badge>
                   )}
                   
-                  {/* Category */}
-                  {selectedCategory !== 'All Categories' && (
+                  {/* Expertise Area */}
+                  {selectedExpertiseArea !== 'All Expertise' && (
                     <Badge variant="outline" className="flex items-center gap-1 px-3 py-1">
-                      {selectedCategory}
+                      {selectedExpertiseArea}
                       <button
-                        onClick={() => setSelectedCategory('All Categories')}
+                        onClick={() => setSelectedExpertiseArea('All Expertise')}
                         className="ml-1 hover:bg-gray-200 rounded-full p-0.5"
                       >
                         <X className="w-3 h-3" />
@@ -976,11 +1008,11 @@ const BrowsePage = () => {
                   ))}
 
                   {/* Expertise */}
-                  {selectedExpertise.map((skill) => (
+                  {selectedExpertiseSkills.map((skill) => (
                     <Badge key={skill} variant="outline" className="flex items-center gap-1 px-3 py-1">
                       {skill}
                       <button
-                        onClick={() => setSelectedExpertise(selectedExpertise.filter(s => s !== skill))}
+                        onClick={() => setSelectedExpertiseSkills(selectedExpertiseSkills.filter(s => s !== skill))}
                         className="ml-1 hover:bg-gray-200 rounded-full p-0.5"
                       >
                         <X className="w-3 h-3" />
@@ -993,7 +1025,7 @@ const BrowsePage = () => {
                     variant="ghost"
                     size="sm"
                     onClick={() => {
-                      setSelectedCategory('All Categories')
+                      setSelectedExpertiseArea('All Expertise')
                       setSelectedPriceRange('All Prices')
                       setShowTopRated(false)
                       setAvailabilityFilters([])
@@ -1004,9 +1036,9 @@ const BrowsePage = () => {
                       setSelectedLanguages([])
                       setSelectedPriceRanges([])
                       setSelectedExpertLevels([])
-                      setSelectedExpertise([])
+                      setSelectedExpertiseSkills([])
                       setSelectedSort('Recommended')
-                      setOpenSection('category')
+                      setOpenSection('expertise')
                     }}
                     className="text-xs text-muted-foreground hover:text-foreground"
                   >
@@ -1059,7 +1091,7 @@ const BrowsePage = () => {
                     variant="outline" 
                     onClick={() => {
                       setSearchQuery('')
-                      setSelectedCategory('All Categories')
+                      setSelectedExpertiseArea('All Expertise')
                       setSelectedPriceRange('All Prices')
                       setShowTopRated(false)
                       setAvailabilityFilters([])

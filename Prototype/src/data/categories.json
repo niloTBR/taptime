@@ -1,0 +1,88 @@
+{
+  "categories": [
+    {
+      "name": "Business & Startups",
+      "href": "/browse?category=business-startups",
+      "subcategories": [
+        { "name": "Entrepreneurship", "href": "/browse?category=entrepreneurship" },
+        { "name": "Business Strategy", "href": "/browse?category=business-strategy" },
+        { "name": "Startup Scaling", "href": "/browse?category=startup-scaling" },
+        { "name": "Operations", "href": "/browse?category=operations" },
+        { "name": "Leadership", "href": "/browse?category=leadership" },
+        { "name": "Team Building", "href": "/browse?category=team-building" },
+        { "name": "Fundraising", "href": "/browse?category=fundraising" },
+        { "name": "Business Development", "href": "/browse?category=business-development" }
+      ]
+    },
+    {
+      "name": "Technology & Innovation",
+      "href": "/browse?category=technology-innovation",
+      "subcategories": [
+        { "name": "Software Development", "href": "/browse?category=software-development" },
+        { "name": "AI & Machine Learning", "href": "/browse?category=ai-machine-learning" },
+        { "name": "Data Science", "href": "/browse?category=data-science" },
+        { "name": "Cloud Computing", "href": "/browse?category=cloud-computing" },
+        { "name": "Cybersecurity", "href": "/browse?category=cybersecurity" },
+        { "name": "Product Management", "href": "/browse?category=product-management" },
+        { "name": "DevOps", "href": "/browse?category=devops" },
+        { "name": "Tech Strategy", "href": "/browse?category=tech-strategy" }
+      ]
+    },
+    {
+      "name": "Design & Creativity",
+      "href": "/browse?category=design-creativity",
+      "subcategories": [
+        { "name": "UX/UI Design", "href": "/browse?category=ux-ui-design" },
+        { "name": "Graphic Design", "href": "/browse?category=graphic-design" },
+        { "name": "Brand Design", "href": "/browse?category=brand-design" },
+        { "name": "Creative Direction", "href": "/browse?category=creative-direction" },
+        { "name": "Content Creation", "href": "/browse?category=content-creation" },
+        { "name": "Photography", "href": "/browse?category=photography" },
+        { "name": "Video Production", "href": "/browse?category=video-production" },
+        { "name": "Design Systems", "href": "/browse?category=design-systems" }
+      ]
+    },
+    {
+      "name": "Marketing & Growth",
+      "href": "/browse?category=marketing-growth",
+      "subcategories": [
+        { "name": "Digital Marketing", "href": "/browse?category=digital-marketing" },
+        { "name": "Content Marketing", "href": "/browse?category=content-marketing" },
+        { "name": "Social Media", "href": "/browse?category=social-media" },
+        { "name": "SEO & SEM", "href": "/browse?category=seo-sem" },
+        { "name": "Email Marketing", "href": "/browse?category=email-marketing" },
+        { "name": "Growth Hacking", "href": "/browse?category=growth-hacking" },
+        { "name": "Analytics", "href": "/browse?category=analytics" },
+        { "name": "PR & Communications", "href": "/browse?category=pr-communications" }
+      ]
+    },
+    {
+      "name": "Finance & Economics",
+      "href": "/browse?category=finance-economics",
+      "subcategories": [
+        { "name": "Financial Planning", "href": "/browse?category=financial-planning" },
+        { "name": "Investment Strategy", "href": "/browse?category=investment-strategy" },
+        { "name": "Corporate Finance", "href": "/browse?category=corporate-finance" },
+        { "name": "Accounting", "href": "/browse?category=accounting" },
+        { "name": "Venture Capital", "href": "/browse?category=venture-capital" },
+        { "name": "Economic Analysis", "href": "/browse?category=economic-analysis" },
+        { "name": "Risk Management", "href": "/browse?category=risk-management" },
+        { "name": "Financial Modeling", "href": "/browse?category=financial-modeling" }
+      ]
+    },
+    {
+      "name": "Health & Wellness",
+      "href": "/browse?category=health-wellness",
+      "subcategories": [
+        { "name": "Mental Health", "href": "/browse?category=mental-health" },
+        { "name": "Nutrition", "href": "/browse?category=nutrition" },
+        { "name": "Fitness & Training", "href": "/browse?category=fitness-training" },
+        { "name": "Wellness Coaching", "href": "/browse?category=wellness-coaching" },
+        { "name": "Sleep Optimization", "href": "/browse?category=sleep-optimization" },
+        { "name": "Stress Management", "href": "/browse?category=stress-management" },
+        { "name": "Life Coaching", "href": "/browse?category=life-coaching" },
+        { "name": "Mindfulness", "href": "/browse?category=mindfulness" }
+      ]
+    }
+  ]
+}

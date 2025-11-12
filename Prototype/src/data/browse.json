@@ -5,8 +5,8 @@
     "searchPlaceholder": "Search by expertise, industry, or name..."
   },
   "filters": {
-    "categories": [
-      "All Categories",
+    "expertise": [
+      "All Expertise",
       "Business & Startups",
       "Technology & Innovation",
       "Design & Creativity", 
