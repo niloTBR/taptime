@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
+import InboxSidebar from '@/components/common/InboxSidebar'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
@@ -54,6 +55,7 @@ const UserDashboard = () => {
   const [settingsTab, setSettingsTab] = useState('basic')
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('card')
   const [selectedSessionType, setSelectedSessionType] = useState(null)
+  const [showInbox, setShowInbox] = useState(false)
 
   // Mock user data from onboarding
   const user = {
@@ -343,8 +345,16 @@ const UserDashboard = () => {
               <Plus className="w-4 h-4 mr-2" />
               Book Session
             </Button>
-            <Button variant="outline" size="icon" className="rounded-full">
+            <Button 
+              variant="outline" 
+              size="icon" 
+              className="rounded-full relative"
+              onClick={() => setShowInbox(true)}
+            >
               <Bell className="w-4 h-4" />
+              <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full text-xs text-white flex items-center justify-center">
+                3
+              </span>
             </Button>
             <Button variant="outline" className="rounded-full">
               Logout
@@ -1965,6 +1975,12 @@ const UserDashboard = () => {
           </div>
         </div>
       )}
+
+      {/* Inbox Sidebar */}
+      <InboxSidebar 
+        isOpen={showInbox} 
+        onClose={() => setShowInbox(false)} 
+      />
     </div>
   )
 }

@@ -518,16 +518,38 @@ const SignUpExpertPage = () => {
                   </div>
                 </div>
 
-                {/* Short Description */}
+                {/* Bio */}
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Short Description</label>
+                  <label className="text-sm font-medium">
+                    Bio
+                    <span className="text-xs text-gray-500 ml-2">140 characters</span>
+                  </label>
                   <div className="relative">
                     <FileText className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
                     <textarea
-                      placeholder="Brief description of your background and expertise..."
-                      value={formData.shortDescription}
-                      onChange={(e) => setFormData({...formData, shortDescription: e.target.value})}
-                      className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-lg focus:border-gray-900 focus:outline-none min-h-[100px] resize-none"
+                      placeholder="Quick bio that captures your essence in one line..."
+                      value={formData.bio}
+                      onChange={(e) => setFormData({...formData, bio: e.target.value})}
+                      className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-lg focus:border-gray-900 focus:outline-none h-20 resize-none"
+                      maxLength={140}
+                    />
+                  </div>
+                </div>
+
+                {/* About */}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">
+                    About
+                    <span className="text-xs text-gray-500 ml-2">Up to 500 words</span>
+                  </label>
+                  <div className="relative">
+                    <FileText className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
+                    <textarea
+                      placeholder="Tell your story. What's your background? What unique insights do you bring? What can clients expect from working with you?"
+                      value={formData.about}
+                      onChange={(e) => setFormData({...formData, about: e.target.value})}
+                      className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-lg focus:border-gray-900 focus:outline-none min-h-[120px] resize-none"
+                      maxLength={3000}
                     />
                   </div>
                 </div>

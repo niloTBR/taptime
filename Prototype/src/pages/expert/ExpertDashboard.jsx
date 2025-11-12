@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
+import { Link } from 'react-router-dom'
+import InboxSidebar from '@/components/common/InboxSidebar'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
@@ -48,7 +50,10 @@ import {
   Trash2,
   CalendarDays,
   FileText,
-  BookOpen
+  BookOpen,
+  EyeOff,
+  ToggleLeft,
+  ToggleRight
 } from 'lucide-react'
 
 const ExpertDashboard = () => {
@@ -62,6 +67,9 @@ const ExpertDashboard = () => {
   const [settingsTab, setSettingsTab] = useState('basic')
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('card')
   const [billingTab, setBillingTab] = useState('withdrawal')
+  const [showInbox, setShowInbox] = useState(false)
+  const [reviewVisibility, setReviewVisibility] = useState({})
+  const [structuredSessions, setStructuredSessions] = useState([])
 
   // Mock expert data from onboarding
   const expert = {
@@ -223,6 +231,39 @@ const ExpertDashboard = () => {
     { id: 'reviews', label: 'Reviews', count: 0 }
   ]
 
+  const toggleReviewVisibility = (reviewIndex) => {
+    setReviewVisibility(prev => ({
+      ...prev,
+      [reviewIndex]: !prev[reviewIndex]
+    }))
+  }
+
+  // Structured sessions management functions
+  const addStructuredSession = () => {
+    setStructuredSessions(prev => [
+      ...prev,
+      {
+        id: `session-${Date.now()}`,
+        title: '',
+        description: '',
+        duration: '15 min',
+        price: ''
+      }
+    ])
+  }
+
+  const updateStructuredSession = (sessionId, field, value) => {
+    setStructuredSessions(prev => 
+      prev.map(session =>
+        session.id === sessionId ? { ...session, [field]: value } : session
+      )
+    )
+  }
+
+  const removeStructuredSession = (sessionId) => {
+    setStructuredSessions(prev => prev.filter(session => session.id !== sessionId))
+  }
+
 
 
 
@@ -241,10 +282,18 @@ const ExpertDashboard = () => {
           <div className="flex items-center gap-4">
             <Button className="rounded-full">
               <Plus className="w-4 h-4 mr-2" />
-              Add Availability
+              Connect Calendly
             </Button>
-            <Button variant="outline" size="icon" className="rounded-full">
+            <Button 
+              variant="outline" 
+              size="icon" 
+              className="rounded-full relative"
+              onClick={() => setShowInbox(true)}
+            >
               <Bell className="w-4 h-4" />
+              <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full text-xs text-white flex items-center justify-center">
+                2
+              </span>
             </Button>
           </div>
         </div>
@@ -431,9 +480,12 @@ const ExpertDashboard = () => {
                 <Button 
                   variant="outline"
                   className="w-full rounded-full text-sm border-2 border-foreground"
+                  asChild
                 >
-                  <Eye className="w-3 h-3 mr-2" />
-                  View Public Profile
+                  <Link to="/expert/isabella-grace">
+                    <Eye className="w-3 h-3 mr-2" />
+                    View Public Profile
+                  </Link>
                 </Button>
               </div>
             </CardContent>
@@ -896,7 +948,7 @@ const ExpertDashboard = () => {
                           <th className="p-4 text-sm font-medium text-muted-foreground">Name</th>
                           <th className="p-4 text-sm font-medium text-muted-foreground">Ratings & Reviews</th>
                           <th className="p-4 text-sm font-medium text-muted-foreground">Date</th>
-                          <th className="p-4 text-sm font-medium text-muted-foreground">Actions</th>
+                          <th className="p-4 text-sm font-medium text-muted-foreground">Hide/Show</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -978,8 +1030,17 @@ const ExpertDashboard = () => {
                             <td className="p-4 text-sm">{review.date}</td>
                             <td className="p-4">
                               <div className="flex gap-2">
-                                <Button variant="outline" size="sm" className="w-8 h-8 p-0">
-                                  <Eye className="w-4 h-4" />
+                                <Button 
+                                  variant="ghost" 
+                                  size="sm" 
+                                  className="h-8 px-2 hover:bg-transparent"
+                                  onClick={() => toggleReviewVisibility(index)}
+                                >
+                                  {reviewVisibility[index] ? (
+                                    <ToggleLeft className="w-5 h-5 text-gray-400" />
+                                  ) : (
+                                    <ToggleRight className="w-5 h-5 text-green-600" />
+                                  )}
                                 </Button>
                               </div>
                             </td>
@@ -1358,14 +1419,26 @@ const ExpertDashboard = () => {
                     
                     <div>
                       <label className="text-sm font-medium mb-2 block">
-                        Short Description*
-                        <span className="text-xs text-gray-500 ml-2">100 characters</span>
+                        Bio*
+                        <span className="text-xs text-gray-500 ml-2">140 characters</span>
                       </label>
                       <textarea
                         defaultValue={expert.bio}
-                        className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 h-24 resize-none"
-                        placeholder="Brief description of expertise..."
-                        maxLength={100}
+                        className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 h-20 resize-none"
+                        placeholder="Quick bio that captures your essence in one line..."
+                        maxLength={140}
+                      />
+                    </div>
+
+                    <div>
+                      <label className="text-sm font-medium mb-2 block">
+                        About*
+                        <span className="text-xs text-gray-500 ml-2">Up to 500 words</span>
+                      </label>
+                      <textarea
+                        className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 h-32 resize-none"
+                        placeholder="Tell your story. What's your background? What unique insights do you bring? What can clients expect from working with you?"
+                        maxLength={3000}
                       />
                     </div>
                     
@@ -1421,6 +1494,7 @@ const ExpertDashboard = () => {
                           variant="outline"
                           size="sm"
                           className="border-2 border-gray-300 hover:border-gray-900"
+                          onClick={addStructuredSession}
                         >
                           <Plus className="w-4 h-4 mr-2" />
                           Add Session
@@ -1430,11 +1504,80 @@ const ExpertDashboard = () => {
                         Pre-defined consultation types with specific topics and durations
                       </p>
                       
-                      <div className="text-center py-8 border-2 border-dashed border-gray-300 rounded-lg">
-                        <Clock className="w-8 h-8 mx-auto text-gray-400 mb-2" />
-                        <p className="text-sm text-gray-500">No structured sessions yet</p>
-                        <p className="text-xs text-gray-400">Add pre-defined consultation types</p>
-                      </div>
+                      {structuredSessions.map((session) => (
+                        <Card key={session.id} className="border border-gray-200">
+                          <CardContent className="p-4 space-y-4">
+                            <div className="flex items-center justify-between">
+                              <h4 className="font-medium text-sm">Session Details</h4>
+                              <Button
+                                type="button"
+                                onClick={() => removeStructuredSession(session.id)}
+                                variant="ghost"
+                                size="sm"
+                                className="text-red-500 hover:text-red-700"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </Button>
+                            </div>
+                            
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              <div className="space-y-2">
+                                <label className="text-sm font-medium">Session Title</label>
+                                <input
+                                  type="text"
+                                  value={session.title}
+                                  onChange={(e) => updateStructuredSession(session.id, 'title', e.target.value)}
+                                  placeholder="e.g., Product Strategy Deep Dive"
+                                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                />
+                              </div>
+                              
+                              <div className="space-y-2">
+                                <label className="text-sm font-medium">Duration & Price</label>
+                                <div className="flex gap-2">
+                                  <select
+                                    value={session.duration}
+                                    onChange={(e) => updateStructuredSession(session.id, 'duration', e.target.value)}
+                                    className="flex-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                  >
+                                    <option value="15 min">15 min</option>
+                                    <option value="30 min">30 min</option>
+                                    <option value="45 min">45 min</option>
+                                    <option value="60 min">60 min</option>
+                                    <option value="90 min">90 min</option>
+                                  </select>
+                                  <input
+                                    type="text"
+                                    value={session.price}
+                                    onChange={(e) => updateStructuredSession(session.id, 'price', e.target.value)}
+                                    placeholder="$120"
+                                    className="w-20 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                            
+                            <div className="space-y-2">
+                              <label className="text-sm font-medium">Session Description</label>
+                              <textarea
+                                value={session.description}
+                                onChange={(e) => updateStructuredSession(session.id, 'description', e.target.value)}
+                                placeholder="What will you cover in this session? What outcomes can clients expect?"
+                                rows={3}
+                                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                              />
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                      
+                      {structuredSessions.length === 0 && (
+                        <div className="text-center py-8 border-2 border-dashed border-gray-300 rounded-lg">
+                          <Clock className="w-8 h-8 mx-auto text-gray-400 mb-2" />
+                          <p className="text-sm text-gray-500">No structured sessions yet</p>
+                          <p className="text-xs text-gray-400">Add pre-defined consultation types</p>
+                        </div>
+                      )}
                     </div>
 
                     {/* General Consultation */}
@@ -1514,22 +1657,15 @@ const ExpertDashboard = () => {
 
                 {settingsTab === 'verification' && (
                   <div className="space-y-8">
-                    <h3 className="text-xl font-semibold">Verification</h3>
-                    
-                    {/* Main Verification Header */}
-                    <div className="text-center py-8">
-                      <div className="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                        <Check className="w-8 h-8 text-green-600" />
-                      </div>
-                      <h2 className="text-2xl font-semibold text-green-700 mb-3">Get Verified on Taptime</h2>
-                      <p className="text-gray-600 max-w-md mx-auto">
+                    <div>
+                      <h3 className="text-xl font-semibold">Verification</h3>
+                      <p className="text-sm text-gray-600 mt-1">
                         Show your audience you're real. Share your booking link, tag us, and we'll verify you fast.
                       </p>
                     </div>
 
                     {/* Steps Section */}
                     <div className="bg-gray-50 rounded-lg p-6">
-                      <h4 className="font-medium text-lg mb-6">Follow the steps to get verified</h4>
                       
                       <div className="space-y-6">
                         <div className="flex gap-4">
@@ -2229,6 +2365,12 @@ const ExpertDashboard = () => {
           </div>
         </div>
       )}
+
+      {/* Inbox Sidebar */}
+      <InboxSidebar 
+        isOpen={showInbox} 
+        onClose={() => setShowInbox(false)} 
+      />
     </div>
   )
 }
