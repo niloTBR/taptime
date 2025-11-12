@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, LineChart, Line, AreaChart, Area } from 'recharts'
 import { 
   Home,
@@ -38,6 +39,7 @@ import {
   Video,
   MessageCircle,
   MoreHorizontal,
+  MoreVertical,
   Bell,
   ExternalLink,
   Camera,
@@ -312,7 +314,7 @@ const AdminDashboard = () => {
       routingNumber: '****1234',
       requestDate: '2024-03-01',
       processingDate: '2024-03-03',
-      status: 'approved',
+      status: 'processed',
       note: 'Monthly earnings withdrawal',
       sessionsCompleted: 8,
       avatar: '/api/placeholder/40/40'
@@ -357,7 +359,7 @@ const AdminDashboard = () => {
       routingNumber: '****4567',
       requestDate: '2024-03-06',
       processingDate: '2024-03-07',
-      status: 'approved',
+      status: 'processed',
       note: 'Monthly withdrawal request',
       sessionsCompleted: 5,
       avatar: '/api/placeholder/40/40'
@@ -372,7 +374,7 @@ const AdminDashboard = () => {
       routingNumber: '****1357',
       requestDate: '2024-03-04',
       processingDate: null,
-      status: 'rejected',
+      status: 'processed',
       note: 'Bi-weekly withdrawal',
       sessionsCompleted: 3,
       avatar: '/api/placeholder/40/40'
@@ -800,10 +802,6 @@ const AdminDashboard = () => {
                     <X className="w-4 h-4 mr-2" />
                     Reject
                   </Button>
-                  <Button variant="ghost" onClick={() => console.log('Request more info')}>
-                    <MessageCircle className="w-4 h-4 mr-2" />
-                    Request Info
-                  </Button>
                 </div>
               </div>
 
@@ -832,9 +830,6 @@ const AdminDashboard = () => {
                     <div>
                       <div className="flex items-center gap-2 mb-1">
                         <h1 className="text-2xl md:text-3xl font-medium tracking-tight">{selectedExpert.name}</h1>
-                        <Badge variant="outline" className="border-red-500 text-red-600 bg-red-50 px-2 py-1 rounded-full">
-                          Admin Review
-                        </Badge>
                       </div>
                       
                       {/* Title */}
@@ -891,29 +886,29 @@ const AdminDashboard = () => {
                       <div className="flex items-center gap-2">
                         {selectedExpert.linkedinUrl ? (
                           <a href={selectedExpert.linkedinUrl} target="_blank" rel="noopener noreferrer" className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors">
-                            <Linkedin className="w-4 h-4 text-white" fill="currentColor" />
+                            <Linkedin className="w-4 h-4 text-white" />
                           </a>
                         ) : (
                           <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
-                            <Linkedin className="w-4 h-4 text-gray-500" fill="currentColor" />
+                            <Linkedin className="w-4 h-4 text-gray-500" />
                           </div>
                         )}
                         {selectedExpert.instagramUrl ? (
                           <a href={selectedExpert.instagramUrl} target="_blank" rel="noopener noreferrer" className="w-8 h-8 bg-pink-600 rounded-full flex items-center justify-center hover:bg-pink-700 transition-colors">
-                            <Instagram className="w-4 h-4 text-white" fill="currentColor" />
+                            <Instagram className="w-4 h-4 text-white" />
                           </a>
                         ) : (
                           <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
-                            <Instagram className="w-4 h-4 text-gray-500" fill="currentColor" />
+                            <Instagram className="w-4 h-4 text-gray-500" />
                           </div>
                         )}
                         {selectedExpert.twitterUrl ? (
-                          <a href={selectedExpert.twitterUrl} target="_blank" rel="noopener noreferrer" className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors">
-                            <Twitter className="w-4 h-4 text-white" fill="currentColor" />
+                          <a href={selectedExpert.twitterUrl} target="_blank" rel="noopener noreferrer" className="w-8 h-8 bg-black rounded-full flex items-center justify-center hover:bg-gray-800 transition-colors">
+                            <Twitter className="w-4 h-4 text-white" />
                           </a>
                         ) : (
                           <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
-                            <Twitter className="w-4 h-4 text-gray-500" fill="currentColor" />
+                            <Twitter className="w-4 h-4 text-gray-500" />
                           </div>
                         )}
                       </div>
@@ -1086,10 +1081,6 @@ const AdminDashboard = () => {
                       <X className="w-4 h-4 mr-2" />
                       Reject
                     </Button>
-                    <Button variant="ghost" onClick={() => console.log('Request more info')}>
-                      <MessageCircle className="w-4 h-4 mr-2" />
-                      Request Info
-                    </Button>
                   </div>
                 </div>
               </div>
@@ -1109,32 +1100,35 @@ const AdminDashboard = () => {
                   <p className="text-muted-foreground mt-1">Overview of your platform performance</p>
                 </div>
                 <div className="flex items-center gap-3">
-                  <Button variant="outline" size="sm">
-                    <Download className="w-4 h-4 mr-2" />
-                    Export
-                  </Button>
-                  <Button size="sm">
-                    <Plus className="w-4 h-4 mr-2" />
-                    Add Widget
-                  </Button>
+                  {/* Removed Add Widget and Export Details buttons */}
                 </div>
               </div>
                 
               {/* Key Metrics */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {/* Users Card */}
                 <Card className="border border-border">
                   <CardContent className="p-6">
                     <div className="flex items-start justify-between">
                       <div className="space-y-2">
-                        <p className="text-sm font-medium text-muted-foreground">Total Users</p>
+                        <p className="text-sm font-medium text-muted-foreground">Users</p>
                         <div className="flex items-baseline gap-2">
-                          <p className="text-3xl font-bold">{platformStats.totalUsers.toLocaleString()}</p>
-                          <div className="flex items-center text-emerald-600">
-                            <ArrowUp className="w-3 h-3" />
-                            <span className="text-xs font-medium">12%</span>
+                          <div className="space-y-1">
+                            <p className="text-2xl font-bold">{platformStats.totalUsers.toLocaleString()}</p>
+                            <p className="text-sm text-muted-foreground">Total</p>
+                          </div>
+                          <div className="text-center px-2">
+                            <span className="text-muted-foreground">/</span>
+                          </div>
+                          <div className="space-y-1">
+                            <p className="text-2xl font-bold text-green-600">{platformStats.activeUsers.toLocaleString()}</p>
+                            <p className="text-sm text-green-600">Active</p>
                           </div>
                         </div>
-                        <p className="text-xs text-muted-foreground">+20 from yesterday</p>
+                        <div className="flex items-center text-emerald-600">
+                          <ArrowUp className="w-3 h-3" />
+                          <span className="text-xs font-medium">12% this month</span>
+                        </div>
                       </div>
                       <div className="p-2 bg-blue-50 rounded-lg">
                         <Users className="w-5 h-5 text-blue-600" />
@@ -1143,19 +1137,29 @@ const AdminDashboard = () => {
                   </CardContent>
                 </Card>
 
+                {/* Experts Card */}
                 <Card className="border border-border">
                   <CardContent className="p-6">
                     <div className="flex items-start justify-between">
                       <div className="space-y-2">
-                        <p className="text-sm font-medium text-muted-foreground">Active Experts</p>
+                        <p className="text-sm font-medium text-muted-foreground">Experts</p>
                         <div className="flex items-baseline gap-2">
-                          <p className="text-3xl font-bold">{platformStats.activeExperts.toLocaleString()}</p>
-                          <div className="flex items-center text-emerald-600">
-                            <ArrowUp className="w-3 h-3" />
-                            <span className="text-xs font-medium">8%</span>
+                          <div className="space-y-1">
+                            <p className="text-2xl font-bold">{platformStats.totalExperts.toLocaleString()}</p>
+                            <p className="text-sm text-muted-foreground">Total</p>
+                          </div>
+                          <div className="text-center px-2">
+                            <span className="text-muted-foreground">/</span>
+                          </div>
+                          <div className="space-y-1">
+                            <p className="text-2xl font-bold text-purple-600">{platformStats.activeExperts.toLocaleString()}</p>
+                            <p className="text-sm text-purple-600">Active</p>
                           </div>
                         </div>
-                        <p className="text-xs text-muted-foreground">+12 from yesterday</p>
+                        <div className="flex items-center text-emerald-600">
+                          <ArrowUp className="w-3 h-3" />
+                          <span className="text-xs font-medium">8% this month</span>
+                        </div>
                       </div>
                       <div className="p-2 bg-purple-50 rounded-lg">
                         <Crown className="w-5 h-5 text-purple-600" />
@@ -1164,43 +1168,32 @@ const AdminDashboard = () => {
                   </CardContent>
                 </Card>
 
+                {/* Meetings Card */}
                 <Card className="border border-border">
                   <CardContent className="p-6">
                     <div className="flex items-start justify-between">
                       <div className="space-y-2">
-                        <p className="text-sm font-medium text-muted-foreground">Total Sessions</p>
+                        <p className="text-sm font-medium text-muted-foreground">Meetings</p>
                         <div className="flex items-baseline gap-2">
-                          <p className="text-3xl font-bold">{platformStats.totalMeetings.toLocaleString()}</p>
-                          <div className="flex items-center text-emerald-600">
-                            <ArrowUp className="w-3 h-3" />
-                            <span className="text-xs font-medium">15%</span>
+                          <div className="space-y-1">
+                            <p className="text-2xl font-bold">{platformStats.totalMeetings.toLocaleString()}</p>
+                            <p className="text-sm text-muted-foreground">Total</p>
+                          </div>
+                          <div className="text-center px-2">
+                            <span className="text-muted-foreground">/</span>
+                          </div>
+                          <div className="space-y-1">
+                            <p className="text-2xl font-bold text-orange-600">{platformStats.meetingBooked.toLocaleString()}</p>
+                            <p className="text-sm text-orange-600">Booked</p>
                           </div>
                         </div>
-                        <p className="text-xs text-muted-foreground">+47 from yesterday</p>
-                      </div>
-                      <div className="p-2 bg-green-50 rounded-lg">
-                        <Video className="w-5 h-5 text-green-600" />
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card className="border border-border">
-                  <CardContent className="p-6">
-                    <div className="flex items-start justify-between">
-                      <div className="space-y-2">
-                        <p className="text-sm font-medium text-muted-foreground">Revenue</p>
-                        <div className="flex items-baseline gap-2">
-                          <p className="text-3xl font-bold">${platformStats.totalAmount}K</p>
-                          <div className="flex items-center text-emerald-600">
-                            <ArrowUp className="w-3 h-3" />
-                            <span className="text-xs font-medium">22%</span>
-                          </div>
+                        <div className="flex items-center text-emerald-600">
+                          <ArrowUp className="w-3 h-3" />
+                          <span className="text-xs font-medium">15% this month</span>
                         </div>
-                        <p className="text-xs text-muted-foreground">+$2.4K from yesterday</p>
                       </div>
                       <div className="p-2 bg-orange-50 rounded-lg">
-                        <DollarSign className="w-5 h-5 text-orange-600" />
+                        <Video className="w-5 h-5 text-orange-600" />
                       </div>
                     </div>
                   </CardContent>
@@ -1406,11 +1399,11 @@ const AdminDashboard = () => {
                     <table className="w-full">
                       <thead>
                         <tr className="border-b text-left">
-                          <th className="pb-4 pt-2 font-semibold text-foreground w-1/4">Expert</th>
-                          <th className="pb-4 pt-2 font-semibold text-foreground w-1/5">Title</th>
-                          <th className="pb-4 pt-2 font-semibold text-foreground w-1/5">Industry</th>
+                          <th className="pb-4 pt-2 font-semibold text-foreground w-1/3">Expert</th>
+                          <th className="pb-4 pt-2 font-semibold text-foreground w-1/4">Title</th>
+                          <th className="pb-4 pt-2 font-semibold text-foreground w-1/4">Industry</th>
                           <th className="pb-4 pt-2 font-semibold text-foreground w-1/6">Verification</th>
-                          <th className="pb-4 pt-2 font-semibold text-foreground w-1/6">View</th>
+                          <th className="pb-4 pt-2 font-semibold text-foreground w-12 text-right"></th>
                         </tr>
                       </thead>
                       <tbody className="divide-y">
@@ -1454,37 +1447,62 @@ const AdminDashboard = () => {
                               <div className="flex items-center gap-2">
                                 {expert.linkedinUrl ? (
                                   <a href={expert.linkedinUrl} target="_blank" rel="noopener noreferrer" className="w-7 h-7 bg-blue-600 rounded-full flex items-center justify-center hover:bg-blue-700">
-                                    <Linkedin className="w-4 h-4 text-white" fill="currentColor" />
+                                    <Linkedin className="w-3 h-3 text-white" />
                                   </a>
                                 ) : (
                                   <div className="w-7 h-7 bg-gray-300 rounded-full flex items-center justify-center">
-                                    <Linkedin className="w-4 h-4 text-gray-500" fill="currentColor" />
+                                    <Linkedin className="w-3 h-3 text-gray-500" />
                                   </div>
                                 )}
                                 
                                 {expert.instagramUrl ? (
                                   <a href={expert.instagramUrl} target="_blank" rel="noopener noreferrer" className="w-7 h-7 bg-pink-600 rounded-full flex items-center justify-center hover:bg-pink-700">
-                                    <Instagram className="w-4 h-4 text-white" fill="currentColor" />
+                                    <Instagram className="w-3 h-3 text-white" />
                                   </a>
                                 ) : (
                                   <div className="w-7 h-7 bg-gray-300 rounded-full flex items-center justify-center">
-                                    <Instagram className="w-4 h-4 text-gray-500" fill="currentColor" />
+                                    <Instagram className="w-3 h-3 text-gray-500" />
+                                  </div>
+                                )}
+
+                                {expert.twitterUrl ? (
+                                  <a href={expert.twitterUrl} target="_blank" rel="noopener noreferrer" className="w-7 h-7 bg-black rounded-full flex items-center justify-center hover:bg-gray-800">
+                                    <Twitter className="w-3 h-3 text-white" />
+                                  </a>
+                                ) : (
+                                  <div className="w-7 h-7 bg-gray-300 rounded-full flex items-center justify-center">
+                                    <Twitter className="w-3 h-3 text-gray-500" />
                                   </div>
                                 )}
                               </div>
                             </td>
                             <td className="py-5">
-                              <Button 
-                                size="sm" 
-                                variant="outline"
-                                onClick={() => {
-                                  setSelectedExpert(expert)
-                                  setCurrentView('expert-detail')
-                                }}
-                              >
-                                <Eye className="w-4 h-4 mr-2" />
-                                View Profile
-                              </Button>
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button variant="ghost" size="sm">
+                                    <MoreVertical className="w-4 h-4" />
+                                  </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                  <DropdownMenuItem 
+                                    onClick={() => {
+                                      setSelectedExpert(expert)
+                                      setCurrentView('expert-detail')
+                                    }}
+                                  >
+                                    <Eye className="w-4 h-4 mr-2" />
+                                    View Profile
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem>
+                                    <Check className="w-4 h-4 mr-2" />
+                                    Approve Expert
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem>
+                                    <X className="w-4 h-4 mr-2" />
+                                    Reject Expert
+                                  </DropdownMenuItem>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
                             </td>
                           </tr>
                         ))}
@@ -1634,8 +1652,8 @@ const AdminDashboard = () => {
                             <td className="py-4 text-sm">{new Date(request.requestDate).toLocaleDateString()}</td>
                             <td className="py-4">
                               <Badge 
-                                variant={request.status === 'approved' ? 'default' : request.status === 'pending' ? 'secondary' : 'destructive'}
-                                className={request.status === 'approved' ? 'bg-green-100 text-green-800' : request.status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'}
+                                variant={request.status === 'processed' ? 'default' : 'secondary'}
+                                className={request.status === 'processed' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}
                               >
                                 {request.status.charAt(0).toUpperCase() + request.status.slice(1)}
                               </Badge>
@@ -2241,8 +2259,8 @@ const AdminDashboard = () => {
                   </div>
                 </div>
                 <Badge 
-                  variant={selectedWithdrawal.status === 'approved' ? 'default' : selectedWithdrawal.status === 'pending' ? 'secondary' : 'destructive'}
-                  className={selectedWithdrawal.status === 'approved' ? 'bg-green-100 text-green-800' : ''}
+                  variant={selectedWithdrawal.status === 'processed' ? 'default' : 'secondary'}
+                  className={selectedWithdrawal.status === 'processed' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}
                 >
                   {selectedWithdrawal.status.charAt(0).toUpperCase() + selectedWithdrawal.status.slice(1)}
                 </Badge>
@@ -2318,60 +2336,62 @@ const AdminDashboard = () => {
                 
               </div>
               
-              {/* Action Buttons */}
+              {/* Process Payment Action */}
               <div>
                 {selectedWithdrawal.status === 'pending' && (
-                  <Card className="bg-gray-50 border-2 border-dashed">
-                    <CardContent className="p-6">
-                      <div className="text-center space-y-4">
-                        <h3 className="font-semibold text-lg">Review Withdrawal Request</h3>
-                        <p className="text-muted-foreground">Please review the details above and approve or reject this withdrawal request.</p>
-                        <div className="flex gap-4 justify-center pt-2">
-                          <Button 
-                            size="lg"
-                            className="bg-green-600 hover:bg-green-700 text-white px-8"
-                            onClick={() => {
-                              approveWithdrawal(selectedWithdrawal.id);
-                              setCurrentView('main');
-                            }}
-                          >
-                            <Check className="w-5 h-5 mr-2" />
-                            Approve Withdrawal
-                          </Button>
-                          <Button 
-                            size="lg"
-                            variant="outline"
-                            className="text-red-600 border-red-300 hover:bg-red-50 px-8"
-                            onClick={() => {
-                              rejectWithdrawal(selectedWithdrawal.id);
-                              setCurrentView('main');
-                            }}
-                          >
-                            <X className="w-5 h-5 mr-2" />
-                            Reject Withdrawal
-                          </Button>
+                  <Card className="border-green-200 bg-green-50/50">
+                    <CardContent className="p-8">
+                      <div className="text-center space-y-6">
+                        <div className="space-y-2">
+                          <h3 className="text-xl font-semibold text-gray-900">Process Payment</h3>
+                          <p className="text-gray-600">Mark this withdrawal request as processed and optionally attach proof of payment.</p>
                         </div>
+                        
+                        {/* File Upload Area */}
+                        <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 hover:border-gray-400 transition-colors">
+                          <div className="text-center space-y-3">
+                            <div className="w-12 h-12 mx-auto bg-gray-100 rounded-full flex items-center justify-center">
+                              <Camera className="w-6 h-6 text-gray-500" />
+                            </div>
+                            <div>
+                              <p className="text-sm text-gray-600">Upload payment confirmation</p>
+                              <p className="text-xs text-gray-500">PDF, PNG, JPG up to 10MB</p>
+                            </div>
+                            <Button variant="outline" size="sm">
+                              Choose File
+                            </Button>
+                          </div>
+                        </div>
+                        
+                        <Button 
+                          size="lg"
+                          className="bg-green-600 hover:bg-green-700 text-white px-12"
+                          onClick={() => {
+                            setCurrentView('main');
+                          }}
+                        >
+                          <Check className="w-5 h-5 mr-3" />
+                          Mark as Processed
+                        </Button>
                       </div>
                     </CardContent>
                   </Card>
                 )}
                 
-                {selectedWithdrawal.status !== 'pending' && (
-                  <Card className="bg-gray-50">
-                    <CardContent className="p-6 text-center">
-                      <Badge 
-                        variant={selectedWithdrawal.status === 'approved' ? 'default' : 'destructive'}
-                        className={`text-lg px-4 py-2 ${
-                          selectedWithdrawal.status === 'approved' ? 'bg-green-100 text-green-800' : ''
-                        }`}
-                      >
-                        {selectedWithdrawal.status === 'approved' ? '✓ Approved' : '✗ Rejected'}
-                      </Badge>
-                      {selectedWithdrawal.processingDate && (
-                        <p className="text-muted-foreground mt-2">
-                          Processed on {new Date(selectedWithdrawal.processingDate).toLocaleDateString()}
-                        </p>
-                      )}
+                {selectedWithdrawal.status === 'processed' && (
+                  <Card className="bg-green-50 border-green-200">
+                    <CardContent className="p-8 text-center">
+                      <div className="space-y-4">
+                        <div className="w-16 h-16 mx-auto bg-green-100 rounded-full flex items-center justify-center">
+                          <Check className="w-8 h-8 text-green-600" />
+                        </div>
+                        <div>
+                          <h3 className="text-xl font-semibold text-green-900">Payment Processed</h3>
+                          <p className="text-green-700 mt-1">
+                            Processed on {selectedWithdrawal.processingDate ? new Date(selectedWithdrawal.processingDate).toLocaleDateString() : 'N/A'}
+                          </p>
+                        </div>
+                      </div>
                     </CardContent>
                   </Card>
                 )}
@@ -2560,10 +2580,6 @@ const AdminDashboard = () => {
                     >
                       <X className="w-4 h-4 mr-2" />
                       Reject Application
-                    </Button>
-                    <Button variant="ghost" onClick={() => console.log('Request more info')}>
-                      <MessageCircle className="w-4 h-4 mr-2" />
-                      Request Info
                     </Button>
                   </div>
                 </div>
